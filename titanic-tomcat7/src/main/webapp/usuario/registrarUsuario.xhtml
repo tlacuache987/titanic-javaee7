@@ -1,0 +1,97 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">#{registroUsuarioBean.editando ? 'Editando Usuario' : 'Registrar Nuevo Usuario'}</ui:define>
+
+	<ui:define name="cuerpo">
+		<h1>#{registroUsuarioBean.editando ? 'Editando Usuario' :
+			'Registrar Nuevo Usuario'}</h1>
+
+
+		<f:metadata>
+			<o:viewParam name="usuario" value="#{registroUsuarioBean.usuario}" />
+			<f:event listener="#{registroUsuarioBean.inicializar}"
+				type="preRenderView" />
+		</f:metadata>
+
+
+		<h:form>
+            <p:growl id="msg" />
+			<p:messages autoUpdate="true" />
+			<p:toolbar style="margin-top:20px">
+				<f:facet name="left">
+					<p:button value="Nuevo Usuario" outcome="/usuario/registrarUsuario" />
+					<p:commandButton value="Grabar Usuario" id="btnGrabar"
+						action="#{registroUsuarioBean.registrarUsuario}" update="@form" />
+                </f:facet>
+				<f:facet name="right">
+					<p:button value="Buscar Usuario" id="btnBuscar"
+						outcome="/usuario/buscarUsuario" />
+                </f:facet>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="panelFormUsuario"
+				style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+				<p:outputLabel value="Nombre" for="nombre" />
+				<p:inputText id="nombre" size="60" maxlength="255"
+					value="#{registroUsuarioBean.usuario.nombreUsuario}" />
+
+				<p:outputLabel value="E-mail" for="email" />
+				<p:inputText id="email" size="30" maxlength="100"
+					value="#{registroUsuarioBean.usuario.email}" readonly="#{registroUsuarioBean.editando}" />
+
+				<p:outputLabel value="Password" for="pwd" />
+				<p:password id="pwd" size="30" maxlength="40"
+					value="#{registroUsuarioBean.usuario.password}" 
+					redisplay="true" />
+
+                <p:outputLabel value="Activo?: " />
+                <p:selectBooleanCheckbox value="#{registroUsuarioBean.usuario.activo}" >
+                    <p:ajax listener="#{registroUsuarioBean.addMessage}" update="msg" />
+                </p:selectBooleanCheckbox>
+
+				<p:selectOneMenu id="grupo" value="#{registroUsuarioBean.grupo}"
+					style="text-align:center;width:200px">
+					<f:selectItems value="#{registroUsuarioBean.grupos}" var="grupo"
+						itemValue="#{grupo}" itemLabel="#{grupo.nombreGrupo}" />
+				</p:selectOneMenu>
+				<p:commandButton value="Agregar Grupo" id="btnAgregarGrupo"
+					action="#{registroUsuarioBean.agregarGrupo}" update="@form" />
+
+			</p:panelGrid>
+
+
+			<p:dataTable id="grupoTable"
+				value="#{registroUsuarioBean.usuario.grupos}" var="grupo"
+				style="margin-top:20px"
+				emptyMessage="No se encontraron Grupos asignados" rows="20"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" style="text-align:center;width:100px">
+					<h:outputLabel value="#{grupo.ideGrupo}" />
+				</p:column>
+
+				<p:column headerText="Nombre">
+					<h:outputLabel value="#{grupo.nombreGrupo}" />
+				</p:column>
+
+				<p:column style="text-align:center;width:100px">
+					<p:commandButton title="Eliminar" icon="ui-icon-trash"
+						action="#{registroUsuarioBean.eliminarGrupo}" update="@form" />
+				</p:column>
+			</p:dataTable>
+
+
+		</h:form>
+
+
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,92 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Buscar Usuario</ui:define>
+
+	<ui:define name="cuerpo">
+		<h:form id="formBusqueda">
+			<h1>Buscar Usuario</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top:20px">
+				<f:facet name="left">
+					<p:commandButton value="Buscar Usuario"
+						action="#{usuarioBean.buscarUsuarioFiltros}" update="@form" />
+                </f:facet>
+				<f:facet name="right">
+					<p:button value="Nuevo Usuario" outcome="/usuario/registrarUsuario" />
+                </f:facet>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="panelForm"
+				style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+				<p:outputLabel value="E-mail" for="email" />
+				<p:inputText id="email" size="30"
+					value="#{usuarioBean.filtros.email}" />
+
+				<p:outputLabel value="Nombre" for="nombre" />
+				<p:inputText id="nombre" size="60"
+					value="#{usuarioBean.filtros.nombre}" />
+
+			</p:panelGrid>
+
+
+			<p:dataTable id="usuariosTable"
+				value="#{usuarioBean.usuariosFiltrados}" var="usuario"
+				style="margin-top:20px"
+				emptyMessage="No se encontraron Usuarios para su busqueda" rows="20"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" style="text-align:center;width:100px">
+					<h:outputLabel value="#{usuario.ideUsuario}" />
+				</p:column>
+
+				<p:column headerText="Nombre">
+					<h:outputLabel value="#{usuario.nombreUsuario}" />
+				</p:column>
+
+				<p:column headerText="Email">
+					<h:outputLabel value="#{usuario.email}" />
+				</p:column>
+
+                <p:column headerText="Activo">
+                    <h:outputLabel value="#{usuario.activo?'ACTIVO':'INACTIVO'}"/>
+                </p:column>
+
+				<p:column style="text-align:center;width:100px">
+					<p:button title="Editar" icon="ui-icon-pencil"
+						outcome="/usuario/registrarUsuario">
+						<f:param name="usuario" value="#{usuario.ideUsuario}" />
+					</p:button>
+
+
+					<p:commandButton icon="ui-icon-trash" actionListener="#{usuarioBean.eliminarUsuario}" update="usuariosTable">
+                        <p:confirm header="Eliminar Usuario"
+                                   message="Esta seguro de eliminar el usuario"
+                                icon="ui-icon-alert"/>
+
+						<f:setPropertyActionListener
+							target="#{usuarioBean.usuarioSeleccionado}" value="#{usuario}" />
+					</p:commandButton>
+
+				</p:column>
+
+			</p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

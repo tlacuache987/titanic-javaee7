@@ -1,0 +1,96 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Buscar Bus</ui:define>
+
+	<ui:define name="cuerpo">
+		<h:form id="formBusqueda">
+			<h1>Buscar Bus</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top:20px">
+				<f:facet name="left">
+					<p:commandButton value="Buscar Bus"
+						action="#{busBean.buscarBusFiltros}" update="@form" />
+                </f:facet>
+				<f:facet name="right">
+					<p:button value="Nuevo Bus" outcome="/bus/registrarBus" />
+                </f:facet>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="panelForm"
+				style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+				<p:outputLabel value="Placa" for="placa" />
+				<p:inputText id="placa" size="30"
+					value="#{busBean.filtros.placa}" />
+
+				<p:outputLabel value="Nombre" for="nombre" />
+				<p:inputText id="nombre" size="60"
+					value="#{busBean.filtros.nombre}" />
+
+			</p:panelGrid>
+
+
+            <p:dataTable id="busTable"
+                         value="#{busBean.busesFiltrados}" var="bus"
+                         style="margin-top:20px"
+                         emptyMessage="No se encontraron Bus para su busqueda" rows="20"
+                         paginator="true" paginatorAlwaysVisible="false"
+                         paginatorPosition="bottom">
+
+                <p:column headerText="Id" style="text-align:center;width:100px">
+                    <h:outputLabel value="#{bus.ideBus}" />
+                </p:column>
+
+                <p:column headerText="Nombre">
+                    <h:outputLabel value="#{bus.descripcionBus}" />
+                </p:column>
+
+                <p:column headerText="Placa">
+                    <h:outputLabel value="#{bus.placa}" />
+                </p:column>
+
+                <p:column headerText="Tipo Bus">
+                    <h:outputLabel value="#{bus.tipoBus}" />
+                </p:column>
+
+                <p:column headerText="Numero Plantas">
+                    <h:outputLabel value="#{bus.tipoPlanta.descripcion}" />
+                </p:column>
+
+                <p:column style="text-align:center;width:100px">
+                    <p:button title="Editar" icon="ui-icon-pencil"
+                              outcome="/bus/registrarBus">
+                        <f:param name="bus" value="#{bus.ideBus}" />
+                    </p:button>
+
+
+                    <p:commandButton  icon="ui-icon-trash" action="#{busBean.eliminarBus}" update="busTable">
+                        <p:confirm header="Eliminar Bus"
+                                   message="Esta seguro de eliminar el bus"
+                                   icon="ui-icon-alert"/>
+
+                        <f:setPropertyActionListener
+                                target="#{busBean.busSeleccionado}" value="#{bus}" />
+                    </p:commandButton>
+
+                </p:column>
+
+            </p:dataTable>
+
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

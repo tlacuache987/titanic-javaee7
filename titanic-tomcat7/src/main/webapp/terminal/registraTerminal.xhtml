@@ -1,0 +1,62 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">#{registroTerminalBean.editando ? 'Editando Terminal' : 'Registrar Nuevo Terminal'}</ui:define>
+
+    <ui:define name="cuerpo">
+        <h1>#{registroClienteBean.editando ? 'Editando Terminal' :
+                'Registrar Nuevo Terminal'}</h1>
+
+
+        <f:metadata>
+            <o:viewParam name="terminal" value="#{registroTerminalBean.terminal}" />
+            <f:event listener="#{registroTerminalBean.inicializar}"
+                     type="preRenderView" />
+        </f:metadata>
+
+        <h:form>
+
+            <p:messages autoUpdate="true" />
+            <p:toolbar style="margin-top:20px">
+                <f:facet name="left">
+                    <p:button value="Nuevo Terminal" outcome="/terminal/registraTerminal" />
+                    <p:commandButton value="Grabar Terminal" id="btnGrabar"
+                                     action="#{registroTerminalBean.registrarTerminal}" update="@form" />
+                </f:facet>
+                <f:facet name="right">
+                    <p:button value="Buscar Terminal" id="btnBuscar"
+                              outcome="/terminal/buscarTerminal" />
+                </f:facet>
+            </p:toolbar>
+
+            <p:panelGrid columns="2" id="panelFormCliente"
+                         style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+                <p:outputLabel value="Nombre" for="nombre" />
+                <p:inputText id="nombre" size="60" maxlength="50"
+                             value="#{registroTerminalBean.terminal.nombreTerminal}" />
+
+
+
+                <p:outputLabel value="Direccion" for="direccion" />
+                <p:inputText id="direccion" size="120" maxlength="255"
+                             value="#{registroTerminalBean.terminal.direccionTerminal}" />
+
+
+                <p:outputLabel value="Telefonos" for="telefonos" />
+                <p:inputText id="telefonos" size="60" maxlength="50"
+                             value="#{registroTerminalBean.terminal.telefonosTerminal}" />
+
+
+            </p:panelGrid>
+
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>

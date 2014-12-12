@@ -1,0 +1,125 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">#{registroRecorridoBean.editando ? 'Editando Recorrido' : 'Registrar Nuevo Recorrido'}</ui:define>
+
+    <ui:define name="cuerpo">
+        <h1>#{registroRecorridoBean.editando ? 'Editando Recorrido' :
+                'Registrar Nuevo Recorrido'}</h1>
+
+
+
+
+        <f:metadata>
+            <o:viewParam name="recorrido" value="#{registroRecorridoBean.recorrido}" />
+            <f:event listener="#{registroRecorridoBean.inicializar}"
+                     type="preRenderView" />
+        </f:metadata>
+
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:messages autoUpdate="true" />
+            <p:toolbar style="margin-top:20px">
+                <p:toolbarGroup>
+                    <p:button value="Nuevo Recorrido" outcome="/recorrido/registrarRecorrido" />
+                    <p:commandButton value="Grabar Recorrido" id="btnGrabar"
+                                     action="#{registroRecorridoBean.registrarRecorrido}" update="@form" />
+                </p:toolbarGroup>
+                <p:toolbarGroup align="right">
+                    <p:button value="Buscar Recorrido" id="btnBuscar"
+                              outcome="/recorrido/buscarRecorrido" />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:panelGrid columns="2" id="panelFormRecorrido"
+                         style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+
+
+                <p:outputLabel value="Terminal Origen" for="terminalOrigen" />
+                <p:selectOneListbox id="terminalOrigen" styleClass="no-border"
+                                    value="#{registroRecorridoBean.recorrido.origen}">
+                    <f:selectItems value="#{registroRecorridoBean.terminales}" var="terminal"
+                                   itemValue="#{terminal}"
+                                   itemLabel="#{terminal.nombreTerminal}"/>
+
+                </p:selectOneListbox>
+
+
+                <p:outputLabel value="Terminal Destino" for="terminalDestino" />
+                <p:selectOneListbox id="terminalDestino" styleClass="no-border"
+                                    value="#{registroRecorridoBean.recorrido.destino}">
+                    <f:selectItems value="#{registroRecorridoBean.terminales}" var="terminalDestino"
+                                   itemValue="#{terminalDestino}"
+                                   itemLabel="#{terminalDestino.nombreTerminal}"/>
+
+                </p:selectOneListbox>
+
+
+
+                <p:outputLabel value="Ruta" for="ruta" />
+                <p:inputText id="ruta" size="60"
+                             value="#{registroRecorridoBean.recorrido.ruta}" />
+
+
+
+            </p:panelGrid>
+
+
+
+            <p:contextMenu for="precios" widgetVar="cMenu">
+                <p:menuitem value="Editar Precio" icon="ui-icon-search" onclick="PF('cellPrecios').showCellEditor();return false;"/>
+                <p:menuitem value="Ocultar Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>
+            </p:contextMenu>
+
+            <p:dataTable id="precios" var="precio" value="#{registroRecorridoBean.recorrido.precios}" editable="true" editMode="cell" widgetVar="cellPrecios">
+                <f:facet name="header">
+                    Precios
+                </f:facet>
+
+                <p:ajax event="cellEdit" listener="#{registroRecorridoBean.onCellEdit}" update=":form:msgs" />
+
+
+                <p:column headerText="Tipo Pasaje" style="text-align: center; " >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{precio.tipoPasaje}" /></f:facet>
+                        <f:facet name="input"><p:inputText  value="#{precio.tipoPasaje}" maxlength="50"  /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Calidad">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{precio.tipoBus}" /></f:facet>
+                        <f:facet name="input">
+                            <h:selectOneMenu value="#{precio.tipoBus}" >
+                                <f:selectItems value="#{registroRecorridoBean.tiposBus}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Precio" style="text-align: center; " >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{precio.precio}" /></f:facet>
+                        <f:facet name="input"><p:inputText  value="#{precio.precio}"  maxlength="50"  /></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+
+                <p:column style="text-align:center;width:100px">
+                    <p:commandButton title="Eliminar" icon="ui-icon-trash"
+                                     action="#{registroRecorridoBean.eliminarDestino}" update="@form" />
+                </p:column>
+
+            </p:dataTable>
+
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

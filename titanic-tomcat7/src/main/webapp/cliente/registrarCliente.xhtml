@@ -1,0 +1,84 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">#{registroClienteBean.editando ? 'Editando Cliente' : 'Registrar Nuevo Cliente'}</ui:define>
+
+	<ui:define name="cuerpo">
+		<h1>#{registroClienteBean.editando ? 'Editando Cliente' :
+			'Registrar Nuevo Cliente'}</h1>
+
+
+		<f:metadata>
+			<o:viewParam name="cliente" value="#{registroClienteBean.cliente}" />
+			<f:event listener="#{registroClienteBean.inicializar}"
+				type="preRenderView" />
+		</f:metadata>
+
+		<h:form >
+
+			<p:messages autoUpdate="true" />
+			<p:toolbar style="margin-top:20px">
+				<f:facet name="left">
+					<p:button value="Nuevo Cliente" outcome="/cliente/registrarCliente" />
+					<p:commandButton value="Grabar Cliente" id="btnGrabar"
+						action="#{registroClienteBean.registrarCliente}" update="@form" />
+                </f:facet>
+				<f:facet name="right">
+					<p:button value="Buscar Cliente" id="btnBuscar"
+						outcome="/cliente/buscarCliente" />
+                </f:facet>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="panelFormCliente"
+				style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+				<p:outputLabel value="Nombre" for="nombre" />
+				<p:inputText id="nombre" size="60" maxlength="255"
+					value="#{registroClienteBean.cliente.nombreCliente}" />
+
+				<p:outputLabel value="Tipo Cliente" for="tipoPersona" />
+				<p:selectOneRadio id="tipoPersona" styleClass="no-border"
+					value="#{registroClienteBean.cliente.tipoPersona}">
+					<f:selectItems value="#{registroClienteBean.tiposPersona}" var="tipoPersona"
+					itemValue="#{tipoPersona}" 
+					itemLabel="#{tipoPersona.descripcion}"/>
+				</p:selectOneRadio>
+
+                <p:outputLabel value="Tipo Documento" for="tipoDocumento" />
+                <p:selectOneListbox id="tipoDocumento" styleClass="no-border"
+                        value="#{registroClienteBean.cliente.tipoDocumento}">
+                    <f:selectItems value="#{registroClienteBean.tiposDocumento}" var="tipoDocumento"
+                                   itemValue="#{tipoDocumento}"
+                                   itemLabel="#{tipoDocumento.descripcion}"/>
+
+                </p:selectOneListbox>
+
+				<p:outputLabel value="Número Documento" for="numdoc" />
+				<p:inputMask mask="99999999" id="numdoc" size="15" maxlength="8"
+					value="#{registroClienteBean.cliente.numeroDocumento}" />
+
+				<p:outputLabel value="E-mail" for="email" />
+				<p:inputText id="email" size="30" maxlength="100"
+					value="#{registroClienteBean.cliente.email}" />
+
+                <p:outputLabel value="Sexo" for="sexo" />
+                <p:selectOneRadio id="sexo" styleClass="no-border"
+                                    value="#{registroClienteBean.cliente.sexo}">
+                    <f:selectItems value="#{registroClienteBean.sexo}" var="sexo"
+                                   itemValue="#{sexo}"
+                                   itemLabel="#{sexo.descripcion}"/>
+
+                </p:selectOneRadio>
+
+			</p:panelGrid>
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>

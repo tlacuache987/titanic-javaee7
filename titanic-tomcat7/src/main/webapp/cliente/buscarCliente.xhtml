@@ -1,0 +1,93 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Buscar Clientes</ui:define>
+
+	<ui:define name="cuerpo">
+		<h:form id="formBusqueda">
+			<h1>Buscar Cliente</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top:20px">
+				<f:facet name="left">
+					<p:commandButton value="Buscar Cliente"
+						action="#{clienteBean.buscarClientesFiltros}" update="@form" />
+                </f:facet>
+				<f:facet name="right">
+					<p:button value="Nuevo Cliente" outcome="/cliente/registrarCliente" />
+                </f:facet>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="panelForm"
+				style="width:100%;margin-top:15px" columnClasses="lblIzq">
+				<p:outputLabel value="Dni" for="numeroDocumento" />
+				<p:inputText id="numeroDocumento" size="8"
+					value="#{clienteBean.filtros.numeroDocumento}" />
+
+				<p:outputLabel value="E-mail" for="email" />
+				<p:inputText id="email" size="30"
+					value="#{clienteBean.filtros.email}" />
+
+
+				<p:outputLabel value="Nombre" for="nombre" />
+				<p:inputText id="nombre" size="60"
+					value="#{clienteBean.filtros.nombre}" />
+
+			</p:panelGrid>
+
+			<p:dataTable id="clientesTable"
+				value="#{clienteBean.clientesFiltrados}" var="cliente"
+				style="margin-top:20px"
+				emptyMessage="No se encontraron clientes para su busqueda" rows="20"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" style="text-align:center;width:100px">
+					<h:outputLabel value="#{cliente.ideCliente}" />
+				</p:column>
+
+				<p:column headerText="Nombre" >
+					<h:outputLabel value="#{cliente.nombreCliente}" />
+				</p:column>
+				
+				<p:column headerText="Tipo" style="text-align:center;width:150px">
+					<h:outputLabel value="#{cliente.tipoPersona}" />
+				</p:column>
+								
+				<p:column headerText="Email" >
+					<h:outputLabel value="#{cliente.email}" />
+				</p:column>		
+				
+				<p:column style="text-align:center;width:100px">
+					<p:button title="Editar" icon="ui-icon-pencil" outcome="/cliente/registrarCliente">
+						<f:param name="cliente" value="#{cliente.ideCliente}" />
+					</p:button>
+
+                    <p:commandButton  icon="ui-icon-trash" action="#{clienteBean.eliminarCliente}" update="clientesTable">
+                        <p:confirm header="Eliminar Cliente"
+                                   message="Esta seguro de eliminar el cliente"
+                                   icon="ui-icon-alert"/>
+                        <f:setPropertyActionListener
+                                target="#{clienteBean.clienteSeleccionado}" value="#{cliente}" />
+                    </p:commandButton>
+					
+				</p:column>				
+				
+			</p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+			
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

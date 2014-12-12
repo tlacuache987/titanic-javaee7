@@ -1,0 +1,108 @@
+package com.titanic.ventapasajes.modelo;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+
+/**
+ * Created by josediaz on 7/19/14.
+ */
+
+@Entity
+@Table(name = "pvm_celda_inferior")
+public class Celda implements Serializable{
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
+    private Long ideCelda;
+    private String numeroCelda;
+    private TipoCelda tipoCelda;
+    private EstadoCelda estadoCelda;
+    private String numeroAsiento;
+    private TipoBus calidad;
+    private Fila fila;
+
+
+
+
+    @Id
+    @GeneratedValue
+    @Column(name="ide_celda", nullable = false, length= 10)
+    public Long getIdeCelda() {
+        return ideCelda;
+    }
+
+    public void setIdeCelda(Long ideCelda) {
+        this.ideCelda = ideCelda;
+    }
+
+
+    @Size(max = 10)
+    @Column(name="numero_celda", nullable=false, length=10)
+    public String getNumeroCelda() {
+        return numeroCelda;
+    }
+
+    public void setNumeroCelda(String numeroCelda) {
+        this.numeroCelda = numeroCelda;
+    }
+
+
+    @Column(name="numero_asiento", nullable=true, length=10)
+    public String getNumeroAsiento() {
+        return numeroAsiento;
+    }
+
+    public void setNumeroAsiento(String numeroAsiento) {
+        this.numeroAsiento = numeroAsiento;
+    }
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name="tipo_celda", nullable=false, length = 50)
+    public TipoCelda getTipoCelda() {
+        return tipoCelda;
+    }
+
+    public void setTipoCelda(TipoCelda tipoCelda) {
+        this.tipoCelda = tipoCelda;
+    }
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="calidad", nullable=true, length = 50)
+    public TipoBus getCalidad() {
+        return calidad;
+    }
+
+    public void setCalidad(TipoBus calidad) {
+        this.calidad = calidad;
+    }
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name="estado_celda", nullable=false, length = 50)
+    public EstadoCelda getEstadoCelda() {
+        return estadoCelda;
+    }
+
+
+    public void setEstadoCelda(EstadoCelda estadoCelda) {
+        this.estadoCelda = estadoCelda;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "ide_fila", nullable = false)
+    public Fila getFila() {
+        return fila;
+    }
+
+    public void setFila(Fila fila) {
+        this.fila = fila;
+    }
+}

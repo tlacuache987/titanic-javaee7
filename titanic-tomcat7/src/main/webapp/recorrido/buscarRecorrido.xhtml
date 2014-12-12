@@ -1,0 +1,113 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="titulo">Buscar Recorrido</ui:define>
+
+    <ui:define name="cuerpo">
+        <h:form id="formBusqueda">
+            <h1>Buscar Recorrido</h1>
+
+            <f:metadata>
+                <f:event listener="#{recorridoBean.inicializar}"
+                         type="preRenderView" />
+            </f:metadata>
+
+            <p:messages autoUpdate="true" closable="true" />
+
+            <p:toolbar style="margin-top:20px">
+                <f:facet name="left">
+                    <p:commandButton value="Buscar Recorrido"
+                                     action="#{recorridoBean.buscarRecorridosFiltros}" update="@form" />
+                </f:facet>
+                <f:facet name="right">
+                    <p:button value="Nuevo Recorrido" outcome="/recorrido/registrarRecorrido" />
+                </f:facet>
+            </p:toolbar>
+
+            <p:panelGrid columns="2" id="panelForm"
+                         style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+                <p:outputLabel value="Terminal Origen" for="terminalOrigen" />
+                <p:selectOneListbox id="terminalOrigen" styleClass="no-border"
+                                    value="#{recorridoBean.filtros.origen}">
+                    <f:selectItems value="#{recorridoBean.terminales}" var="terminal"
+                                   itemValue="#{terminal.ideTerminal}"
+                                   itemLabel="#{terminal.nombreTerminal}"/>
+
+                </p:selectOneListbox>
+
+
+                <p:outputLabel value="Terminal Destino" for="terminalDestino" />
+                <p:selectOneListbox id="terminalDestino" styleClass="no-border"
+                                    value="#{recorridoBean.filtros.destino}">
+                    <f:selectItems value="#{recorridoBean.terminalesDestino}" var="terminal"
+                                   itemValue="#{terminal.ideTerminal}"
+                                   itemLabel="#{terminal.nombreTerminal}"/>
+
+                </p:selectOneListbox>
+
+                <p:outputLabel value="Ruta" for="ruta" />
+                <p:inputText id="ruta" size="60"
+                             value="#{recorridoBean.filtros.ruta}" />
+
+            </p:panelGrid>
+
+            <p:dataTable id="recorridosTable"
+                         value="#{recorridoBean.recorridosFiltrados}" var="recorrido"
+                         style="margin-top:20px"
+                         emptyMessage="No se encontraron recorridos para su busqueda" rows="20"
+                         paginator="true" paginatorAlwaysVisible="false"
+                         paginatorPosition="bottom">
+
+                <p:column headerText="Id" style="text-align:center;width:100px">
+                    <h:outputLabel value="#{recorrido.ideRecorrido}" />
+                </p:column>
+
+
+                <p:column headerText="Origen" >
+                    <h:outputLabel value="#{recorrido.origen.nombreTerminal}" />
+                </p:column>
+
+
+                <p:column headerText="Destino" >
+                    <h:outputLabel value="#{recorrido.destino.nombreTerminal}" />
+                </p:column>
+
+                <p:column headerText="Ruta" >
+                    <h:outputLabel value="#{recorrido.ruta}" />
+                </p:column>
+
+
+                <p:column style="text-align:center;width:100px">
+                    <p:button title="Editar" icon="ui-icon-pencil" outcome="/recorrido/registrarRecorrido">
+                        <f:param name="recorrido" value="#{recorrido.ideRecorrido}" />
+                    </p:button>
+
+
+                    <p:commandButton  icon="ui-icon-trash" action="#{recorridoBean.eliminarRecorrido}" update="recorridosTable">
+                        <p:confirm header="Eliminar Recorrido"
+                                   message="Esta seguro de eliminar el recorrido"
+                                   icon="ui-icon-alert"/>
+
+                        <f:setPropertyActionListener
+                                target="#{recorridoBean.recorridoSeleccionado}" value="#{recorrido}" />
+                    </p:commandButton>
+
+                </p:column>
+
+            </p:dataTable>
+
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
