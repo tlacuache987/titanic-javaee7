@@ -1,19 +1,19 @@
 package com.titanic.ventapasajes.controller;
 
-import com.titanic.ventapasajes.modelo.Bus;
-import com.titanic.ventapasajes.modelo.Recorrido;
-import com.titanic.ventapasajes.repositorio.BusRepositorio;
-import com.titanic.ventapasajes.repositorio.filtros.BusFiltros;
-import com.titanic.ventapasajes.repositorio.filtros.RecorridoFiltros;
-import com.titanic.ventapasajes.util.FacesUtil;
-import org.primefaces.context.RequestContext;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
-import java.util.List;
+
+import org.primefaces.context.RequestContext;
+
+import com.titanic.ventapasajes.modelo.Bus;
+import com.titanic.ventapasajes.repositorio.BusRepositorio;
+import com.titanic.ventapasajes.repositorio.filtros.BusFiltros;
+import com.titanic.ventapasajes.util.FacesUtil;
 
 /**
  * Created by josediaz on 7/20/14.

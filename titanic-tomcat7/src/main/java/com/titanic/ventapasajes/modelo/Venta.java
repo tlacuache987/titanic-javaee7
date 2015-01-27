@@ -15,7 +15,11 @@ import java.util.List;
 @Table(name = "pvm_venta")
 public class Venta implements Serializable {
 
-    private Long ideVenta;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2197964758413800707L;
+	private Long ideVenta;
     private Date fechaVenta;
     private Recorrido ruta;
     private String horaSalida;

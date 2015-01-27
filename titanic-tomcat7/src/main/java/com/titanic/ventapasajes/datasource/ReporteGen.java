@@ -8,9 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.io.StringWriter;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -18,15 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
-import net.sf.jasperreports.engine.export.JRXlsExporter;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.export.JRPdfExporterParameter;
 
 
 /**
@@ -35,7 +28,12 @@ import net.sf.jasperreports.engine.util.JRLoader;
 
 public class ReporteGen implements Serializable {
 
-    public void  exportByFormato(JRDataSource dt,String path, String type,  String outputFileName) {     
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6894823156794184869L;
+
+	public void  exportByFormato(JRDataSource dt,String path, String type,  String outputFileName) {     
         try {
           FacesContext context = FacesContext.getCurrentInstance();
           HttpServletResponse response = (HttpServletResponse) context.getExternalContext().getResponse();               

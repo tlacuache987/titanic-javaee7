@@ -4,6 +4,7 @@ import com.titanic.ventapasajes.modelo.Recorrido;
 import com.titanic.ventapasajes.repositorio.filtros.RecorridoFiltros;
 import com.titanic.ventapasajes.service.NegocioExcepciones;
 import com.titanic.ventapasajes.util.jpa.Transaccion;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -14,6 +15,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -40,7 +42,8 @@ public class RecorridoRepositorio implements Serializable {
                 .getResultList();
     }
 
-    public List<Recorrido> listarRecorridosFiltrados(RecorridoFiltros filtros) {
+    @SuppressWarnings("unchecked")
+	public List<Recorrido> listarRecorridosFiltrados(RecorridoFiltros filtros) {
 
         Session session = entityManager.unwrap(Session.class);
         Criteria criteria =  session.createCriteria(Recorrido.class);

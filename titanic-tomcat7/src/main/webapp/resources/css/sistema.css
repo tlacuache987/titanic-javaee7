@@ -11,7 +11,7 @@ h1{font-size: 24px;font-weight: 500;padding:0px; margin:0px;color:#2779AA}
 .panel-login{background-color: #F2F2F2;border-radius:7px;
 			border:solid 1px #ccc;margin-top:12px;padding:10px}
 			
-.lblIzq{width: 150px;height:32px}
+.lblIzq{width: 150px;height:45px}
 .ajax-status{position: fixed;top:55px;right:10px}
 .no-border tbody tr td{border:none}
 

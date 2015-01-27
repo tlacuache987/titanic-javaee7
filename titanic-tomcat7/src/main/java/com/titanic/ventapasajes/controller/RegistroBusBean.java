@@ -1,20 +1,30 @@
 package com.titanic.ventapasajes.controller;
 
-import com.titanic.ventapasajes.modelo.*;
-import com.titanic.ventapasajes.service.RegistroBusService;
-import com.titanic.ventapasajes.util.FacesUtil;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.event.CellEditEvent;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.event.CellEditEvent;
+
+import com.titanic.ventapasajes.modelo.Bus;
+import com.titanic.ventapasajes.modelo.Celda;
+import com.titanic.ventapasajes.modelo.CeldaSuperior;
+import com.titanic.ventapasajes.modelo.EstadoCelda;
+import com.titanic.ventapasajes.modelo.Fila;
+import com.titanic.ventapasajes.modelo.FilaSuperior;
+import com.titanic.ventapasajes.modelo.TipoBus;
+import com.titanic.ventapasajes.modelo.TipoCelda;
+import com.titanic.ventapasajes.modelo.TipoPlanta;
+import com.titanic.ventapasajes.modelo.UbicacionPlanta;
+import com.titanic.ventapasajes.service.RegistroBusService;
+import com.titanic.ventapasajes.util.FacesUtil;
 
 /**
  * Created by josediaz on 7/20/14.

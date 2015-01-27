@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/JNDI">
+<Context>
 	<Manager pathname="" />
 	<Resource name="BeanManager" auth="Container" type="javax.enterprise.inject.spi.BeanManager"
 			  factory="org.jboss.weld.resources.ManagerObjectFactory" />
-    <Resource name="jdbc/jelasticDb" auth="Container" type="javax.sql.DataSource"
-               maxActive="100" maxIdle="30" maxWait="10000"
-               username="titanic" password="j8sjUxXQF8hfY2Au" driverClassName="com.mysql.jdbc.Driver"
-               url="jdbc:mysql://mysql157535-titanic.jelastic.servint.net/titanic"/>
 </Context>
-

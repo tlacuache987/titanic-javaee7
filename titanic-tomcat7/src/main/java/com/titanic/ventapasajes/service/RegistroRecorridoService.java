@@ -1,13 +1,12 @@
 package com.titanic.ventapasajes.service;
 
-import com.titanic.ventapasajes.modelo.Cliente;
-import com.titanic.ventapasajes.modelo.Recorrido;
-import com.titanic.ventapasajes.repositorio.ClienteRepositorio;
-import com.titanic.ventapasajes.repositorio.RecorridoRepositorio;
-import com.titanic.ventapasajes.util.jpa.Transaccion;
+import java.io.Serializable;
 
 import javax.inject.Inject;
-import java.io.Serializable;
+
+import com.titanic.ventapasajes.modelo.Recorrido;
+import com.titanic.ventapasajes.repositorio.RecorridoRepositorio;
+import com.titanic.ventapasajes.util.jpa.Transaccion;
 
 /**
  * Created by josediaz on 7/25/14.

@@ -1,22 +1,25 @@
 package com.titanic.ventapasajes.controller;
 
-import com.titanic.ventapasajes.modelo.*;
-import com.titanic.ventapasajes.repositorio.TerminalRepositorio;
-import com.titanic.ventapasajes.service.RegistroClienteService;
-import com.titanic.ventapasajes.service.RegistroRecorridoService;
-import com.titanic.ventapasajes.util.FacesUtil;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.event.CellEditEvent;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+
+import org.primefaces.event.CellEditEvent;
+
+import com.titanic.ventapasajes.modelo.Recorrido;
+import com.titanic.ventapasajes.modelo.TarifaGeneral;
+import com.titanic.ventapasajes.modelo.Terminal;
+import com.titanic.ventapasajes.modelo.TipoBus;
+import com.titanic.ventapasajes.repositorio.TerminalRepositorio;
+import com.titanic.ventapasajes.service.RegistroRecorridoService;
+import com.titanic.ventapasajes.util.FacesUtil;
 
 /**
  * Created by josediaz on 7/25/14.
@@ -38,7 +41,7 @@ public class RegistroRecorridoBean implements Serializable {
     @Inject
     private TerminalRepositorio terminalRepositorio;
 
-    private TarifaGeneral precioSeleccionado;
+ 
     private List<Terminal> terminales;
 
 

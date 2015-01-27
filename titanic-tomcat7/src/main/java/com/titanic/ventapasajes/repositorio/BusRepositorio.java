@@ -1,11 +1,13 @@
 package com.titanic.ventapasajes.repositorio;
 
-import com.titanic.ventapasajes.modelo.Bus;
-import com.titanic.ventapasajes.modelo.Usuario;
-import com.titanic.ventapasajes.repositorio.filtros.BusFiltros;
-import com.titanic.ventapasajes.repositorio.filtros.UsuarioFiltros;
-import com.titanic.ventapasajes.service.NegocioExcepciones;
-import com.titanic.ventapasajes.util.jpa.Transaccion;
+import java.io.Serializable;
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
@@ -14,12 +16,10 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
-import java.io.Serializable;
-import java.util.List;
+import com.titanic.ventapasajes.modelo.Bus;
+import com.titanic.ventapasajes.repositorio.filtros.BusFiltros;
+import com.titanic.ventapasajes.service.NegocioExcepciones;
+import com.titanic.ventapasajes.util.jpa.Transaccion;
 
 /**
  * Created by josediaz on 7/20/14.

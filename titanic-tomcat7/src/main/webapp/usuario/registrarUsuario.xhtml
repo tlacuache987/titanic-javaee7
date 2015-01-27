@@ -20,18 +20,18 @@
 
 
 		<h:form>
-            <p:growl id="msg" />
+			<p:growl id="msg" />
 			<p:messages autoUpdate="true" />
 			<p:toolbar style="margin-top:20px">
 				<f:facet name="left">
 					<p:button value="Nuevo Usuario" outcome="/usuario/registrarUsuario" />
 					<p:commandButton value="Grabar Usuario" id="btnGrabar"
 						action="#{registroUsuarioBean.registrarUsuario}" update="@form" />
-                </f:facet>
+				</f:facet>
 				<f:facet name="right">
 					<p:button value="Buscar Usuario" id="btnBuscar"
 						outcome="/usuario/buscarUsuario" />
-                </f:facet>
+				</f:facet>
 			</p:toolbar>
 
 			<p:panelGrid columns="2" id="panelFormUsuario"
@@ -41,19 +41,33 @@
 				<p:inputText id="nombre" size="60" maxlength="255"
 					value="#{registroUsuarioBean.usuario.nombreUsuario}" />
 
+				<p:outputLabel value="Dni" for="dni" />
+				<p:inputText id="dni" size="60" maxlength="10"
+					value="#{registroUsuarioBean.usuario.dni}" />
+
+
 				<p:outputLabel value="E-mail" for="email" />
 				<p:inputText id="email" size="30" maxlength="100"
-					value="#{registroUsuarioBean.usuario.email}" readonly="#{registroUsuarioBean.editando}" />
+					value="#{registroUsuarioBean.usuario.email}"
+					readonly="#{registroUsuarioBean.editando}" />
 
 				<p:outputLabel value="Password" for="pwd" />
 				<p:password id="pwd" size="30" maxlength="40"
-					value="#{registroUsuarioBean.usuario.password}" 
-					redisplay="true" />
+					value="#{registroUsuarioBean.usuario.password}" redisplay="true" />
 
-                <p:outputLabel value="Activo?: " />
-                <p:selectBooleanCheckbox value="#{registroUsuarioBean.usuario.activo}" >
-                    <p:ajax listener="#{registroUsuarioBean.addMessage}" update="msg" />
-                </p:selectBooleanCheckbox>
+				<p:outputLabel value="Sexo" for="sexo" />
+				<p:selectOneRadio id="sexo"
+						value="#{registroUsuarioBean.usuario.sexo}">
+					<f:selectItem itemLabel="MASCULINO" itemValue="MASCULINO" />
+					<f:selectItem itemLabel="FEMENINO" itemValue="FEMENINO" />
+
+				</p:selectOneRadio>
+
+				<p:outputLabel value="Activo?: " />
+				<p:selectBooleanCheckbox
+					value="#{registroUsuarioBean.usuario.activo}">
+					<p:ajax listener="#{registroUsuarioBean.addMessage}" update="msg" />
+				</p:selectBooleanCheckbox>
 
 				<p:selectOneMenu id="grupo" value="#{registroUsuarioBean.grupo}"
 					style="text-align:center;width:200px">

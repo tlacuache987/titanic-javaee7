@@ -33,6 +33,7 @@ public class JsfHandlerException extends ExceptionHandlerWrapper{
 		return this.wrapped;
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public void handle() throws FacesException {
 		

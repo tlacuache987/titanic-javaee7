@@ -13,7 +13,11 @@ import java.math.BigDecimal;
 @Table(name = "pvm_boleto")
 public class Boleto implements Serializable {
 
-    private Long ideBoleto;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3506276599531512837L;
+	private Long ideBoleto;
     private String asiento;
     private BigDecimal precio;
     private Cliente cliente;

@@ -1,19 +1,17 @@
 package com.titanic.ventapasajes.repositorio;
 
-import com.titanic.ventapasajes.modelo.Bus;
-import com.titanic.ventapasajes.modelo.Recorrido;
-import com.titanic.ventapasajes.modelo.Venta;
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import java.io.Serializable;
+import java.util.Date;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.io.Serializable;
-import java.util.Date;
+
+import org.hibernate.Hibernate;
+
+import com.titanic.ventapasajes.modelo.Bus;
+import com.titanic.ventapasajes.modelo.Recorrido;
+import com.titanic.ventapasajes.modelo.Venta;
 
 /**
  * Created by josediaz on 7/28/14.

@@ -4,18 +4,14 @@
  */
 package com.titanic.ventapasajes.datasource;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.titanic.ventapasajes.modelo.Boleto;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
+
+import com.titanic.ventapasajes.modelo.Boleto;
 
 /**
  *
@@ -35,19 +31,19 @@ public class DataSourceBoleto implements JRDataSource{
     	
         Object valor = null;  
 
-            if("Anio".equals(jrf.getName())) {
+            if("ANO".equals(jrf.getName())) {
             	if(listaDR.get(indice).getFechaVenta()!=null)
             		valor = listaDR.get(indice).getFechaVenta().subSequence(6, 4);
             	else
             		valor = "0000";
-            }else if ("FechaEmision".equals(jrf.getName())){
+            }else if ("FECHA".equals(jrf.getName())){
                 valor = listaDR.get(indice).getFechaVenta();
-            }else if ("Mes".equals(jrf.getName())){
+            }else if ("MES".equals(jrf.getName())){
             	if(listaDR.get(indice).getFechaVenta()!=null)
             		valor = listaDR.get(indice).getFechaVenta().subSequence(3, 2);
             	else
             		valor = "00";
-            }else if ("Dia".equals(jrf.getName())){
+            }else if ("DIA".equals(jrf.getName())){
             	if(listaDR.get(indice).getFechaVenta()!=null)
             		valor = listaDR.get(indice).getFechaVenta().subSequence(0, 2);
             	else
@@ -56,20 +52,20 @@ public class DataSourceBoleto implements JRDataSource{
                 valor =listaDR.get(indice).getCliente().getNumeroDocumento();
             }else if ("DNI".equals(jrf.getName())){
             	valor =listaDR.get(indice).getCliente().getNumeroDocumento();
-            }else if("SerieNumero".equals(jrf.getName())) { 
-                valor = listaDR.get(indice).getNumeroDocumento();
-            }else if ("PrecioVenta".equals(jrf.getName())){
+//            }else if("SerieNumero".equals(jrf.getName())) { 
+//                valor = listaDR.get(indice).getNumeroDocumento();
+            }else if ("VALOR".equals(jrf.getName())){
             	valor = listaDR.get(indice).getPrecio();
-            }else if ("ValorVenta".equals(jrf.getName())){
+            }else if ("VALOR_LETRAS".equals(jrf.getName())){
                 NumeroALetra num = new NumeroALetra();
                 valor = num.Convertir(listaDR.get(indice).getPrecio().toString(), true,"SOLES"); 
-            }else if ("Destino".equals(jrf.getName())){
-                valor = listaDR.get(indice).getDestino();
-            }else if ("Origen".equals(jrf.getName())){
-                valor = listaDR.get(indice).getOrigen();
-            }else if ("Pasajero".equals(jrf.getName())){
+//            }else if ("Destino".equals(jrf.getName())){
+//                valor = listaDR.get(indice).getDestino();
+//            }else if ("Origen".equals(jrf.getName())){
+//                valor = listaDR.get(indice).getOrigen();
+            }else if ("PASAJERO".equals(jrf.getName())){
                 valor = listaDR.get(indice).getNombresCliente();
-            }else if ("Usuario".equals(jrf.getName())){
+            }else if ("USUARIO".equals(jrf.getName())){
                 valor = listaDR.get(indice).getUsuario().getNombreUsuario();
                 
             }

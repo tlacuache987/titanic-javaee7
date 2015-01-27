@@ -1,15 +1,13 @@
 package com.titanic.ventapasajes.conversores;
 
-import com.titanic.ventapasajes.modelo.TarifaGeneral;
-import com.titanic.ventapasajes.modelo.Terminal;
-import com.titanic.ventapasajes.repositorio.TarifaGeneralRepositorio;
-import com.titanic.ventapasajes.repositorio.TerminalRepositorio;
-import com.titanic.ventapasajes.util.cdi.CDIServiceLocator;
-
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+
+import com.titanic.ventapasajes.modelo.TarifaGeneral;
+import com.titanic.ventapasajes.repositorio.TarifaGeneralRepositorio;
+import com.titanic.ventapasajes.util.cdi.CDIServiceLocator;
 
 /**
  * Created by josediaz on 7/25/14.

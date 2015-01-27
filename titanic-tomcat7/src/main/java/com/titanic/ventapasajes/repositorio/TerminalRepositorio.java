@@ -1,26 +1,23 @@
 package com.titanic.ventapasajes.repositorio;
 
-import com.titanic.ventapasajes.modelo.Bus;
-import com.titanic.ventapasajes.modelo.Cliente;
-import com.titanic.ventapasajes.modelo.Grupo;
-import com.titanic.ventapasajes.modelo.Terminal;
-import com.titanic.ventapasajes.repositorio.filtros.BusFiltros;
-import com.titanic.ventapasajes.repositorio.filtros.TerminalFiltros;
-import com.titanic.ventapasajes.service.NegocioExcepciones;
-import com.titanic.ventapasajes.util.jpa.Transaccion;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
+import java.io.Serializable;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
-import java.io.Serializable;
-import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+
+import com.titanic.ventapasajes.modelo.Terminal;
+import com.titanic.ventapasajes.repositorio.filtros.TerminalFiltros;
+import com.titanic.ventapasajes.service.NegocioExcepciones;
+import com.titanic.ventapasajes.util.jpa.Transaccion;
 
 /**
  * Created by josediaz on 7/24/14.
@@ -80,7 +77,8 @@ public class TerminalRepositorio implements Serializable {
                 .getResultList();
     }
 
-    public List<Terminal> listarTerminalesFiltrados(TerminalFiltros terminalFiltros) {
+    @SuppressWarnings("unchecked")
+	public List<Terminal> listarTerminalesFiltrados(TerminalFiltros terminalFiltros) {
 
 
         Session session = entityManager.unwrap(Session.class);

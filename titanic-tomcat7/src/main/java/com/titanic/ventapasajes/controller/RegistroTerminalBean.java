@@ -1,14 +1,14 @@
 package com.titanic.ventapasajes.controller;
 
-import com.titanic.ventapasajes.modelo.*;
-import com.titanic.ventapasajes.service.RegistroClienteService;
-import com.titanic.ventapasajes.service.RegistroTerminalService;
-import com.titanic.ventapasajes.util.FacesUtil;
+import java.io.Serializable;
 
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
+
+import com.titanic.ventapasajes.modelo.Terminal;
+import com.titanic.ventapasajes.service.RegistroTerminalService;
+import com.titanic.ventapasajes.util.FacesUtil;
 
 /**
  * Created by josediaz on 7/24/14.

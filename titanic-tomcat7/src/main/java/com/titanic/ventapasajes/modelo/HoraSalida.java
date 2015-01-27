@@ -1,6 +1,14 @@
 package com.titanic.ventapasajes.modelo;
 
-import javax.persistence.*;
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -8,7 +16,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "pvm_hora_salida")
-public class HoraSalida {
+public class HoraSalida implements Serializable {
 
 
 

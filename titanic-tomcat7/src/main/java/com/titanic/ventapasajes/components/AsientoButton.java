@@ -24,7 +24,7 @@ public class AsientoButton extends UIInput implements NamingContainer {
 
     @Override
     public void encodeBegin(FacesContext context) throws IOException {
-        String numeroAsiento = (String) getValue();
+       
         String estado = getAttributeValue("estado", String.valueOf(EstadoBoleto.LIBRE));
 
         if(estado.equals(String.valueOf(EstadoBoleto.RESERVADO))){

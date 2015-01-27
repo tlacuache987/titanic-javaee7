@@ -351,7 +351,8 @@ public class VentaPasajeBean implements Serializable {
             dt.addDetalle(boleto);
         }
         
-        String path="/reportes/venta_boletos2.jasper";           
+        //String path="/reportes/venta_boletos2.jasper";           
+        String path="/reportes/venta_boleto4.jasper";
         ReporteGen rep = new ReporteGen();
         rep.exportByFormato(dt, path, "pdf", "boleto");
         dt=null;
