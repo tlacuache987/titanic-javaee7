@@ -55,7 +55,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.25</version>
-			<scope>compile</scope>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -127,12 +127,12 @@
 
 
 		<!-- JAR generado para envio de e-mails -->
-		<dependency>
+		<!-- dependency>
 			<groupId>com.outjected</groupId>
 			<artifactId>simple-email</artifactId>
 			<version>0.2.1</version>
 			<scope>compile</scope>
-		</dependency>
+		</dependency-->
 
 		<!-- Requerido para envio de e-mails -->
 		<dependency>
