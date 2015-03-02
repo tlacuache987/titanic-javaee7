@@ -1,12 +1,8 @@
 package com.titanic.ventapasajes.controller;
 
-
 import com.titanic.ventapasajes.modelo.Recorrido;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.push.EventBus;
-import org.primefaces.push.EventBusFactory;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
@@ -14,26 +10,35 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by josediaz on 7/26/14.
+ * Created by Celeritech Peru on 02/03/2015.
  */
-
 @Named
 @ViewScoped
-public class VentaPasajeBean implements Serializable {
+public class SeleccionarBusBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
     @NotNull
-    private Recorrido ruta;
-
-    @NotNull
     private Date fechaVenta;
 
+    @NotNull
+    private Date nuevaFechaVenta;
+
+
+    @NotNull
+    private Recorrido ruta;
+
+
+    private boolean mostrarParametros = false;
+
+
+    public void modificarParametros() {
+        this.mostrarParametros = !mostrarParametros;
+    }
 
     public void seleccionarRuta() {
         RequestContext.getCurrentInstance().openDialog("seleccionarRuta");
@@ -46,6 +51,17 @@ public class VentaPasajeBean implements Serializable {
 
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ruta Seleccionada", "Id:" + recorrido.getRuta());
+
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void onFechaSeleccionada(SelectEvent event) {
+        Date nuevaFecha = (Date) event.getObject();
+
+       this.setFechaVenta(nuevaFecha);
+
+
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Fecha Modificada", "Fecha Venta:" + fechaVenta);
 
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
@@ -64,23 +80,24 @@ public class VentaPasajeBean implements Serializable {
         return fechaVenta;
     }
 
-    public String getFechaVentaAsString(){
-       return  fechaVenta==null?"":new SimpleDateFormat("yyyyMMddHHmmss").format(fechaVenta);
-    }
-
     public void setFechaVenta(Date fechaVenta) {
         this.fechaVenta = fechaVenta;
     }
 
+    public boolean isMostrarParametros() {
+        return mostrarParametros;
+    }
 
-    public void notificarPUSH() {
-        String summary = "Asiento Vendido";
-        String detail = "Nuevo asiento vendido";
-        String CHANNEL = "/notify";
+    public void setMostrarParametros(boolean mostrarParametros) {
+        this.mostrarParametros = mostrarParametros;
+    }
 
-        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-        eventBus.publish(CHANNEL,
-                new FacesMessage(StringEscapeUtils.escapeHtml(summary), StringEscapeUtils.escapeHtml(detail)));
+    public Date getNuevaFechaVenta() {
+        return nuevaFechaVenta;
+    }
+
+    public void setNuevaFechaVenta(Date nuevaFechaVenta) {
+        this.nuevaFechaVenta = nuevaFechaVenta;
 
     }
 }

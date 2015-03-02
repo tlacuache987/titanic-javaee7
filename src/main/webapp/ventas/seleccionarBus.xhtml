@@ -1,41 +1,95 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui">
 
-<h:head>
-    <title>Bus</title>
-    <style type="text/css">
-        .ui-widget {
-            font-size: 80%;
-        }
-    </style>
-</h:head>
 
-<h:body>
-    <h:form>
-        <p:dataTable var="bus" value="#{busBean.busesFiltrados}">
-            <p:column headerText="Id">
-                <h:outputText value="#{bus.ideBus}" />
-            </p:column>
+    <ui:define name="titulo">Buses</ui:define>
 
-            <p:column headerText="Nombre Bus">
-                <h:outputText value="#{bus.descripcionBus}" />
-            </p:column>
+    <ui:define name="cuerpo">
 
-            <p:column headerText="Placa">
-                <h:outputText value="#{bus.placa}" />
-            </p:column>
 
-            <p:column headerText="Numero Plantas">
-                <h:outputText value="#{bus.tipoPlanta.descripcion}" />
-            </p:column>
 
-            <p:column headerText="Seleccione Bus">
-                <p:commandButton icon="ui-icon-search" actionListener="#{busBean.selectBusFromDialog(bus)}" />
-            </p:column>
-        </p:dataTable>
-    </h:form>
-</h:body>
+        <f:metadata>
+            <o:viewParam name="ruta" value="#{seleccionarBusBean.ruta}" />
+            <f:viewParam name="fechaVenta" value="#{seleccionarBusBean.fechaVenta}">
+                <f:convertDateTime pattern="yyyyMMddHHmmss" />
+            </f:viewParam>
+        </f:metadata>
 
-</html>
+
+        <h1>Buses</h1>
+
+
+
+        <h:form id="form">
+
+            <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
+
+            <p:messages autoUpdate="true"/>
+
+            <p:toolbar style="margin-top:20px">
+
+
+                <f:facet name="left">
+
+
+
+                        <p:outputLabel value="Fecha Partida:"/>
+                        <p:outputLabel value="#{seleccionarBusBean.fechaVenta}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </p:outputLabel>
+
+                        <p:outputLabel value="  "/>
+
+                        <p:outputLabel value="Ruta:"/>
+                        <p:outputLabel value="#{seleccionarBusBean.ruta.ruta}"/>
+
+
+
+                </f:facet>
+                <f:facet name="right">
+                    <p:commandButton value="Modificar" action="#{seleccionarBusBean.modificarParametros}" update="@form"/>
+                </f:facet>
+            </p:toolbar>
+
+            <h:panelGroup id="myPanel" rendered="#{seleccionarBusBean.mostrarParametros}">
+
+
+
+                    <p:outputLabel for="fechaPartida" value="Fecha Partida:"/>
+                    <p:calendar id="fechaPartida" value="#{seleccionarBusBean.nuevaFechaVenta}" showOn="button"
+                                update=":form" >
+
+
+                        <p:ajax event="dateSelect" listener="#{seleccionarBusBean.onFechaSeleccionada}"
+                                update="msgs,ruta, :form"/>
+                    </p:calendar>
+
+                    <p:outputLabel value="  "/>
+
+                    <p:outputLabel for="ruta" value="Ruta:"/>
+                    <p:inputText id="ruta" value="#{seleccionarBusBean.ruta.ruta}" size="30" readonly="true"/>
+                    <p:commandButton value="Ruta" icon="ui-icon-extlink"
+                                     actionListener="#{seleccionarBusBean.seleccionarRuta}">
+                        <p:ajax event="dialogReturn" listener="#{seleccionarBusBean.onRutaSeleccionada}"
+                                update="msgs,ruta, :form"/>
+
+                    </p:commandButton>
+
+
+            </h:panelGroup>
+
+        </h:form>
+
+    </ui:define>
+
+
+
+
+</ui:composition>
+
+
