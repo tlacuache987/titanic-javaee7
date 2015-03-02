@@ -11,11 +11,14 @@ import com.titanic.ventapasajes.service.RegistroVentaService;
 import com.titanic.ventapasajes.util.FacesUtil;
 import com.titanic.ventapasajes.util.reporte.EjecutorReporte;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.hibernate.Session;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -538,5 +541,14 @@ public class VentaPasajeBean implements Serializable {
 	}
 
 
+    public void notificarPUSH(){
+        String summary = "Asiento Vendido";
+        String detail = "Nuevo asiento vendido";
+        String CHANNEL = "/notify";
 
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish(CHANNEL,
+                new FacesMessage(StringEscapeUtils.escapeHtml(summary),StringEscapeUtils.escapeHtml(detail) ));
+
+    }
 }

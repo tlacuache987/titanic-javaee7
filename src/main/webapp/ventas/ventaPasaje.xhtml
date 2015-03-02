@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:asiento="http://java.sun.com/jsf/composite/components"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
 
@@ -22,9 +22,35 @@
 </f:metadata>
 
 
+
+
+
 <h:form id="form">
-<p:growl id="msgs" showDetail="true"/>
-<p:messages autoUpdate="true"/>
+
+
+
+    <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
+
+    <p:socket channel="/notify" onMessage="handleMessage">
+        <p:ajax event="message" update=":form" />
+    </p:socket>
+
+    <script language="JavaScript">
+
+
+        function handleMessage(facesMessage){
+            facesMessage.severity = "info";
+
+            PF('wmsg').show(facesMessage);
+        }
+
+    </script>
+
+
+
+
+    <p:messages autoUpdate="true"/>
+
 
 <p:toolbar style="margin-top:20px">
 
@@ -596,7 +622,12 @@ function openPrintWindow(url, name, specs) {
         }
     }
     var sched = setInterval(printAndClose, 200);
-};
+}
+
+
+
+
+
 
 </script>
 
