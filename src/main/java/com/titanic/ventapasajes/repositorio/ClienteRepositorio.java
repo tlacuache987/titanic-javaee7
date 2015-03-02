@@ -32,7 +32,7 @@ public class ClienteRepositorio implements Serializable{
 	}
 
 
-    @SuppressWarnings("unchecked")
+
 	public List<Cliente> buscarTodos(){
         return this.entityManager.createQuery("from Cliente").getResultList();
     }

@@ -1,0 +1,116 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="titulo">#{registroProgramacionBean.editando ? 'Editando Programacion' : 'Registrar Nueva Programación'}</ui:define>
+
+	<ui:define name="cuerpo">
+		<h1>#{registroProgramacionBean.editando ? 'Editando Programación' :
+			'Registrar Nueva Programación'}</h1>
+
+
+		<f:metadata>
+			<o:viewParam name="programacion" value="#{registroProgramacionBean.programacion}" />
+			<f:event listener="#{registroProgramacionBean.inicializar}"
+				type="preRenderView" />
+		</f:metadata>
+
+		<h:form >
+
+			<p:messages autoUpdate="true" />
+			<p:toolbar style="margin-top:20px">
+				<f:facet name="left">
+					<p:button value="Nueva Programacion" outcome="/programacion/registrarProgramacion" />
+					<p:commandButton value="Grabar Programacion" id="btnGrabar"
+						action="#{registroProgramacionBean.registrarProgramacion}" update="@form" />
+                </f:facet>
+				<f:facet name="right">
+					<p:button value="Buscar Programacion" id="btnBuscar"
+						outcome="/programacion/buscarProgramacion" />
+                </f:facet>
+			</p:toolbar>
+
+			<p:panelGrid  id="panelFormProgramacion"
+				style="width:100%;margin-top:15px" >
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Fecha Programación" for="fechaProgramacion" />
+                    </p:column>
+                    <p:column>
+                        <p:calendar id="fechaProgramacion" value="#{registroProgramacionBean.programacion.fechaProgramacion}"
+                                    showOn="button"
+                                />
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Bus" for="bus" />
+                    </p:column>
+                    <p:column>
+
+                        <p:inputText id="bus" value="#{registroProgramacionBean.programacion.bus.descripcionBus}" size="30" readonly="true"/>
+                        <p:commandButton value="Bus" icon="ui-icon-extlink"
+                                         actionListener="#{registroProgramacionBean.seleccionarBus}">
+                            <p:ajax event="dialogReturn" listener="#{registroProgramacionBean.onBusSeleccionado}"
+                                    update="bus"/>
+
+                        </p:commandButton>
+                    </p:column>
+                </p:row>
+
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Hora Salida" for="horaSalida" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="horaSalida" value="#{registroProgramacionBean.programacion.horaSalida}"
+                                     size="30" maxlength="10"/>
+
+                    </p:column>
+                </p:row>
+
+
+
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="Hora Llegada" for="horaLlegada" />
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="horaLlegada" value="#{registroProgramacionBean.programacion.horaLlegada}"
+                                     size="30" maxlength="10"/>
+                    </p:column>
+                </p:row>
+
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel value="TipoProgramacion" for="tipoProgramacion" />
+                    </p:column>
+                    <p:column>
+                        <p:selectOneRadio id="tipoProgramacion" styleClass="no-border"
+                                          value="#{registroProgramacionBean.programacion.tipoProgramacion}">
+                            <f:selectItems value="#{registroProgramacionBean.tipoProgramacion}" var="sexo"
+                                           itemValue="#{tipoProgramacion}"
+                                           itemLabel="#{tipoProgramacion.descripcion}"/>
+
+                        </p:selectOneRadio>
+
+                    </p:column>
+                </p:row>
+
+
+			</p:panelGrid>
+
+		</h:form>
+
+
+	</ui:define>
+
+</ui:composition>
