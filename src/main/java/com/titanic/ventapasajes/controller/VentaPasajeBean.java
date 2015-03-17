@@ -35,6 +35,14 @@ public class VentaPasajeBean implements Serializable {
     private Date fechaVenta;
 
 
+
+
+
+    private void inicializar() {
+
+    }
+
+
     public void seleccionarRuta() {
         RequestContext.getCurrentInstance().openDialog("seleccionarRuta");
     }

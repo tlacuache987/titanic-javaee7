@@ -88,7 +88,7 @@ public class RegistroProgramacionBean implements Serializable {
         Bus busSeleccionado = (Bus) event.getObject();
 
         this.programacion.setBus(busRepositorio.getFilasWithBusById(busSeleccionado.getIdeBus()));
-        
+
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bus Seleccionado", "Id:" + busSeleccionado.getDescripcionBus());
 

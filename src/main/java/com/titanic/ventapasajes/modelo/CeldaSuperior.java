@@ -106,4 +106,29 @@ public class CeldaSuperior implements Serializable{
     public void setFila(FilaSuperior fila) {
         this.fila = fila;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CeldaSuperior that = (CeldaSuperior) o;
+
+        if (ideCelda != null ? !ideCelda.equals(that.ideCelda) : that.ideCelda != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return ideCelda != null ? ideCelda.hashCode() : 0;
+    }
+
+
+    @Override
+    public String toString() {
+        return numeroCelda.equals("")?"":numeroCelda + '(' + estadoCelda + ")";
+    }
+
 }

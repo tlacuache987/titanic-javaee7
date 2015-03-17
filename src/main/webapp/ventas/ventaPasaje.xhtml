@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
 
 <ui:define name="titulo">Venta Pasaje</ui:define>
@@ -11,6 +11,13 @@
 <ui:define name="cuerpo">
 
     <h1>Venta de Pasaje</h1>
+
+
+    <f:metadata>
+
+        <f:event listener="#{ventaPasajeBean.inicializar}"
+                 type="preRenderView"/>
+    </f:metadata>
 
 
 
@@ -66,7 +73,6 @@
 
 
         </p:panelGrid>
-
 
 
 

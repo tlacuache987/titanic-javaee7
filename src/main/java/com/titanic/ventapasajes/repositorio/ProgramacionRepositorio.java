@@ -4,15 +4,14 @@ import com.titanic.ventapasajes.modelo.Programacion;
 import com.titanic.ventapasajes.repositorio.filtros.ProgramacionFiltros;
 import com.titanic.ventapasajes.service.NegocioExcepciones;
 import com.titanic.ventapasajes.util.jpa.Transaccion;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -25,19 +24,26 @@ public class ProgramacionRepositorio implements Serializable {
     @Inject
     private EntityManager entityManager;
 
+
+    public List<Programacion> buscarTodos(){
+        return this.entityManager.createQuery("from Programacion").getResultList();
+    }
+
+
     @SuppressWarnings("unchecked")
     public List<Programacion> listarProgramacionesFiltradas(ProgramacionFiltros programacionFiltros) {
 
 
-        Session session = entityManager.unwrap(Session.class);
-        Criteria criteria =  session.createCriteria(Programacion.class);
-        if(programacionFiltros.getFechaProgramacion()!=null){
-            criteria.add(Restrictions.eq("fechaProgramacion", programacionFiltros.getFechaProgramacion()));
-        }
+        TypedQuery<Programacion> q = entityManager.createQuery("select p from Programacion p " +
+                "where p.fechaProgramacion = :fechaProgramacion", Programacion.class);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(programacionFiltros.getFechaProgramacion());
+
+        q.setParameter("fechaProgramacion", calendar.getTime(), TemporalType.DATE);
 
 
 
-        return criteria.addOrder(Order.desc("fechaProgramacion")).list();
+        return q.getResultList();
 
     }
 

@@ -10,8 +10,8 @@
 	</appender>
 
 	<appender name="archivo" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="c:\\joe\\logs\\pedido-venta.log" />
-        <!--param name="file" value="/tomcat/logs/pedido-venta.log"/-->
+		<!--param name="file" value="c:\\joe\\logs\\pedido-venta.log" /-->
+        <param name="file" value="/opt/apache-tomcat-7.0.57/logs/pedido-venta.log"/>
 		<param name="datePattern" value="'.'yyyy-MM-dd" />
 		<param name="append" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -21,7 +21,7 @@
 
 	<root>
 		<priority value="info" />
-		<appender-ref ref="console" />
+		<appender-ref ref="archivo" />
 	</root>
 
 </log4j:configuration>

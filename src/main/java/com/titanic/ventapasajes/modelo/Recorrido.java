@@ -24,7 +24,6 @@ public class Recorrido implements Serializable {
     private String ruta;  //nombre corto FIORI-CHICLAYO   FIORI-ZAPALLAL-CHICLAYO PLAZANORTE-CHICLAYO
     private Terminal origen;
     private Terminal destino;
-    private List<HoraSalida> horasSalida;
     private List<TarifaGeneral> precios;
 
 
@@ -74,16 +73,6 @@ public class Recorrido implements Serializable {
     }
 
 
-    @OneToMany(mappedBy = "recorrido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    public List<HoraSalida> getHorasSalida() {
-        return horasSalida;
-    }
-
-    public void setHorasSalida(List<HoraSalida> horasSalida) {
-        this.horasSalida = horasSalida;
-    }
-
-
 
     @OneToMany(mappedBy = "recorrido", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     public List<TarifaGeneral> getPrecios() {
@@ -101,7 +90,6 @@ public class Recorrido implements Serializable {
                 ", ruta='" + ruta + '\'' +
                 ", origen=" + origen +
                 ", destino=" + destino +
-                ", horasSalida=" + horasSalida +
                 ", precios=" + precios +
                 '}';
     }
