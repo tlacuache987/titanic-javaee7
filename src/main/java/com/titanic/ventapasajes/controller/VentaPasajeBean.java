@@ -77,29 +77,15 @@ public class VentaPasajeBean implements Serializable {
 
     private void nuevaVenta() {
         venta = new Venta();
+        venta.setFechaVenta(fechaVenta);
+        venta.setRuta(ruta);
+        venta.setHoraSalida(horaSalida);
+        venta.setBus(bus);
+        venta.setTotalVenta(BigDecimal.ZERO);
         boletosReservados = new ArrayList<>();
-    }
+        ventaService.registrarVenta(venta);
 
-
-    public void inicializar() {
-
-
-        if (isCargarAsientos()) {
-
-            Venta ventaGuardada = ventaService.obtenerVenta(fechaVenta, ruta, horaSalida, bus);
-            if (ventaGuardada != null) {
-                venta = ventaGuardada;
-            } else {
-                venta.setFechaVenta(fechaVenta);
-                venta.setRuta(ruta);
-                venta.setHoraSalida(horaSalida);
-                venta.setBus(bus);
-                venta.setTotalVenta(BigDecimal.ZERO);
-            }
-
-        }
-
-
+        FacesUtil.adicionarMensajeInfo("Se inicializo venta satisfactoriamente");
     }
 
 
@@ -247,8 +233,6 @@ public class VentaPasajeBean implements Serializable {
         if (venta==null)
             nuevaVenta();
 
-        inicializar();
-
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bus Seleccionado", "Id:" + busSeleccionado.getDescripcionBus());
 
         FacesContext.getCurrentInstance().addMessage(null, message);
@@ -376,6 +360,91 @@ public class VentaPasajeBean implements Serializable {
     }
 
 
+    public String getAsientosReservados() {
+        String reservados = "";
+        if (venta.getBoletos() != null) {
+            for (Boleto boleto : venta.getBoletos()) {
+                if (reservados.isEmpty() && (boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO)) {
+                    reservados = boleto.getAsiento();
+                } else if(boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
+                    reservados = reservados + "," + boleto.getAsiento();
+                }
+            }
+        }
+        return reservados;
+    }
+
+    public String getTotalReservados() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        if (venta.getBoletos() != null) {
+            for (Boleto boleto : venta.getBoletos()) {
+                if(boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
+                    total = total.add(boleto.getPrecio());
+                }
+            }
+        }
+
+        return total.toString();
+    }
+
+
+    public BigDecimal getTotalPagados() {
+
+        BigDecimal total = BigDecimal.ZERO;
+
+        if (venta.getBoletos() != null) {
+            for (Boleto boleto : venta.getBoletos()) {
+                if(boleto.getEstadoBoleto() == EstadoBoleto.PAGADO) {
+                    total = total.add(boleto.getPrecio());
+                }
+            }
+        }
+
+        return total;
+    }
+
+
+    public void validarCartaNotarial(Cliente cliente){
+        if(cliente.getEdad()<18){
+            cliente.setDebePresentarCartaNotarial(true);
+        }else{
+            cliente.setDebePresentarCartaNotarial(false);
+        }
+    }
+
+    public List<String> completeClientes(String query) {
+        List<Cliente> todosLosClientes = clienteService.buscarTodos();
+        List<String> dnisFiltrados = new ArrayList<>();
+
+        for(Cliente cliente : todosLosClientes){
+            if(cliente.getNumeroDocumento().toLowerCase().startsWith(query)){
+                dnisFiltrados.add(cliente.getNumeroDocumento());
+            }
+        }
+        return dnisFiltrados;
+    }
+
+
+    public void setearCliente(Cliente cliente){
+        if(cliente!=null) {
+            Cliente clienteBD = clienteService.obtenerClientePorNumeroDocumento(cliente.getNumeroDocumento());
+            cliente.setNumeroDocumento(clienteBD.getNumeroDocumento());
+            cliente.setEdad(clienteBD.getEdad());
+            cliente.setSexo(clienteBD.getSexo());
+            cliente.setNombreCliente(clienteBD.getNombreCliente());
+            cliente.setIdeCliente(clienteBD.getIdeCliente());
+
+        }
+
+
+    }
+
+    public boolean isCargarAsientos() {
+        return (this.fechaVenta != null && this.ruta != null && this.horaSalida != null && this.bus != null);
+    }
+
     public Venta getVenta() {
         return venta;
     }
@@ -426,54 +495,6 @@ public class VentaPasajeBean implements Serializable {
     }
 
 
-    public String getAsientosReservados() {
-        String reservados = "";
-        if (venta.getBoletos() != null) {
-            for (Boleto boleto : venta.getBoletos()) {
-                if (reservados.isEmpty() && (boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO)) {
-                    reservados = boleto.getAsiento();
-                } else if(boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    reservados = reservados + "," + boleto.getAsiento();
-                }
-            }
-        }
-        return reservados;
-    }
-
-    public String getTotalReservados() {
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        if (venta.getBoletos() != null) {
-            for (Boleto boleto : venta.getBoletos()) {
-                if(boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    total = total.add(boleto.getPrecio());
-                }
-            }
-        }
-
-        return total.toString();
-    }
-
-
-    public BigDecimal getTotalPagados() {
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        if (venta.getBoletos() != null) {
-            for (Boleto boleto : venta.getBoletos()) {
-                if(boleto.getEstadoBoleto() == EstadoBoleto.PAGADO) {
-                    total = total.add(boleto.getPrecio());
-                }
-            }
-        }
-
-        return total;
-    }
-
-    public boolean isCargarAsientos() {
-        return (this.fechaVenta != null && this.ruta != null && this.horaSalida != null && this.bus != null);
-    }
 
 
     public Sexo[] getSexo() {
@@ -494,40 +515,7 @@ public class VentaPasajeBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
     }
 
-    public void validarCartaNotarial(Cliente cliente){
-        if(cliente.getEdad()<18){
-            cliente.setDebePresentarCartaNotarial(true);
-        }else{
-            cliente.setDebePresentarCartaNotarial(false);
-        }
-    }
 
-    public List<String> completeClientes(String query) {
-        List<Cliente> todosLosClientes = clienteService.buscarTodos();
-        List<String> dnisFiltrados = new ArrayList<>();
-
-        for(Cliente cliente : todosLosClientes){
-            if(cliente.getNumeroDocumento().toLowerCase().startsWith(query)){
-                dnisFiltrados.add(cliente.getNumeroDocumento());
-            }
-        }
-       return dnisFiltrados;
-    }
-
-
-    public void setearCliente(Cliente cliente){
-        if(cliente!=null) {
-            Cliente clienteBD = clienteService.obtenerClientePorNumeroDocumento(cliente.getNumeroDocumento());
-            cliente.setNumeroDocumento(clienteBD.getNumeroDocumento());
-            cliente.setEdad(clienteBD.getEdad());
-            cliente.setSexo(clienteBD.getSexo());
-            cliente.setNombreCliente(clienteBD.getNombreCliente());
-            cliente.setIdeCliente(clienteBD.getIdeCliente());
-
-        }
-
-
-    }
 
 	public String getNameDocumentPDF() {
 		return nameDocumentPDF;

@@ -36,7 +36,7 @@ public class Fila implements Serializable{
 	}
 
 
-    @OneToMany(mappedBy = "fila", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fila", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<Celda> getCeldasInferiores() {
         return celdasInferiores;
     }
