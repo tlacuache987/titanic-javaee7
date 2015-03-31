@@ -143,7 +143,7 @@
     <p:tab id="ventaAsientos" title="Asientos">
 
 
-        <p:panelGrid id="panelAsientos" style="width:100%;margin-top:15px" columnClasses="lblIzq"
+        <p:panelGrid id="panelAsientos" style="width:100%;margin-top:15px"
                      rendered="#{ventaPasajeBean.cargarAsientos}">
 
             <p:row>
@@ -207,6 +207,41 @@
 
                 </c:forEach>
 
+                <p:column rowspan="5">
+                    <p:outputLabel value="Abajo"/>
+                </p:column>
+
+                <c:forEach items="#{ventaPasajeBean.bus.filasInferiores}" var="filaInferior" varStatus="status">
+
+                    <p:column>
+                        <c:choose>
+                            <c:when test="#{filaInferior.celdasInferiores[4].tipoCelda=='ASIENTO'}">
+                                <asiento:asiento value="#{filaInferior.celdasInferiores[4].numeroAsiento}"
+                                                 estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento)}"
+                                                 method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[4].numeroAsiento)}"
+                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) ne 'PAGADO'
+                                 and ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
+
+                                <asiento:asientoPagado value="#{filaInferior.celdasInferiores[4].numeroAsiento}"
+                                                       estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento)}"
+                                                       method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[4].numeroAsiento)}"
+                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) eq 'PAGADO'}"/>
+
+                                <asiento:asientoNoDisponible value="#{filaInferior.celdasInferiores[4].numeroAsiento}"
+                                                             estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento)}"
+                                                             method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[4].numeroAsiento)}"
+                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
+                            </c:when>
+
+                            <c:otherwise>
+                                <p:spacer height="0"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </p:column>
+
+                </c:forEach>
+
+
             </p:row>
 
             <p:row>
@@ -231,6 +266,36 @@
                                                              estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[3].numeroAsiento)}"
                                                              method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[3].numeroAsiento)}"
                                                              rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[3].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
+                            </c:when>
+
+                            <c:otherwise>
+                                <p:spacer height="0"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </p:column>
+
+                </c:forEach>
+
+                <c:forEach items="#{ventaPasajeBean.bus.filasInferiores}" var="filaInferior" varStatus="status">
+
+                    <p:column>
+                        <c:choose>
+                            <c:when test="#{filaInferior.celdasInferiores[3].tipoCelda=='ASIENTO'}">
+                                <asiento:asiento value="#{filaInferior.celdasInferiores[3].numeroAsiento}"
+                                                 estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento)}"
+                                                 method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[3].numeroAsiento)}"
+                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) ne 'PAGADO'
+                                 and ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
+
+                                <asiento:asientoPagado value="#{filaInferior.celdasInferiores[3].numeroAsiento}"
+                                                       estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento)}"
+                                                       method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[3].numeroAsiento)}"
+                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) eq 'PAGADO'}"/>
+
+                                <asiento:asientoNoDisponible value="#{filaInferior.celdasInferiores[3].numeroAsiento}"
+                                                             estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento)}"
+                                                             method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[3].numeroAsiento)}"
+                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
                             </c:when>
 
                             <c:otherwise>
@@ -272,154 +337,6 @@
                     </p:column>
 
                 </c:forEach>
-            </p:row>
-            <p:row>
-                <!-- celdas 01 -->
-                <c:forEach items="#{ventaPasajeBean.bus.filasSuperiores}" var="filaSuperior" varStatus="status">
-
-                    <p:column>
-                        <c:choose>
-                            <c:when test="#{filaSuperior.celdasSuperiores[1].tipoCelda=='ASIENTO'}">
-                                <asiento:asiento value="#{filaSuperior.celdasSuperiores[1].numeroAsiento}"
-                                                 estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
-                                                 method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
-                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) ne 'PAGADO'
-                                 and ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
-
-                                <asiento:asientoPagado value="#{filaSuperior.celdasSuperiores[1].numeroAsiento}"
-                                                       estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
-                                                       method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
-                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) eq 'PAGADO'}"/>
-
-                                <asiento:asientoNoDisponible value="#{filaSuperior.celdasSuperiores[1].numeroAsiento}"
-                                                             estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
-                                                             method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
-                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
-                            </c:when>
-
-                            <c:otherwise>
-                                <p:spacer height="0"/>
-                            </c:otherwise>
-                        </c:choose>
-                    </p:column>
-
-                </c:forEach>
-            </p:row>
-
-            <p:row>
-                <!-- celdas 00 -->
-                <c:forEach items="#{ventaPasajeBean.bus.filasSuperiores}" var="filaSuperior" varStatus="status">
-
-                    <p:column>
-                        <c:choose>
-                            <c:when test="#{filaSuperior.celdasSuperiores[0].tipoCelda=='ASIENTO'}">
-                                <asiento:asiento value="#{filaSuperior.celdasSuperiores[0].numeroAsiento}"
-                                                 estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
-                                                 method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
-                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) ne 'PAGADO'
-                                 and ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
-
-                                <asiento:asientoPagado value="#{filaSuperior.celdasSuperiores[0].numeroAsiento}"
-                                                       estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
-                                                       method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
-                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) eq 'PAGADO'}"/>
-
-                                <asiento:asientoNoDisponible value="#{filaSuperior.celdasSuperiores[0].numeroAsiento}"
-                                                             estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
-                                                             method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
-                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
-                            </c:when>
-
-                            <c:otherwise>
-                                <p:spacer height="0"/>
-                            </c:otherwise>
-                        </c:choose>
-                    </p:column>
-
-                </c:forEach>
-            </p:row>
-
-        </p:panelGrid>
-
-
-        <p:panelGrid id="primeraPlanta" style="margin-top:15px" rendered="#{ventaPasajeBean.cargarAsientos}">
-
-
-            <p:row>
-                <p:column rowspan="5">
-                    <p:outputLabel value="Abajo"/>
-                </p:column>
-
-                <!-- celdas 04 -->
-                <!-- celdas  04 -->
-                <c:forEach items="#{ventaPasajeBean.bus.filasInferiores}" var="filaInferior" varStatus="status">
-
-                    <p:column>
-                        <c:choose>
-                            <c:when test="#{filaInferior.celdasInferiores[4].tipoCelda=='ASIENTO'}">
-                                <asiento:asiento value="#{filaInferior.celdasInferiores[4].numeroAsiento}"
-                                                 estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento)}"
-                                                 method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[4].numeroAsiento)}"
-                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) ne 'PAGADO'
-                                 and ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
-
-                                <asiento:asientoPagado value="#{filaInferior.celdasInferiores[4].numeroAsiento}"
-                                                       estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento)}"
-                                                       method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[4].numeroAsiento)}"
-                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) eq 'PAGADO'}"/>
-
-                                <asiento:asientoNoDisponible value="#{filaInferior.celdasInferiores[4].numeroAsiento}"
-                                                             estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento)}"
-                                                             method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[4].numeroAsiento)}"
-                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[4].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
-                            </c:when>
-
-                            <c:otherwise>
-                                <p:spacer height="0"/>
-                            </c:otherwise>
-                        </c:choose>
-                    </p:column>
-
-                </c:forEach>
-
-            </p:row>
-
-            <p:row>
-
-                <!-- celdas 03 -->
-
-                <c:forEach items="#{ventaPasajeBean.bus.filasInferiores}" var="filaInferior" varStatus="status">
-
-                    <p:column>
-                        <c:choose>
-                            <c:when test="#{filaInferior.celdasInferiores[3].tipoCelda=='ASIENTO'}">
-                                <asiento:asiento value="#{filaInferior.celdasInferiores[3].numeroAsiento}"
-                                                 estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento)}"
-                                                 method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[3].numeroAsiento)}"
-                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) ne 'PAGADO'
-                                 and ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
-
-                                <asiento:asientoPagado value="#{filaInferior.celdasInferiores[3].numeroAsiento}"
-                                                       estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento)}"
-                                                       method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[3].numeroAsiento)}"
-                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) eq 'PAGADO'}"/>
-
-                                <asiento:asientoNoDisponible value="#{filaInferior.celdasInferiores[3].numeroAsiento}"
-                                                             estado="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento)}"
-                                                             method="#{ventaPasajeBean.reservar(filaInferior.celdasInferiores[3].numeroAsiento)}"
-                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaInferior.celdasInferiores[3].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
-                            </c:when>
-
-                            <c:otherwise>
-                                <p:spacer height="0"/>
-                            </c:otherwise>
-                        </c:choose>
-                    </p:column>
-
-                </c:forEach>
-
-            </p:row>
-            <p:row>
                 <!-- celdas 02 -->
                 <c:forEach items="#{ventaPasajeBean.bus.filasInferiores}" var="filaInferior" varStatus="status">
 
@@ -453,6 +370,36 @@
 
             </p:row>
             <p:row>
+                <!-- celdas 01 -->
+                <c:forEach items="#{ventaPasajeBean.bus.filasSuperiores}" var="filaSuperior" varStatus="status">
+
+                    <p:column>
+                        <c:choose>
+                            <c:when test="#{filaSuperior.celdasSuperiores[1].tipoCelda=='ASIENTO'}">
+                                <asiento:asiento value="#{filaSuperior.celdasSuperiores[1].numeroAsiento}"
+                                                 estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
+                                                 method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
+                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) ne 'PAGADO'
+                                 and ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
+
+                                <asiento:asientoPagado value="#{filaSuperior.celdasSuperiores[1].numeroAsiento}"
+                                                       estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
+                                                       method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
+                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) eq 'PAGADO'}"/>
+
+                                <asiento:asientoNoDisponible value="#{filaSuperior.celdasSuperiores[1].numeroAsiento}"
+                                                             estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
+                                                             method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[1].numeroAsiento)}"
+                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[1].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
+                            </c:when>
+
+                            <c:otherwise>
+                                <p:spacer height="0"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </p:column>
+
+                </c:forEach>
 
                 <!-- celdas 01 -->
                 <c:forEach items="#{ventaPasajeBean.bus.filasInferiores}" var="filaInferior" varStatus="status">
@@ -484,10 +431,40 @@
                     </p:column>
 
                 </c:forEach>
+
             </p:row>
 
             <p:row>
                 <!-- celdas 00 -->
+                <c:forEach items="#{ventaPasajeBean.bus.filasSuperiores}" var="filaSuperior" varStatus="status">
+
+                    <p:column>
+                        <c:choose>
+                            <c:when test="#{filaSuperior.celdasSuperiores[0].tipoCelda=='ASIENTO'}">
+                                <asiento:asiento value="#{filaSuperior.celdasSuperiores[0].numeroAsiento}"
+                                                 estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
+                                                 method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
+                                                 rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) ne 'PAGADO'
+                                 and ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) ne 'NO_DISPONIBLE'}"/>
+
+                                <asiento:asientoPagado value="#{filaSuperior.celdasSuperiores[0].numeroAsiento}"
+                                                       estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
+                                                       method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
+                                                       rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) eq 'PAGADO'}"/>
+
+                                <asiento:asientoNoDisponible value="#{filaSuperior.celdasSuperiores[0].numeroAsiento}"
+                                                             estado="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
+                                                             method="#{ventaPasajeBean.reservar(filaSuperior.celdasSuperiores[0].numeroAsiento)}"
+                                                             rendered="#{ventaPasajeBean.obtenerEstado(filaSuperior.celdasSuperiores[0].numeroAsiento) eq 'NO_DISPONIBLE'}"/>
+                            </c:when>
+
+                            <c:otherwise>
+                                <p:spacer height="0"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </p:column>
+
+                </c:forEach>
 
                 <c:forEach items="#{ventaPasajeBean.bus.filasInferiores}" var="filaInferior" varStatus="status">
 
@@ -520,7 +497,12 @@
                 </c:forEach>
             </p:row>
 
+
+
         </p:panelGrid>
+
+
+
     </p:tab>
 
     <p:tab id="confirmarAsientos" title="Confirmacion">
