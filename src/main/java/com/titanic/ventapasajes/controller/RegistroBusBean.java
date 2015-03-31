@@ -225,14 +225,6 @@ public class RegistroBusBean implements Serializable {
         }
     }
 
-//    public void renderPlantas(ValueChangeEvent event){
-//
-//
-//        if(event.getNewValue().toString().equals("UNA_PLANTA")){
-//
-//        }else{
-//
-//        }
-//    }
+
 
 }

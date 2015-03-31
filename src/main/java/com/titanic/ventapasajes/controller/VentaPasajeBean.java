@@ -74,17 +74,12 @@ public class VentaPasajeBean implements Serializable {
 
     private DataSourceBoleto dt;
 
-    @PostConstruct
-    public void init() {
-        iniciarVenta();
 
-
-    }
-
-    private void iniciarVenta() {
+    private void nuevaVenta() {
         venta = new Venta();
         boletosReservados = new ArrayList<>();
     }
+
 
     public void inicializar() {
 
@@ -247,6 +242,12 @@ public class VentaPasajeBean implements Serializable {
         this.setBus(busRepositorio.getFilasWithBusById(busSeleccionado.getIdeBus()));
         this.nombreBus = bus.getDescripcionBus();
 
+        venta = ventaService.obtenerVenta(fechaVenta, ruta, horaSalida, bus);
+
+        if (venta==null)
+            nuevaVenta();
+
+        inicializar();
 
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bus Seleccionado", "Id:" + busSeleccionado.getDescripcionBus());
 
@@ -372,10 +373,6 @@ public class VentaPasajeBean implements Serializable {
             }
         }
         return idsBoletos;
-    }
-
-    public void nuevaVenta(){
-        iniciarVenta();
     }
 
 
