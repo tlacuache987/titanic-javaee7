@@ -21,11 +21,11 @@ public class CeldaSuperior implements Serializable{
     private Long ideCelda;
     private String numeroCelda;
     private TipoCelda tipoCelda;
-    private EstadoCelda estadoCelda;
+    private EstadoBoleto estadoCelda;
     private FilaSuperior fila;
     private String numeroAsiento;
     private TipoBus calidad;
-
+    private TarifaGeneral tarifaGeneral;
 
 
     @Id
@@ -87,12 +87,12 @@ public class CeldaSuperior implements Serializable{
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name="estado_celda", nullable=false, length = 50)
-    public EstadoCelda getEstadoCelda() {
+    public EstadoBoleto getEstadoCelda() {
         return estadoCelda;
     }
 
 
-    public void setEstadoCelda(EstadoCelda estadoCelda) {
+    public void setEstadoCelda(EstadoBoleto estadoCelda) {
         this.estadoCelda = estadoCelda;
     }
 
@@ -106,4 +106,5 @@ public class CeldaSuperior implements Serializable{
     public void setFila(FilaSuperior fila) {
         this.fila = fila;
     }
+
 }

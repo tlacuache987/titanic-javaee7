@@ -91,7 +91,7 @@ public class Venta implements Serializable {
         this.totalVenta = totalVenta;
     }
 
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<Boleto> getBoletos() {
         return boletos;
     }

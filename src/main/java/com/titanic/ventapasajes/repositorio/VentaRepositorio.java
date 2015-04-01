@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import com.titanic.ventapasajes.modelo.Boleto;
 import org.hibernate.Hibernate;
 
 import com.titanic.ventapasajes.modelo.Bus;
@@ -31,6 +32,30 @@ public class VentaRepositorio implements Serializable {
     public Venta adicionarVenta(Venta venta) {
 
         return entityManager.merge(venta);
+    }
+
+    public Boleto adicionarBoleto(Boleto boleto){
+        return entityManager.merge(boleto);
+    }
+
+    public Boleto buscarBoleto(String numeroAsiento, Long ideVenta){
+
+        try {
+
+            Boleto boletoRpta = entityManager.createQuery("from Boleto where " +
+                    "asiento = :numeroAsiento and " +
+                    "venta.ideVenta = :ideVenta", Boleto.class)
+                    .setParameter("numeroAsiento", numeroAsiento)
+                    .setParameter("ideVenta", ideVenta)
+                    .getSingleResult();
+
+
+
+
+            return boletoRpta;
+        }catch(NoResultException e){
+            return null;
+        }
     }
 
     public Venta obtenerVenta(Date fechaVenta, Recorrido ruta, String horaSalida, Bus bus) {

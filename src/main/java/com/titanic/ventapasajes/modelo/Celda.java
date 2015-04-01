@@ -21,7 +21,7 @@ public class Celda implements Serializable{
     private Long ideCelda;
     private String numeroCelda;
     private TipoCelda tipoCelda;
-    private EstadoCelda estadoCelda;
+    private EstadoBoleto estadoCelda;
     private String numeroAsiento;
     private TipoBus calidad;
     private Fila fila;
@@ -86,12 +86,12 @@ public class Celda implements Serializable{
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name="estado_celda", nullable=false, length = 50)
-    public EstadoCelda getEstadoCelda() {
+    public EstadoBoleto getEstadoCelda() {
         return estadoCelda;
     }
 
 
-    public void setEstadoCelda(EstadoCelda estadoCelda) {
+    public void setEstadoCelda(EstadoBoleto estadoCelda) {
         this.estadoCelda = estadoCelda;
     }
 

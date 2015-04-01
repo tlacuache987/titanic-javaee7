@@ -10,19 +10,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.titanic.ventapasajes.modelo.*;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 
-import com.titanic.ventapasajes.modelo.Bus;
-import com.titanic.ventapasajes.modelo.Celda;
-import com.titanic.ventapasajes.modelo.CeldaSuperior;
-import com.titanic.ventapasajes.modelo.EstadoCelda;
-import com.titanic.ventapasajes.modelo.Fila;
-import com.titanic.ventapasajes.modelo.FilaSuperior;
-import com.titanic.ventapasajes.modelo.TipoBus;
-import com.titanic.ventapasajes.modelo.TipoCelda;
-import com.titanic.ventapasajes.modelo.TipoPlanta;
-import com.titanic.ventapasajes.modelo.UbicacionPlanta;
 import com.titanic.ventapasajes.service.RegistroBusService;
 import com.titanic.ventapasajes.util.FacesUtil;
 
@@ -58,7 +49,7 @@ public class RegistroBusBean implements Serializable {
             for(int j=0; j<5; j++){
                 Celda celda = new Celda();
                 celda.setNumeroCelda("");
-                celda.setEstadoCelda(EstadoCelda.LIBRE);
+                celda.setEstadoCelda(EstadoBoleto.LIBRE);
                 celda.setTipoCelda(TipoCelda.OTRO);
                 celda.setFila(fila);
                 fila.getCeldasInferiores().add(celda);
@@ -90,7 +81,7 @@ public class RegistroBusBean implements Serializable {
             for(int j=0; j<5; j++){
                 CeldaSuperior celda = new CeldaSuperior();
                 celda.setNumeroCelda("");
-                celda.setEstadoCelda(EstadoCelda.LIBRE);
+                celda.setEstadoCelda(EstadoBoleto.LIBRE);
                 celda.setTipoCelda(TipoCelda.OTRO);
                 celda.setFila(fila);
                 fila.getCeldasSuperiores().add(celda);

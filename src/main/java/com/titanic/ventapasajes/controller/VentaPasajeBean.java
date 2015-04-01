@@ -8,6 +8,7 @@ import com.titanic.ventapasajes.repositorio.BusRepositorio;
 import com.titanic.ventapasajes.security.Seguridad;
 import com.titanic.ventapasajes.service.RegistroClienteService;
 import com.titanic.ventapasajes.service.RegistroVentaService;
+import com.titanic.ventapasajes.service.TarifaGeneralService;
 import com.titanic.ventapasajes.util.FacesUtil;
 import com.titanic.ventapasajes.util.reporte.EjecutorReporte;
 
@@ -54,12 +55,19 @@ public class VentaPasajeBean implements Serializable {
     @Inject
     private RegistroClienteService clienteService;
 
+
+    @Inject
+    private TarifaGeneralService tarifaGeneralService;
+
     @Inject
     private Seguridad seguridad;
 
-    @Inject private FacesContext facesContext;
-    @Inject private HttpServletResponse response;
-    @Inject private EntityManager entityManager;
+    @Inject
+    private FacesContext facesContext;
+    @Inject
+    private HttpServletResponse response;
+    @Inject
+    private EntityManager entityManager;
 
     @NotNull
     private Date fechaVenta;
@@ -69,377 +77,13 @@ public class VentaPasajeBean implements Serializable {
     private String nombreBus;
     private boolean cargarAsientos;
     private Venta venta;
-    private List<Boleto> boletosReservados;
+    private List<Boleto> boletos;
     private String nameDocumentPDF;
 
     private DataSourceBoleto dt;
 
 
-    private void nuevaVenta() {
-        venta = new Venta();
-        venta.setFechaVenta(fechaVenta);
-        venta.setRuta(ruta);
-        venta.setHoraSalida(horaSalida);
-        venta.setBus(bus);
-        venta.setTotalVenta(BigDecimal.ZERO);
-        boletosReservados = new ArrayList<>();
-        ventaService.registrarVenta(venta);
 
-        FacesUtil.adicionarMensajeInfo("Se inicializo venta satisfactoriamente");
-    }
-
-
-    public void reservar(String numeroAsiento) {
-
-        Boleto boleto = buscarBoleto(numeroAsiento);
-        if (boleto == null) {
-            boleto = new Boleto();
-            boleto.setAsiento(numeroAsiento);
-            boleto.setEstadoBoleto(EstadoBoleto.RESERVADO);
-            boleto.setPrecio(new BigDecimal("40.00"));
-            boleto.setVenta(venta);
-            boleto = asociarVendedor(boleto);
-            if (venta.getBoletos() == null) {
-                venta.setBoletos(new ArrayList<Boleto>());
-            }
-            //configureClienteForBoleto(boleto);
-            venta.getBoletos().add(boleto);
-
-        } else {
-
-            if (boleto.getEstadoBoleto() == EstadoBoleto.LIBRE) {
-                boleto.setEstadoBoleto(EstadoBoleto.RESERVADO);
-            } else if (boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                boleto.setEstadoBoleto(EstadoBoleto.LIBRE);
-            } else { //pagado
-                boleto.setEstadoBoleto(EstadoBoleto.LIBRE);
-            }
-
-
-        }
-
-        registrarVenta();
-    }
-
-    private Boleto asociarVendedor(Boleto boleto) {
-        Usuario usuario = seguridad.getUsuarioLogeado().getUsuario();
-        boleto.setUsuario(usuario);
-        return boleto;
-    }
-
-    private Boleto buscarBoleto(String numeroAsiento) {
-        if (venta.getBoletos() == null) return null;
-
-        for (Boleto boleto : venta.getBoletos()) {
-            if (boleto.getAsiento().equals(numeroAsiento)) {
-                return boleto;
-            }
-        }
-        return null;
-    }
-
-    public String obtenerEstado(String numeroAsiento) {
-        if (venta.getBoletos() == null) return String.valueOf(EstadoBoleto.LIBRE);
-
-        Boleto boleto = buscarBoleto(numeroAsiento);
-
-        if (boleto == null) {
-
-            boleto = new Boleto();
-            boleto.setAsiento(numeroAsiento);
-            boleto.setEstadoBoleto(EstadoBoleto.LIBRE);
-            boleto.setPrecio(new BigDecimal("40.00"));
-            boleto.setVenta(venta);
-            boleto = asociarVendedor(boleto);
-            if (venta.getBoletos() == null) {
-                venta.setBoletos(new ArrayList<Boleto>());
-            }
-            //configureClienteForBoleto(boleto);
-            venta.getBoletos().add(boleto);
-
-
-
-        }else{
-
-            if(boleto.getEstadoBoleto()!= EstadoBoleto.PAGADO) {
-                Usuario vendedor = boleto.getUsuario();
-                Usuario usuarioLogueado = seguridad.getUsuarioLogeado().getUsuario();
-                if (!vendedor.equals(usuarioLogueado)) {
-                    boleto.setEstadoBoleto(EstadoBoleto.NO_DISPONIBLE);
-                }
-            }
-        }
-
-        return boleto.getEstadoBoleto().toString();
-    }
-
-    private void configureClienteForBoleto(Boleto boleto) {
-        boleto.setCliente(new Cliente());
-        boleto.getCliente().setEdad(0);
-        boleto.getCliente().setSexo(Sexo.FEMENINO);
-        boleto.getCliente().setTipoDocumento(TipoDocumento.DNI);
-        boleto.getCliente().setTipoPersona(TipoPersona.NATURAL);
-        boleto.getCliente().setDebePresentarCartaNotarial(false);
-    }
-
-    private void validarFormulario() {
-        if (ruta == null) {
-            FacesUtil.adicionarMensajeError("Ruta debe ser seleccionada");
-        }
-        if (bus == null) {
-            FacesUtil.adicionarMensajeError("Bus debe ser seleccionado");
-        }
-    }
-
-
-    /* UI methods */
-
-    public void onDateSelect(SelectEvent event) {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Fecha Seleccionada",
-                format.format(event.getObject())));
-    }
-
-
-    public void seleccionarBus() {
-        RequestContext.getCurrentInstance().openDialog("seleccionarBus");
-    }
-
-
-    public void seleccionarRuta() {
-        RequestContext.getCurrentInstance().openDialog("seleccionarRuta");
-    }
-
-    public void onRutaSeleccionada(SelectEvent event) {
-        Recorrido recorrido = (Recorrido) event.getObject();
-
-        this.setRuta(recorrido);
-
-
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ruta Seleccionada", "Id:" + recorrido.getRuta());
-
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
-    public void onBusSeleccionado(SelectEvent event) {
-        Bus busSeleccionado = (Bus) event.getObject();
-
-        this.setBus(busRepositorio.getFilasWithBusById(busSeleccionado.getIdeBus()));
-        this.nombreBus = bus.getDescripcionBus();
-
-        venta = ventaService.obtenerVenta(fechaVenta, ruta, horaSalida, bus);
-
-        if (venta==null)
-            nuevaVenta();
-
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bus Seleccionado", "Id:" + busSeleccionado.getDescripcionBus());
-
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
-
-    public String onFlowProcess(FlowEvent event) {
-
-        boletosReservados = new ArrayList<>();
-
-        if(venta.getBoletos()!=null) {
-            for (Boleto boleto : venta.getBoletos()) {
-                if (boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    Cliente cliente = new Cliente();
-                    cliente.setEdad(0);
-                    cliente.setSexo(Sexo.FEMENINO);
-                    cliente.setTipoDocumento(TipoDocumento.DNI);
-                    cliente.setTipoPersona(TipoPersona.NATURAL);
-                    cliente.setDebePresentarCartaNotarial(false);
-                    boleto.setCliente(cliente);
-                    boletosReservados.add(boleto);
-                }
-            }
-        }
-
-
-        return event.getNewStep();
-
-    }
-
-
-    public void registrarVenta() {
-
-
-        this.venta = ventaService.registrarVenta(this.venta);
-
-        FacesUtil.adicionarMensajeInfo("Se reservo satisfactoriamente");
-    }
-
-
-
-    public void registrarVentaConCliente() {
-
-        if(boletosReservados.size()>0) {
-
-            for (int i = 0; i < boletosReservados.size(); i++) {
-
-                Cliente cliente = boletosReservados.get(i).getCliente();
-                cliente = clienteService.adicionarCliente(cliente);
-                Boleto boleto = buscarBoleto(boletosReservados.get(i).getAsiento());
-                boleto.setCliente(cliente);
-                boleto.setEstadoBoleto(EstadoBoleto.PAGADO);
-                boleto.setNumeroDocumento(cliente.getNumeroDocumento());
-                boleto.setNombresCliente(cliente.getNombreCliente());
-                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                boleto.setFechaVenta(DATE_FORMAT.format(fechaVenta));
-                boleto.setHoraSalida(horaSalida);
-                boleto.setOrigen(ruta.getOrigen().getNombreTerminal());
-                boleto.setDestino(ruta.getDestino().getNombreTerminal());
-                boleto.setPresentoCartaNotarial(boletosReservados.get(i).getPresentoCartaNotarial());
-            }
-
-            this.venta.setTotalVenta(getTotalPagados());
-
-            this.venta = ventaService.registrarVenta(this.venta);
-            //printSilentPDF();
-            FacesUtil.adicionarMensajeInfo("Los boletos fueron vendidos satisfactoriamente");
-        }
-    }
-
-
-    public void imprimirVenta(){
-
-        System.out.println("Uno: " + getBoletosReservados().size());
-        dt = new DataSourceBoleto();
-        for(Boleto boleto: getBoletosReservados()){
-            dt.addDetalle(boleto);
-        }
-
-        Map<String, Object> parametros = new HashMap<String, Object>();
-        parametros.put("boletos",  obtenerIdsBoletos().split(",") );
-
-
-        EjecutorReporte executor = new EjecutorReporte("/reportes/venta_boletos3.jasper",
-                this.response, parametros, "venta_boletos_" + this.venta.getIdeVenta() + ".pdf", dt);
-
-        Session session = entityManager.unwrap(Session.class);
-        session.doWork(executor);
-
-        if (executor.isReporteGenerado()) {
-            facesContext.responseComplete();
-        } else {
-            FacesUtil.adicionarMensajeError("No hay datos para la venta..");
-        }
-
-
-    }
-    
-    
-    public void printSilentPDF(){
-    	System.out.println("Uno: " + getBoletosReservados().size());
-        dt = new DataSourceBoleto();   
-        for(Boleto boleto: getBoletosReservados()){
-            dt.addDetalle(boleto);
-        }
-        
-        //String path="/reportes/venta_boletos2.jasper";           
-        String path="/reportes/venta_boleto4.jasper";
-        ReporteGen rep = new ReporteGen();
-        rep.exportByFormato(dt, path, "pdf", "boleto");
-        dt=null;
-        
-    }
-
-    private String obtenerIdsBoletos() {
-        String idsBoletos = "";
-        for(Boleto boleto: getBoletosReservados()){
-            if(idsBoletos.isEmpty()){
-                idsBoletos = String.valueOf(boleto.getIdeBoleto());
-            }else{
-                idsBoletos = idsBoletos + "," + String.valueOf(boleto.getIdeBoleto());
-            }
-        }
-        return idsBoletos;
-    }
-
-
-    public String getAsientosReservados() {
-        String reservados = "";
-        if (venta.getBoletos() != null) {
-            for (Boleto boleto : venta.getBoletos()) {
-                if (reservados.isEmpty() && (boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO)) {
-                    reservados = boleto.getAsiento();
-                } else if(boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    reservados = reservados + "," + boleto.getAsiento();
-                }
-            }
-        }
-        return reservados;
-    }
-
-    public String getTotalReservados() {
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        if (venta.getBoletos() != null) {
-            for (Boleto boleto : venta.getBoletos()) {
-                if(boleto.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    total = total.add(boleto.getPrecio());
-                }
-            }
-        }
-
-        return total.toString();
-    }
-
-
-    public BigDecimal getTotalPagados() {
-
-        BigDecimal total = BigDecimal.ZERO;
-
-        if (venta.getBoletos() != null) {
-            for (Boleto boleto : venta.getBoletos()) {
-                if(boleto.getEstadoBoleto() == EstadoBoleto.PAGADO) {
-                    total = total.add(boleto.getPrecio());
-                }
-            }
-        }
-
-        return total;
-    }
-
-
-    public void validarCartaNotarial(Cliente cliente){
-        if(cliente.getEdad()<18){
-            cliente.setDebePresentarCartaNotarial(true);
-        }else{
-            cliente.setDebePresentarCartaNotarial(false);
-        }
-    }
-
-    public List<String> completeClientes(String query) {
-        List<Cliente> todosLosClientes = clienteService.buscarTodos();
-        List<String> dnisFiltrados = new ArrayList<>();
-
-        for(Cliente cliente : todosLosClientes){
-            if(cliente.getNumeroDocumento().toLowerCase().startsWith(query)){
-                dnisFiltrados.add(cliente.getNumeroDocumento());
-            }
-        }
-        return dnisFiltrados;
-    }
-
-
-    public void setearCliente(Cliente cliente){
-        if(cliente!=null) {
-            Cliente clienteBD = clienteService.obtenerClientePorNumeroDocumento(cliente.getNumeroDocumento());
-            cliente.setNumeroDocumento(clienteBD.getNumeroDocumento());
-            cliente.setEdad(clienteBD.getEdad());
-            cliente.setSexo(clienteBD.getSexo());
-            cliente.setNombreCliente(clienteBD.getNombreCliente());
-            cliente.setIdeCliente(clienteBD.getIdeCliente());
-
-        }
-
-
-    }
 
     public boolean isCargarAsientos() {
         return (this.fechaVenta != null && this.ruta != null && this.horaSalida != null && this.bus != null);
@@ -495,45 +139,122 @@ public class VentaPasajeBean implements Serializable {
     }
 
 
-
-
     public Sexo[] getSexo() {
         return Sexo.values();
     }
 
-    public List<Boleto> getBoletosReservados() {
-        return boletosReservados;
+    public List<Boleto> getBoletos() {
+        return boletos;
     }
 
-    public void setBoletosReservados(List<Boleto> boletosReservados) {
-        this.boletosReservados = boletosReservados;
-    }
-
-
-    public void addMessage(Boleto boleto) {
-        String summary = boleto.getPresentoCartaNotarial() ? "Presento Carta Notarial" : "No ha presentado carta notarial";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+    public void setBoletos(List<Boleto> boletos) {
+        this.boletos = boletos;
     }
 
 
+    private void nuevaVenta() {
+        venta = new Venta();
+        venta.setFechaVenta(fechaVenta);
+        venta.setRuta(ruta);
+        venta.setHoraSalida(horaSalida);
+        venta.setBus(bus);
+        venta.setTotalVenta(BigDecimal.ZERO);
+        boletos = new ArrayList<>();
 
-	public String getNameDocumentPDF() {
-		return nameDocumentPDF;
-	}
+        for(FilaSuperior filaSuperior: bus.getFilasSuperiores()){
+            for(CeldaSuperior celdaSuperior: filaSuperior.getCeldasSuperiores()){
 
-	public void setNameDocumentPDF(String nameDocumentPDF) {
-		this.nameDocumentPDF = nameDocumentPDF;
-	}
+                Boleto boleto = new Boleto();
+                boleto.setAsiento(celdaSuperior.getNumeroAsiento());
+                boleto.setOrigen(ruta.getOrigen().getNombreTerminal());
+                boleto.setDestino(ruta.getDestino().getNombreTerminal());
+                boleto.setEstadoBoleto(celdaSuperior.getEstadoCelda());
+                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+                boleto.setFechaVenta(DATE_FORMAT.format(fechaVenta));
+                boleto.setHoraSalida(horaSalida);
+                boleto.setUsuario(seguridad.getUsuarioLogeado().getUsuario());
+                TarifaGeneral tarifaGeneral = tarifaGeneralService.buscarTarifaGeneral(celdaSuperior.getCalidad().getDescripcion(), ruta.getIdeRecorrido());
+                boleto.setPrecio(tarifaGeneral.getPrecio());
+
+                boletos.add(boleto);
+
+            }
+        }
 
 
-    public void notificarPUSH(){
-        String summary = "Asiento Vendido";
-        String detail = "Nuevo asiento vendido";
-        String CHANNEL = "/notify";
+        venta.setBoletos(boletos);
+        ventaService.registrarVenta(venta);
 
-        EventBus eventBus = EventBusFactory.getDefault().eventBus();
-        eventBus.publish(CHANNEL,
-                new FacesMessage(StringEscapeUtils.escapeHtml(summary),StringEscapeUtils.escapeHtml(detail) ));
+        FacesUtil.adicionarMensajeInfo("Se inicializo venta satisfactoriamente");
+    }
+
+
+
+
+
+    private void validarFormulario() {
+        if (ruta == null) {
+            FacesUtil.adicionarMensajeError("Ruta debe ser seleccionada");
+        }
+        if (bus == null) {
+            FacesUtil.adicionarMensajeError("Bus debe ser seleccionado");
+        }
+    }
+
+
+    /* UI methods */
+
+    public void onDateSelect(SelectEvent event) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Fecha Seleccionada",
+                format.format(event.getObject())));
+    }
+
+
+    public void seleccionarBus() {
+        RequestContext.getCurrentInstance().openDialog("seleccionarBus");
+    }
+
+
+    public void seleccionarRuta() {
+        RequestContext.getCurrentInstance().openDialog("seleccionarRuta");
+    }
+
+    public void onRutaSeleccionada(SelectEvent event) {
+        Recorrido recorrido = (Recorrido) event.getObject();
+
+        this.setRuta(recorrido);
+
+
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ruta Seleccionada", "Id:" + recorrido.getRuta());
+
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+    public void onBusSeleccionado(SelectEvent event) {
+        Bus busSeleccionado = (Bus) event.getObject();
+
+        this.setBus(busRepositorio.getFilasWithBusById(busSeleccionado.getIdeBus()));
+        this.nombreBus = bus.getDescripcionBus();
+
+        venta = ventaService.obtenerVenta(fechaVenta, ruta, horaSalida, bus);
+
+        if (venta == null)
+            nuevaVenta();
+
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bus Seleccionado", "Id:" + busSeleccionado.getDescripcionBus());
+
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
+
+    public String onFlowProcess(FlowEvent event) {
+
+
+        return event.getNewStep();
 
     }
+
+
 }
