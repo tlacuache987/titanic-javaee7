@@ -77,7 +77,7 @@ public class VentaPasajeBean implements Serializable {
     private String nombreBus;
     private boolean cargarAsientos;
     private Venta venta;
-    private List<Boleto> boletos;
+
     private String nameDocumentPDF;
 
     private DataSourceBoleto dt;
@@ -143,13 +143,7 @@ public class VentaPasajeBean implements Serializable {
         return Sexo.values();
     }
 
-    public List<Boleto> getBoletos() {
-        return boletos;
-    }
 
-    public void setBoletos(List<Boleto> boletos) {
-        this.boletos = boletos;
-    }
 
 
     private void nuevaVenta() {
@@ -159,30 +153,18 @@ public class VentaPasajeBean implements Serializable {
         venta.setHoraSalida(horaSalida);
         venta.setBus(bus);
         venta.setTotalVenta(BigDecimal.ZERO);
-        boletos = new ArrayList<>();
+
 
         for(FilaSuperior filaSuperior: bus.getFilasSuperiores()){
             for(CeldaSuperior celdaSuperior: filaSuperior.getCeldasSuperiores()){
 
-                Boleto boleto = new Boleto();
-                boleto.setAsiento(celdaSuperior.getNumeroAsiento());
-                boleto.setOrigen(ruta.getOrigen().getNombreTerminal());
-                boleto.setDestino(ruta.getDestino().getNombreTerminal());
-                boleto.setEstadoBoleto(celdaSuperior.getEstadoCelda());
-                SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-                boleto.setFechaVenta(DATE_FORMAT.format(fechaVenta));
-                boleto.setHoraSalida(horaSalida);
-                boleto.setUsuario(seguridad.getUsuarioLogeado().getUsuario());
-                TarifaGeneral tarifaGeneral = tarifaGeneralService.buscarTarifaGeneral(celdaSuperior.getCalidad().getDescripcion(), ruta.getIdeRecorrido());
-                boleto.setPrecio(tarifaGeneral.getPrecio());
 
-                boletos.add(boleto);
 
             }
         }
 
 
-        venta.setBoletos(boletos);
+
         ventaService.registrarVenta(venta);
 
         FacesUtil.adicionarMensajeInfo("Se inicializo venta satisfactoriamente");

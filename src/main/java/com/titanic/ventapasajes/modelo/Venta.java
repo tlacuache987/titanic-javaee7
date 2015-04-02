@@ -24,8 +24,10 @@ public class Venta implements Serializable {
     private Recorrido ruta;
     private String horaSalida;
     private Bus bus;
-    private List<Boleto> boletos;
     private BigDecimal totalVenta;
+
+    private List<FilaBoletoSuperior> filasBoletoSuperiores;
+    private List<FilaBoletoInferior> filasBoletosInferiores;
 
 
     @Id
@@ -91,13 +93,25 @@ public class Venta implements Serializable {
         this.totalVenta = totalVenta;
     }
 
-    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    public List<Boleto> getBoletos() {
-        return boletos;
+
+
+
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    public List<FilaBoletoInferior> getFilasBoletosInferiores() {
+        return filasBoletosInferiores;
     }
 
-    public void setBoletos(List<Boleto> boletos) {
-        this.boletos = boletos;
+    public void setFilasBoletosInferiores(List<FilaBoletoInferior> filasBoletosInferiores) {
+        this.filasBoletosInferiores = filasBoletosInferiores;
+    }
+
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    public List<FilaBoletoSuperior> getFilasBoletoSuperiores() {
+        return filasBoletoSuperiores;
+    }
+
+    public void setFilasBoletoSuperiores(List<FilaBoletoSuperior> filasBoletoSuperiores) {
+        this.filasBoletoSuperiores = filasBoletoSuperiores;
     }
 
     @Override
@@ -108,7 +122,9 @@ public class Venta implements Serializable {
                 ", ruta=" + ruta +
                 ", horaSalida='" + horaSalida + '\'' +
                 ", bus=" + bus +
-                ", boletos=" + boletos +
+                ", totalVenta=" + totalVenta +
+                ", filasBoletoSuperiores=" + filasBoletoSuperiores +
+                ", filasBoletosInferiores=" + filasBoletosInferiores +
                 '}';
     }
 
