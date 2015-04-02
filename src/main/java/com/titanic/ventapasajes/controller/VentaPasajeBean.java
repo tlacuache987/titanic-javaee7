@@ -146,6 +146,7 @@ public class VentaPasajeBean implements Serializable {
 
 
 
+
     private void nuevaVenta() {
         venta = new Venta();
         venta.setFechaVenta(fechaVenta);
@@ -155,13 +156,12 @@ public class VentaPasajeBean implements Serializable {
         venta.setTotalVenta(BigDecimal.ZERO);
 
 
-        for(FilaSuperior filaSuperior: bus.getFilasSuperiores()){
-            for(CeldaSuperior celdaSuperior: filaSuperior.getCeldasSuperiores()){
 
+        List<FilaBoletoSuperior> filasBoletosSuperiores = new ArrayList<>();
+        List<FilaBoletoInferior> filasBoletosInferiores = new ArrayList<>();
 
-
-            }
-        }
+        venta.setFilasBoletoSuperiores(clonarFilasSuperiores(filasBoletosSuperiores));
+        venta.setFilasBoletosInferiores(clonarFilasInferiores(filasBoletosInferiores));
 
 
 
@@ -170,6 +170,63 @@ public class VentaPasajeBean implements Serializable {
         FacesUtil.adicionarMensajeInfo("Se inicializo venta satisfactoriamente");
     }
 
+    private List<FilaBoletoInferior> clonarFilasInferiores(List<FilaBoletoInferior> filasBoletosInferiores) {
+
+        for(Fila fila: bus.getFilasInferiores()){
+
+            FilaBoletoInferior filaBoletoInferior = new FilaBoletoInferior();
+            filaBoletoInferior.setUbicacionPlanta(fila.getUbicacionPlanta());
+            filaBoletoInferior.setVenta(venta);
+            filaBoletoInferior.setBoletosInferiores(new ArrayList<BoletoInferior>());
+
+            for(Celda celdaInferior: fila.getCeldasInferiores()){
+
+                BoletoInferior boletoInferior = new BoletoInferior();
+                boletoInferior.setCalidad(celdaInferior.getCalidad());
+                boletoInferior.setEstadoBoleto(celdaInferior.getEstadoCelda());
+                boletoInferior.setFilaBoletoInferior(filaBoletoInferior);
+                boletoInferior.setNumeroAsiento(celdaInferior.getNumeroAsiento());
+                boletoInferior.setNumeroBoleto(celdaInferior.getNumeroCelda());
+                boletoInferior.setTipoBoleto(celdaInferior.getTipoCelda());
+                boletoInferior.setPrecio(new BigDecimal(0));
+                filaBoletoInferior.getBoletosInferiores().add(boletoInferior);
+
+            }
+
+            filasBoletosInferiores.add(filaBoletoInferior);
+        }
+
+        return filasBoletosInferiores;
+    }
+
+    private List<FilaBoletoSuperior> clonarFilasSuperiores(List<FilaBoletoSuperior> filasBoletosSuperiores) {
+
+        for(FilaSuperior filaSuperior: bus.getFilasSuperiores()){
+
+            FilaBoletoSuperior filaBoletoSuperior = new FilaBoletoSuperior();
+            filaBoletoSuperior.setUbicacionPlanta(filaSuperior.getUbicacionPlanta());
+            filaBoletoSuperior.setVenta(venta);
+            filaBoletoSuperior.setBoletosSuperiores(new ArrayList<BoletoSuperior>());
+
+            for(CeldaSuperior celdaSuperior: filaSuperior.getCeldasSuperiores()){
+
+                BoletoSuperior boletoSuperior = new BoletoSuperior();
+                boletoSuperior.setCalidad(celdaSuperior.getCalidad());
+                boletoSuperior.setEstadoBoleto(celdaSuperior.getEstadoCelda());
+                boletoSuperior.setFilaBoletoSuperior(filaBoletoSuperior);
+                boletoSuperior.setNumeroAsiento(celdaSuperior.getNumeroAsiento());
+                boletoSuperior.setNumeroBoleto(celdaSuperior.getNumeroCelda());
+                boletoSuperior.setTipoBoleto(celdaSuperior.getTipoCelda());
+                boletoSuperior.setPrecio(new BigDecimal(0));
+                filaBoletoSuperior.getBoletosSuperiores().add(boletoSuperior);
+
+            }
+
+            filasBoletosSuperiores.add(filaBoletoSuperior);
+        }
+
+        return filasBoletosSuperiores;
+    }
 
 
 

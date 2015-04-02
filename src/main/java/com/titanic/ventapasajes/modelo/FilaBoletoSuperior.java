@@ -35,8 +35,7 @@ public class FilaBoletoSuperior implements Serializable {
         this.ideFila = ideAsiento;
     }
 
-
-    @OneToMany(mappedBy = "fila", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "filaBoletoSuperior", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<BoletoSuperior> getBoletosSuperiores() {
         return boletosSuperiores;
     }
@@ -44,6 +43,8 @@ public class FilaBoletoSuperior implements Serializable {
     public void setBoletosSuperiores(List<BoletoSuperior> boletosSuperiores) {
         this.boletosSuperiores = boletosSuperiores;
     }
+
+
 
     @NotNull
     @Enumerated(EnumType.STRING)

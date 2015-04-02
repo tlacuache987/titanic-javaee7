@@ -8,156 +8,357 @@
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 
-<ui:define name="titulo">Venta Pasaje</ui:define>
+    <ui:define name="titulo">Venta Pasaje</ui:define>
 
-<ui:define name="cuerpo">
+    <ui:define name="cuerpo">
 
-<h1>Venta de Pasaje</h1>
-
-
-
-<h:form id="form">
+        <h1>Venta de Pasaje</h1>
 
 
-
-    <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
-
-    <p:socket channel="/notify" onMessage="handleMessage">
-        <p:ajax event="message" update=":form" />
-    </p:socket>
-
-    <script language="JavaScript">
+        <h:form id="form">
 
 
-        function handleMessage(facesMessage){
-            facesMessage.severity = "info";
+            <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
 
-            PF('wmsg').show(facesMessage);
-        }
+            <p:socket channel="/notify" onMessage="handleMessage">
+                <p:ajax event="message" update=":form"/>
+            </p:socket>
 
-    </script>
-
-
+            <script language="JavaScript">
 
 
-    <p:messages autoUpdate="true"/>
+                function handleMessage(facesMessage) {
+                    facesMessage.severity = "info";
+
+                    PF('wmsg').show(facesMessage);
+                }
+
+            </script>
 
 
-<p:toolbar style="margin-top:20px">
-
-    <f:facet name="left">
-
-        <p:outputLabel for="button" value="Fecha:"/>
-        <p:calendar id="button" value="#{ventaPasajeBean.fechaVenta}" showOn="button" update=":form"/>
-
-        <p:commandButton value="Ruta" icon="ui-icon-extlink"
-                         actionListener="#{ventaPasajeBean.seleccionarRuta}">
-            <p:ajax event="dialogReturn" listener="#{ventaPasajeBean.onRutaSeleccionada}"
-                    update="msgs,ruta, :form"/>
-
-        </p:commandButton>
-
-        <p:inputText id="ruta" value="#{ventaPasajeBean.ruta.ruta}" size="30" readonly="true"/>
-
-        <p:outputLabel value="Hora Salida:"/>
-        <h:selectOneMenu value="#{ventaPasajeBean.horaSalida}" onchange="this.form.submit()">
-            <f:selectItem itemValue="00.00" itemLabel="00.00"/>
-            <f:selectItem itemValue="00.30" itemLabel="00.30"/>
-            <f:selectItem itemValue="01.00" itemLabel="01.00"/>
-            <f:selectItem itemValue="01.30" itemLabel="01.30"/>
-            <f:selectItem itemValue="02.00" itemLabel="02.00"/>
-            <f:selectItem itemValue="02.30" itemLabel="02.30"/>
-            <f:selectItem itemValue="03.00" itemLabel="03.00"/>
-            <f:selectItem itemValue="03.30" itemLabel="03.30"/>
-            <f:selectItem itemValue="04.00" itemLabel="04.00"/>
-            <f:selectItem itemValue="04.30" itemLabel="04.30"/>
-            <f:selectItem itemValue="05.00" itemLabel="05.00"/>
-            <f:selectItem itemValue="05.30" itemLabel="05.30"/>
-            <f:selectItem itemValue="06.00" itemLabel="06.00"/>
-            <f:selectItem itemValue="06.30" itemLabel="06.30"/>
-            <f:selectItem itemValue="07.00" itemLabel="07.00"/>
-            <f:selectItem itemValue="07.30" itemLabel="07.30"/>
-            <f:selectItem itemValue="08.00" itemLabel="08.00"/>
-            <f:selectItem itemValue="08.30" itemLabel="08.30"/>
-            <f:selectItem itemValue="09.00" itemLabel="09.00"/>
-            <f:selectItem itemValue="09.30" itemLabel="09.30"/>
-            <f:selectItem itemValue="10.00" itemLabel="10.00"/>
-            <f:selectItem itemValue="10.30" itemLabel="10.30"/>
-            <f:selectItem itemValue="11.00" itemLabel="11.00"/>
-            <f:selectItem itemValue="11.30" itemLabel="11.30"/>
-            <f:selectItem itemValue="12.00" itemLabel="12.00"/>
-            <f:selectItem itemValue="12.30" itemLabel="12.30"/>
-            <f:selectItem itemValue="13.00" itemLabel="13.00"/>
-            <f:selectItem itemValue="13.30" itemLabel="13.30"/>
-            <f:selectItem itemValue="14.00" itemLabel="14.00"/>
-            <f:selectItem itemValue="14.30" itemLabel="14.30"/>
-            <f:selectItem itemValue="15.00" itemLabel="15.00"/>
-            <f:selectItem itemValue="15.30" itemLabel="15.30"/>
-            <f:selectItem itemValue="16.00" itemLabel="16.00"/>
-            <f:selectItem itemValue="16.30" itemLabel="16.30"/>
-            <f:selectItem itemValue="17.00" itemLabel="17.00"/>
-            <f:selectItem itemValue="17.30" itemLabel="17.30"/>
-            <f:selectItem itemValue="18.00" itemLabel="18.00"/>
-            <f:selectItem itemValue="18.30" itemLabel="18.30"/>
-            <f:selectItem itemValue="19.00" itemLabel="19.00"/>
-            <f:selectItem itemValue="19.30" itemLabel="19.30"/>
-            <f:selectItem itemValue="20.00" itemLabel="20.00"/>
-            <f:selectItem itemValue="20.30" itemLabel="20.30"/>
-            <f:selectItem itemValue="21.00" itemLabel="21.00"/>
-            <f:selectItem itemValue="21.30" itemLabel="21.30"/>
-            <f:selectItem itemValue="22.00" itemLabel="22.00"/>
-            <f:selectItem itemValue="22.30" itemLabel="22.30"/>
-            <f:selectItem itemValue="23.00" itemLabel="23.00"/>
-            <f:selectItem itemValue="23.30" itemLabel="23.30"/>
-        </h:selectOneMenu>
-
-        <p:commandButton value="Bus" icon="ui-icon-extlink"
-                         actionListener="#{ventaPasajeBean.seleccionarBus}">
-            <p:ajax event="dialogReturn" listener="#{ventaPasajeBean.onBusSeleccionado}"
-                    update="msgs,bus, :form"/>
-
-        </p:commandButton>
-
-        <p:inputText id="bus" value="#{ventaPasajeBean.nombreBus}" size="30" readonly="true"/>
-    </f:facet>
-
-    <f:facet name="right">
-        <p:commandButton value="Nueva Venta" action="#{ventaPasajeBean.nuevaVenta}" update="@form"/>
-    </f:facet>
-</p:toolbar>
+            <p:messages autoUpdate="true"/>
 
 
-<p:wizard flowListener="#{ventaPasajeBean.onFlowProcess}" style="margin-top:20px" nextLabel="Siguiente"
-          backLabel="Atras">
+            <p:toolbar style="margin-top:20px">
+
+                <f:facet name="left">
+
+                    <p:outputLabel for="button" value="Fecha:"/>
+                    <p:calendar id="button" value="#{ventaPasajeBean.fechaVenta}" showOn="button" update=":form"/>
+
+                    <p:commandButton value="Ruta" icon="ui-icon-extlink"
+                                     actionListener="#{ventaPasajeBean.seleccionarRuta}">
+                        <p:ajax event="dialogReturn" listener="#{ventaPasajeBean.onRutaSeleccionada}"
+                                update="msgs,ruta, :form"/>
+
+                    </p:commandButton>
+
+                    <p:inputText id="ruta" value="#{ventaPasajeBean.ruta.ruta}" size="30" readonly="true"/>
+
+                    <p:outputLabel value="Hora Salida:"/>
+                    <h:selectOneMenu value="#{ventaPasajeBean.horaSalida}" onchange="this.form.submit()">
+                        <f:selectItem itemValue="00.00" itemLabel="00.00"/>
+                        <f:selectItem itemValue="00.30" itemLabel="00.30"/>
+                        <f:selectItem itemValue="01.00" itemLabel="01.00"/>
+                        <f:selectItem itemValue="01.30" itemLabel="01.30"/>
+                        <f:selectItem itemValue="02.00" itemLabel="02.00"/>
+                        <f:selectItem itemValue="02.30" itemLabel="02.30"/>
+                        <f:selectItem itemValue="03.00" itemLabel="03.00"/>
+                        <f:selectItem itemValue="03.30" itemLabel="03.30"/>
+                        <f:selectItem itemValue="04.00" itemLabel="04.00"/>
+                        <f:selectItem itemValue="04.30" itemLabel="04.30"/>
+                        <f:selectItem itemValue="05.00" itemLabel="05.00"/>
+                        <f:selectItem itemValue="05.30" itemLabel="05.30"/>
+                        <f:selectItem itemValue="06.00" itemLabel="06.00"/>
+                        <f:selectItem itemValue="06.30" itemLabel="06.30"/>
+                        <f:selectItem itemValue="07.00" itemLabel="07.00"/>
+                        <f:selectItem itemValue="07.30" itemLabel="07.30"/>
+                        <f:selectItem itemValue="08.00" itemLabel="08.00"/>
+                        <f:selectItem itemValue="08.30" itemLabel="08.30"/>
+                        <f:selectItem itemValue="09.00" itemLabel="09.00"/>
+                        <f:selectItem itemValue="09.30" itemLabel="09.30"/>
+                        <f:selectItem itemValue="10.00" itemLabel="10.00"/>
+                        <f:selectItem itemValue="10.30" itemLabel="10.30"/>
+                        <f:selectItem itemValue="11.00" itemLabel="11.00"/>
+                        <f:selectItem itemValue="11.30" itemLabel="11.30"/>
+                        <f:selectItem itemValue="12.00" itemLabel="12.00"/>
+                        <f:selectItem itemValue="12.30" itemLabel="12.30"/>
+                        <f:selectItem itemValue="13.00" itemLabel="13.00"/>
+                        <f:selectItem itemValue="13.30" itemLabel="13.30"/>
+                        <f:selectItem itemValue="14.00" itemLabel="14.00"/>
+                        <f:selectItem itemValue="14.30" itemLabel="14.30"/>
+                        <f:selectItem itemValue="15.00" itemLabel="15.00"/>
+                        <f:selectItem itemValue="15.30" itemLabel="15.30"/>
+                        <f:selectItem itemValue="16.00" itemLabel="16.00"/>
+                        <f:selectItem itemValue="16.30" itemLabel="16.30"/>
+                        <f:selectItem itemValue="17.00" itemLabel="17.00"/>
+                        <f:selectItem itemValue="17.30" itemLabel="17.30"/>
+                        <f:selectItem itemValue="18.00" itemLabel="18.00"/>
+                        <f:selectItem itemValue="18.30" itemLabel="18.30"/>
+                        <f:selectItem itemValue="19.00" itemLabel="19.00"/>
+                        <f:selectItem itemValue="19.30" itemLabel="19.30"/>
+                        <f:selectItem itemValue="20.00" itemLabel="20.00"/>
+                        <f:selectItem itemValue="20.30" itemLabel="20.30"/>
+                        <f:selectItem itemValue="21.00" itemLabel="21.00"/>
+                        <f:selectItem itemValue="21.30" itemLabel="21.30"/>
+                        <f:selectItem itemValue="22.00" itemLabel="22.00"/>
+                        <f:selectItem itemValue="22.30" itemLabel="22.30"/>
+                        <f:selectItem itemValue="23.00" itemLabel="23.00"/>
+                        <f:selectItem itemValue="23.30" itemLabel="23.30"/>
+                    </h:selectOneMenu>
+
+                    <p:commandButton value="Bus" icon="ui-icon-extlink"
+                                     actionListener="#{ventaPasajeBean.seleccionarBus}">
+                        <p:ajax event="dialogReturn" listener="#{ventaPasajeBean.onBusSeleccionado}"
+                                update="msgs,bus, :form"/>
+
+                    </p:commandButton>
+
+                    <p:inputText id="bus" value="#{ventaPasajeBean.nombreBus}" size="30" readonly="true"/>
+                </f:facet>
+
+                <f:facet name="right">
+                    <p:commandButton value="Nueva Venta" action="#{ventaPasajeBean.nuevaVenta}" update="@form"/>
+                </f:facet>
+            </p:toolbar>
 
 
-    <p:tab id="ventaAsientos" title="Asientos">
+            <p:wizard flowListener="#{ventaPasajeBean.onFlowProcess}" style="margin-top:20px" nextLabel="Siguiente"
+                      backLabel="Atras">
 
 
+                <p:tab id="ventaAsientos" title="Asientos">
 
 
-
-    </p:tab>
-
-    <p:tab id="confirmarAsientos" title="Confirmacion">
+                    <p:panelGrid id="mapa" style="margin-top:15px" rendered="#{ventaPasajeBean.cargarAsientos}">
 
 
+                        <!-- 4 FILA -->
+                        <p:row>
+                            <p:column rowspan="5">
+                                <p:outputLabel value="Arriba"/>
+                            </p:column>
+                            <!-- celdas  04 -->
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[4].tipoBoleto=='ASIENTO'}">
+
+                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+
+                            <p:column rowspan="5">
+                                <p:outputLabel value="Abajo"/>
+                            </p:column>
+
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletosInferiores}" var="filaBoletoInferior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[4].tipoBoleto=='ASIENTO'}">
+
+                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
 
 
-    </p:tab>
-
-</p:wizard>
-
-<p:confirmDialog global="true">
-    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
-    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-</p:confirmDialog>
+                        </p:row>
 
 
-</h:form>
+                        <!-- 3 fila -->
+
+                        <p:row>
+                            <!-- celdas 03 -->
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[3].tipoBoleto=='ASIENTO'}">
+
+                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}"/>
+
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletosInferiores}" var="filaBoletoInferior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[3].tipoBoleto=='ASIENTO'}">
+                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+
+                        </p:row>
+
+                        <!--2 fila-->
+
+                        <p:row>
+                            <!-- celdas 02 -->
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[2].tipoBoleto=='ASIENTO'}">
+                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}"/>
+
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0" />
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+                            <!-- celdas 02 -->
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletosInferiores}" var="filaBoletoInferior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[2].tipoBoleto=='ASIENTO'}">
+                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+
+                        </p:row>
 
 
-</ui:define>
+                        <!-- fila 1-->
+
+                        <p:row>
+                            <!-- celdas 01 -->
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[1].tipoBoleto=='ASIENTO'}">
+                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+
+                            <!-- celdas 01 -->
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletosInferiores}" var="filaBoletoInferior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[1].tipoBoleto=='ASIENTO'}">
+                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+
+                        </p:row>
+
+                        <!--fila 0-->
+
+                        <p:row>
+                            <!-- celdas 00 -->
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[0].tipoBoleto=='ASIENTO'}">
+                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+
+                            <c:forEach items="#{ventaPasajeBean.venta.filasBoletosInferiores}" var="filaBoletoInferior" varStatus="status">
+
+                                <p:column>
+                                    <c:choose>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[0].tipoBoleto=='ASIENTO'}">
+                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}"/>
+                                        </c:when>
+
+                                        <c:otherwise>
+                                            <p:spacer height="0"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </p:column>
+
+                            </c:forEach>
+                        </p:row>
+
+                    </p:panelGrid>
+
+
+                </p:tab>
+
+                <p:tab id="confirmarAsientos" title="Confirmacion">
+
+
+                </p:tab>
+
+            </p:wizard>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+
+
+        </h:form>
+
+
+    </ui:define>
 
 </ui:composition>
 

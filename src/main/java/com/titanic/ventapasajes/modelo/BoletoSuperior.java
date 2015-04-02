@@ -145,19 +145,9 @@ public class BoletoSuperior implements Serializable{
 
 
 
-    @ManyToOne
-    @JoinColumn(name = "ide_venta", nullable = false)
-    public Venta getVenta() {
-        return venta;
-    }
-
-    public void setVenta(Venta venta) {
-        this.venta = venta;
-    }
-
 
     @ManyToOne
-    @JoinColumn(name = "vendedor", nullable = false)
+    @JoinColumn(name = "vendedor", nullable = true)
     public Usuario getUsuario() {
         return usuario;
     }
@@ -234,21 +224,6 @@ public class BoletoSuperior implements Serializable{
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        BoletoSuperior that = (BoletoSuperior) o;
-
-        return ideBoleto.equals(that.ideBoleto);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return ideBoleto.hashCode();
-    }
 
     @Override
     public String toString() {

@@ -29,7 +29,7 @@ public class BoletoInferior implements Serializable {
 
     private BigDecimal precio;
     private Cliente cliente;
-    private Venta venta;
+
     private Usuario usuario;
     private Boolean presentoCartaNotarial;
 
@@ -145,19 +145,10 @@ public class BoletoInferior implements Serializable {
 
 
 
-    @ManyToOne
-    @JoinColumn(name = "ide_venta", nullable = false)
-    public Venta getVenta() {
-        return venta;
-    }
-
-    public void setVenta(Venta venta) {
-        this.venta = venta;
-    }
 
 
     @ManyToOne
-    @JoinColumn(name = "vendedor", nullable = false)
+    @JoinColumn(name = "vendedor", nullable = true)
     public Usuario getUsuario() {
         return usuario;
     }
@@ -234,21 +225,6 @@ public class BoletoInferior implements Serializable {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        BoletoInferior that = (BoletoInferior) o;
-
-        return ideBoleto.equals(that.ideBoleto);
-
-    }
-
-    @Override
-    public int hashCode() {
-        return ideBoleto.hashCode();
-    }
 
     @Override
     public String toString() {
@@ -262,7 +238,7 @@ public class BoletoInferior implements Serializable {
                 ", calidad=" + calidad +
                 ", precio=" + precio +
                 ", cliente=" + cliente +
-                ", venta=" + venta +
+
                 ", usuario=" + usuario +
                 ", presentoCartaNotarial=" + presentoCartaNotarial +
                 ", numeroDocumento='" + numeroDocumento + '\'' +

@@ -35,7 +35,7 @@ public class FilaBoletoInferior implements Serializable {
     }
 
 
-    @OneToMany(mappedBy = "fila", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "filaBoletoInferior", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     public List<BoletoInferior> getBoletosInferiores() {
         return boletosInferiores;
     }
