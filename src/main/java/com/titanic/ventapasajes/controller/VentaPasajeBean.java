@@ -167,7 +167,7 @@ public class VentaPasajeBean implements Serializable {
 
         ventaService.registrarVenta(venta);
 
-        FacesUtil.adicionarMensajeInfo("Se inicializo venta satisfactoriamente");
+
     }
 
     private List<FilaBoletoInferior> clonarFilasInferiores(List<FilaBoletoInferior> filasBoletosInferiores) {
@@ -265,10 +265,6 @@ public class VentaPasajeBean implements Serializable {
 
         this.setRuta(recorrido);
 
-
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ruta Seleccionada", "Id:" + recorrido.getRuta());
-
-        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     public void onBusSeleccionado(SelectEvent event) {
@@ -282,9 +278,40 @@ public class VentaPasajeBean implements Serializable {
         if (venta == null)
             nuevaVenta();
 
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Bus Seleccionado", "Id:" + busSeleccionado.getDescripcionBus());
+    }
 
-        FacesContext.getCurrentInstance().addMessage(null, message);
+    public void reservarBoletoSuperior(BoletoSuperior boletoSuperior) {
+
+        boletoSuperior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+
+        this.venta = ventaService.registrarVenta(this.venta);
+
+
+
+
+        notificarPUSH();
+    }
+
+
+    public void reservarBoletoInferior(BoletoInferior boletoInferior) {
+
+        boletoInferior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+
+        this.venta = ventaService.registrarVenta(venta);
+
+        notificarPUSH();
+    }
+
+
+    public void notificarPUSH() {
+        String summary = "Reservar Reservado";
+        String detail = "Nuevo asiento reservado";
+        String CHANNEL = "/notify";
+
+        EventBus eventBus = EventBusFactory.getDefault().eventBus();
+        eventBus.publish(CHANNEL,
+                new FacesMessage(StringEscapeUtils.escapeHtml(summary), StringEscapeUtils.escapeHtml(detail)));
+
     }
 
 

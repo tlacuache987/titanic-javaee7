@@ -4,7 +4,6 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:asiento="http://java.sun.com/jsf/composite/components"
                 xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 
@@ -21,7 +20,7 @@
             <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
 
             <p:socket channel="/notify" onMessage="handleMessage">
-                <p:ajax event="message" update=":form"/>
+                <p:ajax event="message" update=":form:mapa"/>
             </p:socket>
 
             <script language="JavaScript">
@@ -30,7 +29,7 @@
                 function handleMessage(facesMessage) {
                     facesMessage.severity = "info";
 
-                    PF('wmsg').show(facesMessage);
+                    PF('wmsg').show([facesMessage]);
                 }
 
             </script>
@@ -143,9 +142,20 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[4].tipoBoleto=='ASIENTO'}">
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[4].tipoBoleto.descripcion.equals('ASIENTO')}">
 
-                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}"/>
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[4].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoSuperior(filaBoletoSuperior.boletosSuperiores[4])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento.concat('(').
+                                                            concat(filaBoletoSuperior.boletosSuperiores[4].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
 
                                         <c:otherwise>
@@ -164,14 +174,30 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoInferior.boletosInferiores[4].tipoBoleto=='ASIENTO'}">
 
-                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}"/>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[4].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoInferior.boletosInferiores[4].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoInferior(filaBoletoInferior.boletosInferiores[4])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento.concat('(').
+                                                            concat(filaBoletoInferior.boletosInferiores[4].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
+
 
                                         <c:otherwise>
                                             <p:spacer height="0"/>
                                         </c:otherwise>
+
+
+
                                     </c:choose>
                                 </p:column>
 
@@ -189,16 +215,32 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[3].tipoBoleto=='ASIENTO'}">
 
-                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}"/>
+
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[3].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[3].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoSuperior(filaBoletoSuperior.boletosSuperiores[3])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento.concat('(').
+                                                            concat(filaBoletoSuperior.boletosSuperiores[3].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
 
                                         </c:when>
 
                                         <c:otherwise>
                                             <p:spacer height="0"/>
                                         </c:otherwise>
+
+
                                     </c:choose>
+
+
                                 </p:column>
 
                             </c:forEach>
@@ -207,8 +249,23 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoInferior.boletosInferiores[3].tipoBoleto=='ASIENTO'}">
-                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}"/>
+
+
+
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[3].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoInferior.boletosInferiores[3].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoInferior(filaBoletoInferior.boletosInferiores[3])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento.concat('(').
+                                                            concat(filaBoletoInferior.boletosInferiores[3].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
 
                                         <c:otherwise>
@@ -229,8 +286,19 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[2].tipoBoleto=='ASIENTO'}">
-                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}"/>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[2].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[2].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoSuperior(filaBoletoSuperior.boletosSuperiores[2])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento.concat('(').
+                                                            concat(filaBoletoSuperior.boletosSuperiores[2].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
 
                                         </c:when>
 
@@ -246,8 +314,20 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoInferior.boletosInferiores[2].tipoBoleto=='ASIENTO'}">
-                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}"/>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[2].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoInferior(filaBoletoInferior.boletosInferiores[2])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento.concat('(').
+                                                            concat(filaBoletoInferior.boletosInferiores[2].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
 
                                         <c:otherwise>
@@ -269,8 +349,20 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[1].tipoBoleto=='ASIENTO'}">
-                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}"/>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[1].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoSuperior(filaBoletoSuperior.boletosSuperiores[1])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento.concat('(').
+                                                            concat(filaBoletoSuperior.boletosSuperiores[1].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
 
                                         <c:otherwise>
@@ -286,8 +378,20 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoInferior.boletosInferiores[1].tipoBoleto=='ASIENTO'}">
-                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}"/>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[1].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoInferior(filaBoletoInferior.boletosInferiores[1])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento.concat('(').
+                                                            concat(filaBoletoInferior.boletosInferiores[1].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
 
                                         <c:otherwise>
@@ -308,8 +412,20 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[0].tipoBoleto=='ASIENTO'}">
-                                            <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}"/>
+                                        <c:when test="#{filaBoletoSuperior.boletosSuperiores[0].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoSuperior(filaBoletoSuperior.boletosSuperiores[0])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento.concat('(').
+                                                            concat(filaBoletoSuperior.boletosSuperiores[0].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
 
                                         <c:otherwise>
@@ -324,9 +440,22 @@
 
                                 <p:column>
                                     <c:choose>
-                                        <c:when test="#{filaBoletoInferior.boletosInferiores[0].tipoBoleto=='ASIENTO'}">
-                                            <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}"/>
+                                        <c:when test="#{filaBoletoInferior.boletosInferiores[0].tipoBoleto.descripcion.equals('ASIENTO')}">
+
+
+                                            <c:choose>
+                                                <c:when test="#{filaBoletoInferior.boletosInferiores[0].estadoBoleto.descripcion.equals('LIBRE')}">
+                                                    <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}"
+                                                                     action="#{ventaPasajeBean.reservarBoletoInferior(filaBoletoInferior.boletosInferiores[0])}" />
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <p:outputLabel value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento.concat('(').
+                                                            concat(filaBoletoInferior.boletosInferiores[0].estadoBoleto).concat(')')}"/>
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </c:when>
+
 
                                         <c:otherwise>
                                             <p:spacer height="0"/>
