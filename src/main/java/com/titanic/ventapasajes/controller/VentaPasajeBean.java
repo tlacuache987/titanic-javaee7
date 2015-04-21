@@ -2,7 +2,6 @@ package com.titanic.ventapasajes.controller;
 
 
 import com.titanic.ventapasajes.datasource.DataSourceBoleto;
-import com.titanic.ventapasajes.datasource.ReporteGen;
 import com.titanic.ventapasajes.modelo.*;
 import com.titanic.ventapasajes.repositorio.BusRepositorio;
 import com.titanic.ventapasajes.security.Seguridad;
@@ -10,38 +9,37 @@ import com.titanic.ventapasajes.service.RegistroClienteService;
 import com.titanic.ventapasajes.service.RegistroVentaService;
 import com.titanic.ventapasajes.service.TarifaGeneralService;
 import com.titanic.ventapasajes.util.FacesUtil;
-import com.titanic.ventapasajes.util.reporte.EjecutorReporte;
-
 import org.apache.commons.lang.StringEscapeUtils;
-import org.hibernate.Session;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.FlowEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by josediaz on 7/26/14.
  */
 
 @Named
-@ViewScoped
+@RequestScoped
 public class VentaPasajeBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -145,6 +143,10 @@ public class VentaPasajeBean implements Serializable {
 
 
 
+    @PostConstruct
+    public void init(){
+        venta = ventaService.obtenerVenta(fechaVenta, ruta, horaSalida, bus);
+    }
 
 
     private void nuevaVenta() {
@@ -279,7 +281,7 @@ public class VentaPasajeBean implements Serializable {
             nuevaVenta();
 
     }
-
+/*
     public void reservarBoletoSuperior(BoletoSuperior boletoSuperior) {
 
         boletoSuperior.setEstadoBoleto(EstadoBoleto.RESERVADO);
@@ -301,7 +303,7 @@ public class VentaPasajeBean implements Serializable {
 
         notificarPUSH();
     }
-
+*/
 
     public void notificarPUSH() {
         String summary = "Reservar Reservado";
@@ -312,6 +314,25 @@ public class VentaPasajeBean implements Serializable {
         eventBus.publish(CHANNEL,
                 new FacesMessage(StringEscapeUtils.escapeHtml(summary), StringEscapeUtils.escapeHtml(detail)));
 
+
+
+    }
+
+
+
+
+
+
+
+    public void onCellEdit(CellEditEvent event) {
+        Object oldValue = event.getOldValue();
+        Object newValue = event.getNewValue();
+
+        if(newValue != null && !newValue.equals(oldValue)) {
+
+            this.venta = ventaService.registrarVenta(this.venta);
+            notificarPUSH();
+        }
     }
 
 
@@ -322,5 +343,7 @@ public class VentaPasajeBean implements Serializable {
 
     }
 
-
+    public EstadoBoleto[] getEstadoBoleto() {
+        return EstadoBoleto.values();
+    }
 }

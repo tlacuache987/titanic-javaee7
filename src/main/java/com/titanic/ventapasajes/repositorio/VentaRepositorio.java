@@ -38,15 +38,16 @@ public class VentaRepositorio implements Serializable {
 
         try{
 
-            Venta venta = entityManager.createQuery("from Venta where " +
-                    "fechaVenta = :fechaVenta and " +
-                    "ruta.ideRecorrido = :ideRecorrido and " +
-                    "horaSalida = :horaSalida and " +
-                    "bus.ideBus = :ideBus", Venta.class)
-                    .setParameter("fechaVenta", fechaVenta)
-                    .setParameter("ideRecorrido", ruta.getIdeRecorrido())
-                    .setParameter("horaSalida", horaSalida)
-                    .setParameter("ideBus", bus.getIdeBus())
+            Venta venta = entityManager.createQuery("from Venta where ideVenta = :ideVenta", Venta.class)
+                    //"fechaVenta = :fechaVenta and " +
+                    //"ruta.ideRecorrido = :ideRecorrido and " +
+                    //"horaSalida = :horaSalida and " +
+                    //"bus.ideBus = :ideBus", Venta.class)
+                    //.setParameter("fechaVenta",  new Date() )//fechaVenta)
+                    //.setParameter("ideRecorrido", 2l)//ruta.getIdeRecorrido())
+                    //.setParameter("horaSalida", "00:00") //horaSalida)
+                    //.setParameter("ideBus", 3l) //bus.getIdeBus())
+                    .setParameter("ideVenta", 35l)
                     .getSingleResult();
 
             //Hibernate.initialize(venta.getBoletos());
