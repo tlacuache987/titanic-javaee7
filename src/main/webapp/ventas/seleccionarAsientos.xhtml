@@ -13,9 +13,8 @@
 
         <f:metadata>
             <o:viewParam name="programacion" value="#{seleccionarAsientosBean.programacion}" />
-
             <f:event listener="#{seleccionarAsientosBean.inicializar}"
-                     type="preRenderView"/>
+                     type="preRenderView" />
         </f:metadata>
 
         <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
@@ -64,7 +63,8 @@
             <p:messages autoUpdate="true" />
 
             <p:panelGrid columns="2" id="panelPlanos"
-                         style="width:100%;margin-top:15px;align-content: center" >
+                         style="width:100%;margin-top:15px;align-content: center"
+                         >
 
 
 

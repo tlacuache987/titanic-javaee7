@@ -1,6 +1,7 @@
 package com.titanic.ventapasajes.controller;
 
 import com.titanic.ventapasajes.modelo.*;
+import com.titanic.ventapasajes.repositorio.ProgramacionRepositorio;
 import com.titanic.ventapasajes.service.RegistroVentaService;
 import com.titanic.ventapasajes.util.FacesUtil;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -16,6 +17,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,19 +36,31 @@ public class SeleccionarAsientosBean implements Serializable {
     @Inject
     private RegistroVentaService ventaService;
 
+    @Inject
+    private ProgramacionRepositorio programacionRepositorio;
+
+    @Inject
+    private HttpServletRequest request;
+
     private Programacion programacion;
 
     private Venta venta;
 
 
+
     public void inicializar(){
-        if(!FacesUtil.isPostback()){
+
+
+        if(!FacesUtil.isPostback()) {
             venta = ventaService.obtenerVenta(programacion);
-            if(venta==null){
+            if (venta == null) {
                 nuevaVenta();
             }
         }
+
     }
+
+
 
 
     public Programacion getProgramacion() {
