@@ -47,7 +47,7 @@ public class VentaRepositorio implements Serializable {
                     //.setParameter("ideRecorrido", 2l)//ruta.getIdeRecorrido())
                     //.setParameter("horaSalida", "00:00") //horaSalida)
                     //.setParameter("ideBus", 3l) //bus.getIdeBus())
-                    .setParameter("ideVenta", 35l)
+                    .setParameter("ideVenta", 10l)
                     .getSingleResult();
 
             //Hibernate.initialize(venta.getBoletos());
