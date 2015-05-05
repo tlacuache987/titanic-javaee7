@@ -13,9 +13,23 @@
 
         <f:metadata>
             <o:viewParam name="programacion" value="#{seleccionarAsientosBean.programacion}" />
+
             <f:event listener="#{seleccionarAsientosBean.inicializar}"
-                     type="preRenderView" />
+                     type="preRenderView"/>
         </f:metadata>
+
+        <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
+
+
+        <script language="JavaScript">
+                function handleMessage(facesMessage) {
+                    facesMessage.severity = "info";
+                    PF('wmsg').show([facesMessage]);
+                }
+
+        </script>
+
+
 
 
         <h:form id="form">
@@ -25,8 +39,17 @@
             <p:messages autoUpdate="true" />
             <p:toolbar style="margin-top:20px">
                 <f:facet name="left">
-                    <p:commandButton value="Grabar Asientos" id="btnGrabarAsientos"
-                                     action="#{seleccionarAsientosBean.registrarAsientos}" update="@form" />
+                    <p:outputLabel  value="Fecha:  "  style="font-weight:normal"/>
+                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.fechaProgramacion}"/>
+                    <p:outputLabel  value="  Ruta:  " style="font-weight:normal"/>
+                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.ruta.ruta}"/>
+                    <p:outputLabel  value="  Bus:  " style="font-weight:normal"/>
+                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.bus.descripcionBus}"/>
+                    <p:outputLabel  value="  Hora Salida:  " style="font-weight:normal"/>
+                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.horaSalida}"/>
+                    <p:outputLabel  value="  Hora Llegada:  " style="font-weight:normal"/>
+                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.horaLlegada}"/>
+
                 </f:facet>
                 <f:facet name="right">
                     <p:button value="Seleccionar Bus" id="btnSeleccionarBus"
@@ -34,94 +57,23 @@
                 </f:facet>
             </p:toolbar>
 
-            <p:panelGrid  id="panelFormProgramacion"
-                          style="width:100%;margin-top:15px" >
-
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Fecha Programación" for="fechaProgramacion" />
-                    </p:column>
-                    <p:column>
-                        <p:calendar id="fechaProgramacion" value="#{seleccionarAsientosBean.programacion.fechaProgramacion}"
-                                    showOn="button"
-                                />
-                    </p:column>
-                </p:row>
-
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Bus" for="bus" />
-                    </p:column>
-                    <p:column>
-
-                        <p:inputText id="bus" value="#{seleccionarAsientosBean.programacion.bus.descripcionBus}" size="30" readonly="true"/>
-                        <p:commandButton value="Bus" icon="ui-icon-extlink"
-                                         actionListener="#{seleccionarAsientosBean.seleccionarBus}">
-                            <p:ajax event="dialogReturn" listener="#{seleccionarAsientosBean.onBusSeleccionado}"
-                                    update="bus"/>
-
-                        </p:commandButton>
-                    </p:column>
-                </p:row>
-
-
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Hora Salida" for="horaSalida" />
-                    </p:column>
-                    <p:column>
-                        <p:inputText id="horaSalida" value="#{seleccionarAsientosBean.programacion.horaSalida}"
-                                     size="30" maxlength="10"/>
-
-                    </p:column>
-                </p:row>
-
-
-
-
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="Hora Llegada" for="horaLlegada" />
-                    </p:column>
-                    <p:column>
-                        <p:inputText id="horaLlegada" value="#{seleccionarAsientosBean.programacion.horaLlegada}"
-                                     size="30" maxlength="10"/>
-                    </p:column>
-                </p:row>
-
-
-                <p:row>
-                    <p:column>
-                        <p:outputLabel value="TipoProgramacion" for="tipoProgramacion" />
-                    </p:column>
-                    <p:column>
-                        <p:selectOneRadio id="tipoProgramacion" styleClass="no-border"
-                                          value="#{seleccionarAsientosBean.programacion.tipoProgramacion}">
-                            <f:selectItems value="#{seleccionarAsientosBean.tipoProgramacion}" var="sexo"
-                                           itemValue="#{tipoProgramacion}"
-                                           itemLabel="#{tipoProgramacion.descripcion}"/>
-
-                        </p:selectOneRadio>
-
-                    </p:column>
-                </p:row>
-
-
-            </p:panelGrid>
 
 
             <!-- Asientos para escoger -->
+
+            <p:messages autoUpdate="true" />
 
             <p:panelGrid columns="2" id="panelPlanos"
                          style="width:100%;margin-top:15px;align-content: center" >
 
 
 
-                <p:dataTable id="planoPrimeraPlanta"
-                             value="#{seleccionarAsientosBean.programacion.bus.filasInferiores}" var="fila"
+
+                <p:dataTable id="dtPrimeraPlanta"
+                             value="#{seleccionarAsientosBean.venta.filasBoletosInferiores}" var="fila"
                              editable="true"
                              editMode="cell"
-                             widgetVar="cellFilaPrimera"
+                             widgetVar="wPrimeraPlanta"
 
                         >
 
@@ -130,27 +82,27 @@
                     </f:facet>
 
 
-                    <p:ajax event="cellEdit" listener="#{seleccionarAsientosBean.onCellEdit}" update=":form:msgs" />
+                    <p:ajax event="cellEdit" listener="#{seleccionarAsientosBean.onCellEdit}" />
 
 
                     <p:column headerText="C1" style="text-align: center; width:30px;" >
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[0]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[0].numeroAsiento.concat(fila.boletosInferiores[0].estadoBoleto)}" /></f:facet>
                             <f:facet name="input">
-                                <h:outputText value="#{fila.celdasInferiores[0].numeroCelda}" />
-                                <h:selectOneMenu value="#{fila.celdasInferiores[0].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <h:outputText value="#{fila.boletosInferiores[0].numeroAsiento}" />
+                                <h:selectOneMenu value="#{fila.boletosInferiores[0].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
                     <p:column headerText="C2" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[1]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[1].numeroAsiento.concat(fila.boletosInferiores[1].estadoBoleto)}" /></f:facet>
                             <f:facet name="input">
-                                <p:inputText value="#{fila.celdasInferiores[1].numeroCelda}" style="width:40px" maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.celdasInferiores[1].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <p:inputText value="#{fila.boletosInferiores[1].numeroAsiento}" style="width:40px" maxlength="10"/>
+                                <h:selectOneMenu value="#{fila.boletosInferiores[1].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -158,11 +110,11 @@
 
                     <p:column headerText="C3" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[2]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[2].numeroAsiento}" /></f:facet>
                             <f:facet name="input">
-                                <p:inputText  value="#{fila.celdasInferiores[2].numeroCelda}" style="width:40px"  maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.celdasInferiores[2].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <p:inputText  value="#{fila.boletosInferiores[2].numeroAsiento}" style="width:40px"  maxlength="10"/>
+                                <h:selectOneMenu value="#{fila.boletosInferiores[2].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -170,11 +122,11 @@
 
                     <p:column headerText="C4" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[3]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[3].numeroAsiento.concat(fila.boletosInferiores[3].estadoBoleto)}" /></f:facet>
                             <f:facet name="input">
-                                <p:inputText value="#{fila.celdasInferiores[3].numeroCelda}" style="width:40px"  maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.celdasInferiores[3].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <p:inputText value="#{fila.boletosInferiores[3].numeroAsiento}" style="width:40px"  maxlength="10"/>
+                                <h:selectOneMenu value="#{fila.boletosInferiores[3].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -182,11 +134,11 @@
 
                     <p:column headerText="C5" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[4]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[4].numeroAsiento.concat(fila.boletosInferiores[4].estadoBoleto)}" /></f:facet>
                             <f:facet name="input">
-                                <p:inputText  value="#{fila.celdasInferiores[4].numeroCelda}" style="width:40px" maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.celdasInferiores[4].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <p:inputText  value="#{fila.boletosInferiores[4].numeroAsiento}" style="width:40px" maxlength="10"/>
+                                <h:selectOneMenu value="#{fila.boletosInferiores[4].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -195,8 +147,11 @@
                 </p:dataTable>
 
 
-                <p:dataTable id="planoSegundaPlanta"
-                             value="#{seleccionarAsientosBean.programacion.bus.filasSuperiores}" var="filaSuperior"
+
+
+
+                <p:dataTable id="dtSegundaPlanta"
+                             value="#{seleccionarAsientosBean.venta.filasBoletoSuperiores}" var="filaSuperior"
                              editable="true"
                              editMode="cell"
                              widgetVar="cellFilaSegunda"
@@ -207,27 +162,27 @@
                     </f:facet>
 
 
-                    <p:ajax event="cellEdit" listener="#{seleccionarAsientosBean.onCellEdit}" update=":form:msgs" />
+                    <p:ajax event="cellEdit" listener="#{seleccionarAsientosBean.onCellEdit}" />
 
 
                     <p:column headerText="C1" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[0]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[0].numeroAsiento}" /></f:facet>
                             <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.celdasSuperiores[0].numeroCelda}" />
-                                <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[0].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <h:outputText value="#{filaSuperior.boletosSuperiores[0].numeroAsiento}" />
+                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[0].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
                     </p:column>
                     <p:column headerText="C2" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[1]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[1].numeroAsiento}" /></f:facet>
                             <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.celdasSuperiores[1].numeroCelda}" />
-                                <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[1].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <h:outputText value="#{filaSuperior.boletosSuperiores[1].numeroAsiento}" />
+                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[1].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -235,11 +190,11 @@
 
                     <p:column headerText="C3" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[2]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[2].numeroAsiento}" /></f:facet>
                             <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.celdasSuperiores[2].numeroCelda}" />
-                                <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[2].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <h:outputText value="#{filaSuperior.boletosSuperiores[2].numeroAsiento}" />
+                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[2].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -247,11 +202,11 @@
 
                     <p:column headerText="C4" style="text-align: center; width:30px;" >
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[3]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[3].numeroAsiento}" /></f:facet>
                             <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.celdasSuperiores[3].numeroCelda}" />
-                                <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[3].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <h:outputText value="#{filaSuperior.boletosSuperiores[3].numeroAsiento}" />
+                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[3].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -259,11 +214,11 @@
 
                     <p:column headerText="C5"  style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[4]}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[4].numeroAsiento}" /></f:facet>
                             <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.celdasSuperiores[4].numeroCelda}" />
-                                <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[4].estadoCelda}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoCelda}" var="estadoCelda" itemLabel="#{estadoCelda}" itemValue="#{estadoCelda}" />
+                                <h:outputText value="#{filaSuperior.boletosSuperiores[4].numeroAsiento}" />
+                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[4].estadoBoleto}" style="width:100%">
+                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
                                 </h:selectOneMenu>
                             </f:facet>
                         </p:cellEditor>
@@ -273,10 +228,16 @@
 
 
 
+
             </p:panelGrid>
 
 
         </h:form>
+
+        <p:socket channel="/notify" onMessage="handleMessage">
+            <p:ajax event="message" update=":form:dtPrimeraPlanta"/>
+        </p:socket>
+
 
 
 

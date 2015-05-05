@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "pvm_celda_inferior")
-public class Celda implements Serializable {
+public class Celda implements Serializable{
 
     /**
      *
@@ -21,15 +21,17 @@ public class Celda implements Serializable {
     private Long ideCelda;
     private String numeroCelda;
     private TipoCelda tipoCelda;
-    private EstadoCelda estadoCelda;
+    private EstadoBoleto estadoCelda;
     private String numeroAsiento;
     private TipoBus calidad;
     private Fila fila;
 
 
+
+
     @Id
     @GeneratedValue
-    @Column(name = "ide_celda", nullable = false, length = 10)
+    @Column(name="ide_celda", nullable = false, length= 10)
     public Long getIdeCelda() {
         return ideCelda;
     }
@@ -40,7 +42,7 @@ public class Celda implements Serializable {
 
 
     @Size(max = 10)
-    @Column(name = "numero_celda", nullable = false, length = 10)
+    @Column(name="numero_celda", nullable=false, length=10)
     public String getNumeroCelda() {
         return numeroCelda;
     }
@@ -50,7 +52,7 @@ public class Celda implements Serializable {
     }
 
 
-    @Column(name = "numero_asiento", nullable = true, length = 10)
+    @Column(name="numero_asiento", nullable=true, length=10)
     public String getNumeroAsiento() {
         return numeroAsiento;
     }
@@ -61,7 +63,7 @@ public class Celda implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_celda", nullable = false, length = 50)
+    @Column(name="tipo_celda", nullable=false, length = 50)
     public TipoCelda getTipoCelda() {
         return tipoCelda;
     }
@@ -72,7 +74,7 @@ public class Celda implements Serializable {
 
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "calidad", nullable = true, length = 50)
+    @Column(name="calidad", nullable=true, length = 50)
     public TipoBus getCalidad() {
         return calidad;
     }
@@ -83,13 +85,13 @@ public class Celda implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "estado_celda", nullable = false, length = 50)
-    public EstadoCelda getEstadoCelda() {
+    @Column(name="estado_celda", nullable=false, length = 50)
+    public EstadoBoleto getEstadoCelda() {
         return estadoCelda;
     }
 
 
-    public void setEstadoCelda(EstadoCelda estadoCelda) {
+    public void setEstadoCelda(EstadoBoleto estadoCelda) {
         this.estadoCelda = estadoCelda;
     }
 
@@ -103,27 +105,4 @@ public class Celda implements Serializable {
     public void setFila(Fila fila) {
         this.fila = fila;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Celda celda = (Celda) o;
-
-        if (ideCelda != null ? !ideCelda.equals(celda.ideCelda) : celda.ideCelda != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return ideCelda != null ? ideCelda.hashCode() : 0;
-    }
-
-    @Override
-    public String toString() {
-        return numeroCelda.equals("")?"":numeroCelda + '(' + estadoCelda + ")";
-    }
-
 }

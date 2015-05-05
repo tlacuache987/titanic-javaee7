@@ -45,7 +45,11 @@
 				<p:column headerText="Fecha Programacion" >
 					<h:outputLabel value="#{programacion.fechaProgramacion}" />
 				</p:column>
-				
+
+				<p:column headerText="Ruta" style="text-align:center;width:150px">
+					<h:outputLabel value="#{programacion.ruta.ruta}" />
+				</p:column>
+
 				<p:column headerText="Bus" style="text-align:center;width:150px">
 					<h:outputLabel value="#{programacion.bus.descripcionBus}" />
 				</p:column>

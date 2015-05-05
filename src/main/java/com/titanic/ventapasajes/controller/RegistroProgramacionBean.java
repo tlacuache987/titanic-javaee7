@@ -2,6 +2,7 @@ package com.titanic.ventapasajes.controller;
 
 import com.titanic.ventapasajes.modelo.Bus;
 import com.titanic.ventapasajes.modelo.Programacion;
+import com.titanic.ventapasajes.modelo.Recorrido;
 import com.titanic.ventapasajes.modelo.TipoProgramacion;
 import com.titanic.ventapasajes.repositorio.BusRepositorio;
 import com.titanic.ventapasajes.service.RegistroProgramacionService;
@@ -39,12 +40,11 @@ public class RegistroProgramacionBean implements Serializable {
 
     public RegistroProgramacionBean(){
         programacion = new Programacion();
+        programacion.setTipoProgramacion(TipoProgramacion.ABIERTO);
     }
 
     public void inicializar(){
-        if(!FacesUtil.isPostback()){
-            //inicializar listas
-        }
+
     }
 
 
@@ -79,10 +79,31 @@ public class RegistroProgramacionBean implements Serializable {
     }
 
 
+    public void seleccionarRuta() {
+        RequestContext.getCurrentInstance().openDialog("seleccionarRuta");
+    }
+
+
 
     public TipoProgramacion[] getTipoProgramacion() {
         return TipoProgramacion.values();
     }
+
+
+
+
+
+    public void onRutaSeleccionada(SelectEvent event) {
+        Recorrido recorrido = (Recorrido) event.getObject();
+
+        this.programacion.setRuta(recorrido);
+
+
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ruta Seleccionada", "Id:" + recorrido.getRuta());
+
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
 
     public void onBusSeleccionado(SelectEvent event) {
         Bus busSeleccionado = (Bus) event.getObject();

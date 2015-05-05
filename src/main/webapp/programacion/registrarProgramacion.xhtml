@@ -47,6 +47,23 @@
                     </p:column>
                 </p:row>
 
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for="ruta" value="Ruta"/>
+                    </p:column>
+                    <p:column>
+                        <p:inputText id="ruta" value="#{registroProgramacionBean.programacion.ruta.ruta}" size="30" readonly="true"/>
+                        <p:commandButton value="Ruta" icon="ui-icon-extlink"
+                                         actionListener="#{registroProgramacionBean.seleccionarRuta}">
+                            <p:ajax event="dialogReturn" listener="#{registroProgramacionBean.onRutaSeleccionada}"
+                                    update="ruta"/>
+
+                        </p:commandButton>
+                    </p:column>
+
+                </p:row>
+
                 <p:row>
                     <p:column>
                         <p:outputLabel value="Bus" for="bus" />

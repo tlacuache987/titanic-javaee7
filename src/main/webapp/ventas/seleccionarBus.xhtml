@@ -14,10 +14,6 @@
 
 
         <f:metadata>
-            <o:viewParam name="ruta" value="#{seleccionarBusBean.ruta}" />
-            <f:viewParam name="fechaVenta" value="#{seleccionarBusBean.fechaVenta}">
-                <f:convertDateTime pattern="yyyyMMddHHmmss" />
-            </f:viewParam>
 
 
             <f:event listener="#{seleccionarBusBean.inicializar}"
@@ -42,50 +38,21 @@
 
 
 
-                        <p:outputLabel value="Fecha Partida:"/>
-                        <p:outputLabel value="#{seleccionarBusBean.fechaVenta}">
-                                <f:convertDateTime pattern="dd/MM/yyyy"/>
-                        </p:outputLabel>
-
-                        <p:outputLabel value="  "/>
-
-                        <p:outputLabel value="Ruta:"/>
-                        <p:outputLabel value="#{seleccionarBusBean.ruta.ruta}"/>
-
-
-
-                </f:facet>
-                <f:facet name="right">
-                    <p:commandButton value="Modificar" action="#{seleccionarBusBean.modificarParametros}" update="@form"/>
-                </f:facet>
-            </p:toolbar>
-
-            <h:panelGroup id="myPanel" rendered="#{seleccionarBusBean.mostrarParametros}">
-
-
-
                     <p:outputLabel for="fechaPartida" value="Fecha Partida:"/>
-                    <p:calendar id="fechaPartida" value="#{seleccionarBusBean.nuevaFechaVenta}" showOn="button"
+                    <p:calendar id="fechaPartida" value="#{seleccionarBusBean.fechaVenta}" showOn="button"
                                 update=":form" >
 
 
                         <p:ajax event="dateSelect" listener="#{seleccionarBusBean.onFechaSeleccionada}"
-                                update="msgs,ruta, :form"/>
+                                update="msgs,:form"/>
                     </p:calendar>
 
-                    <p:outputLabel value="  "/>
 
-                    <p:outputLabel for="ruta" value="Ruta:"/>
-                    <p:inputText id="ruta" value="#{seleccionarBusBean.ruta.ruta}" size="30" readonly="true"/>
-                    <p:commandButton value="Ruta" icon="ui-icon-extlink"
-                                     actionListener="#{seleccionarBusBean.seleccionarRuta}">
-                        <p:ajax event="dialogReturn" listener="#{seleccionarBusBean.onRutaSeleccionada}"
-                                update="msgs,ruta, :form"/>
+                </f:facet>
 
-                    </p:commandButton>
+            </p:toolbar>
 
 
-            </h:panelGroup>
 
 
             <p:dataTable id="programacionesTable"
@@ -101,6 +68,10 @@
 
                 <p:column headerText="Fecha Programacion" >
                     <h:outputLabel value="#{programacion.fechaProgramacion}" />
+                </p:column>
+
+                <p:column headerText="Ruta" style="text-align:center;width:150px">
+                    <h:outputLabel value="#{programacion.ruta.ruta}" />
                 </p:column>
 
                 <p:column headerText="Bus" style="text-align:center;width:150px">

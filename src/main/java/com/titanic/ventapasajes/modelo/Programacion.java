@@ -20,6 +20,7 @@ public class Programacion implements Serializable{
     private static final long serialVersionUID = -2197964758413800707L;
     private Long ideProgramacion;
     private Date fechaProgramacion;
+    private Recorrido ruta;
     private Bus bus;
     private String horaSalida;
     private String horaLlegada;
@@ -46,6 +47,17 @@ public class Programacion implements Serializable{
 
     public void setFechaProgramacion(Date fechaProgramacion) {
         this.fechaProgramacion = fechaProgramacion;
+    }
+
+
+    @ManyToOne
+    @JoinColumn(name = "ide_recorrido", nullable = false)
+    public Recorrido getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(Recorrido ruta) {
+        this.ruta = ruta;
     }
 
     @NotNull
@@ -116,6 +128,7 @@ public class Programacion implements Serializable{
         return "Programacion{" +
                 "ideProgramacion=" + ideProgramacion +
                 ", fechaProgramacion=" + fechaProgramacion +
+                ", ruta=" + ruta +
                 ", bus=" + bus +
                 ", horaSalida='" + horaSalida + '\'' +
                 ", horaLlegada='" + horaLlegada + '\'' +

@@ -5,7 +5,17 @@ package com.titanic.ventapasajes.modelo;
  */
 public enum EstadoBoleto {
 
-    LIBRE, RESERVADO, PAGADO, NO_DISPONIBLE;
+    LIBRE("LIBRE"), RESERVADO("RESERVADO"), PAGADO("PAGADO"), NO_DISPONIBLE("NO DISPONIBLE");
 
 
+
+    private String descripcion;
+
+    EstadoBoleto(String descripcion){
+        this.descripcion = descripcion;
+    }
+
+    public String getDescripcion(){
+        return descripcion;
+    }
 }

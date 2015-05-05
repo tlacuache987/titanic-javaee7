@@ -1,9 +1,16 @@
 package com.titanic.ventapasajes.repositorio;
 
 import com.titanic.ventapasajes.modelo.Programacion;
+import com.titanic.ventapasajes.modelo.Usuario;
 import com.titanic.ventapasajes.repositorio.filtros.ProgramacionFiltros;
 import com.titanic.ventapasajes.service.NegocioExcepciones;
 import com.titanic.ventapasajes.util.jpa.Transaccion;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -34,16 +41,33 @@ public class ProgramacionRepositorio implements Serializable {
     public List<Programacion> listarProgramacionesFiltradas(ProgramacionFiltros programacionFiltros) {
 
 
-        TypedQuery<Programacion> q = entityManager.createQuery("select p from Programacion p " +
-                "where p.fechaProgramacion = :fechaProgramacion", Programacion.class);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(programacionFiltros.getFechaProgramacion());
+//        TypedQuery<Programacion> q = entityManager.createQuery("select p from Programacion p " +
+//                "where p.fechaProgramacion = :fechaProgramacion", Programacion.class);
+//
+//        if(programacionFiltros.getFechaProgramacion()!=null) {
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.setTime(programacionFiltros.getFechaProgramacion());
+//            q.setParameter("fechaProgramacion", calendar.getTime(), TemporalType.DATE);
+//
+//        }
+//
+//        return q.getResultList();
+//
+//
 
-        q.setParameter("fechaProgramacion", calendar.getTime(), TemporalType.DATE);
+        Session session = entityManager.unwrap(Session.class);
+        Criteria criteria =  session.createCriteria(Programacion.class);
+        if(programacionFiltros.getFechaProgramacion()!=null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(programacionFiltros.getFechaProgramacion());
+            criteria.add(Restrictions.eq("fechaProgramacion", calendar.getTime()));
+        }
 
 
 
-        return q.getResultList();
+        return criteria.addOrder(Order.asc("fechaProgramacion")).list();
+
+
 
     }
 

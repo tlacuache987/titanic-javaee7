@@ -7,6 +7,7 @@ import com.titanic.ventapasajes.repositorio.filtros.ProgramacionFiltros;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -28,20 +29,13 @@ public class SeleccionarBusBean implements Serializable {
 
 
     @NotNull
-    private Date fechaVenta;
-
-    @NotNull
-    private Date nuevaFechaVenta;
-
-
-    @NotNull
-    private Recorrido ruta;
+    private Date fechaVenta = new Date();
 
 
     @Inject
     private ProgramacionRepositorio programacionRepositorio;
 
-    private boolean mostrarParametros = false;
+
 
 
     private List<Programacion> programaciones;
@@ -56,26 +50,6 @@ public class SeleccionarBusBean implements Serializable {
 
 
 
-
-    public void modificarParametros() {
-        this.mostrarParametros = !mostrarParametros;
-    }
-
-    public void seleccionarRuta() {
-        RequestContext.getCurrentInstance().openDialog("seleccionarRuta");
-    }
-
-    public void onRutaSeleccionada(SelectEvent event) {
-        Recorrido recorrido = (Recorrido) event.getObject();
-
-        this.setRuta(recorrido);
-
-
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Ruta Seleccionada", "Id:" + recorrido.getRuta());
-
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
-
     public void onFechaSeleccionada(SelectEvent event) {
         Date nuevaFecha = (Date) event.getObject();
 
@@ -88,14 +62,6 @@ public class SeleccionarBusBean implements Serializable {
     }
 
 
-    public Recorrido getRuta() {
-        return ruta;
-    }
-
-    public void setRuta(Recorrido ruta) {
-        this.ruta = ruta;
-    }
-
 
     public Date getFechaVenta() {
         return fechaVenta;
@@ -105,21 +71,6 @@ public class SeleccionarBusBean implements Serializable {
         this.fechaVenta = fechaVenta;
     }
 
-    public boolean isMostrarParametros() {
-        return mostrarParametros;
-    }
-
-    public void setMostrarParametros(boolean mostrarParametros) {
-        this.mostrarParametros = mostrarParametros;
-    }
-
-    public Date getNuevaFechaVenta() {
-        return nuevaFechaVenta;
-    }
-
-    public void setNuevaFechaVenta(Date nuevaFechaVenta) {
-        this.nuevaFechaVenta = nuevaFechaVenta;
-    }
 
     public List<Programacion> getProgramaciones() {
         return programaciones;

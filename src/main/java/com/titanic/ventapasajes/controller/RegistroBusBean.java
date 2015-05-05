@@ -1,5 +1,4 @@
 package com.titanic.ventapasajes.controller;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,19 +9,10 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.titanic.ventapasajes.modelo.*;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 
-import com.titanic.ventapasajes.modelo.Bus;
-import com.titanic.ventapasajes.modelo.Celda;
-import com.titanic.ventapasajes.modelo.CeldaSuperior;
-import com.titanic.ventapasajes.modelo.EstadoCelda;
-import com.titanic.ventapasajes.modelo.Fila;
-import com.titanic.ventapasajes.modelo.FilaSuperior;
-import com.titanic.ventapasajes.modelo.TipoBus;
-import com.titanic.ventapasajes.modelo.TipoCelda;
-import com.titanic.ventapasajes.modelo.TipoPlanta;
-import com.titanic.ventapasajes.modelo.UbicacionPlanta;
 import com.titanic.ventapasajes.service.RegistroBusService;
 import com.titanic.ventapasajes.util.FacesUtil;
 
@@ -50,7 +40,7 @@ public class RegistroBusBean implements Serializable {
 
     private List<Fila> getFilasYCeldasInferiores(Bus bus) {
         List<Fila> planta = new ArrayList<>();
-        for(int i=0; i<18; i++){
+        for(int i=0; i<10; i++){
             Fila fila = new Fila();
             fila.setBus(bus);
             fila.setUbicacionPlanta(UbicacionPlanta.INFERIOR);
@@ -58,7 +48,7 @@ public class RegistroBusBean implements Serializable {
             for(int j=0; j<5; j++){
                 Celda celda = new Celda();
                 celda.setNumeroCelda("");
-                celda.setEstadoCelda(EstadoCelda.LIBRE);
+                celda.setEstadoCelda(EstadoBoleto.LIBRE);
                 celda.setTipoCelda(TipoCelda.OTRO);
                 celda.setFila(fila);
                 fila.getCeldasInferiores().add(celda);
@@ -82,7 +72,7 @@ public class RegistroBusBean implements Serializable {
     private List<FilaSuperior> getFilasYCeldasSuperiores(Bus bus) {
 
         List<FilaSuperior> planta = new ArrayList<>();
-        for(int i=0; i<18; i++){
+        for(int i=0; i<15; i++){
             FilaSuperior fila = new FilaSuperior();
             fila.setBus(bus);
             fila.setUbicacionPlanta(UbicacionPlanta.SUPERIOR);
@@ -90,7 +80,7 @@ public class RegistroBusBean implements Serializable {
             for(int j=0; j<5; j++){
                 CeldaSuperior celda = new CeldaSuperior();
                 celda.setNumeroCelda("");
-                celda.setEstadoCelda(EstadoCelda.LIBRE);
+                celda.setEstadoCelda(EstadoBoleto.LIBRE);
                 celda.setTipoCelda(TipoCelda.OTRO);
                 celda.setFila(fila);
                 fila.getCeldasSuperiores().add(celda);
@@ -225,14 +215,6 @@ public class RegistroBusBean implements Serializable {
         }
     }
 
-//    public void renderPlantas(ValueChangeEvent event){
-//
-//
-//        if(event.getNewValue().toString().equals("UNA_PLANTA")){
-//
-//        }else{
-//
-//        }
-//    }
+
 
 }

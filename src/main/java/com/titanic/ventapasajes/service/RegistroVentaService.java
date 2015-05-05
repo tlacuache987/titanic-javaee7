@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.inject.Inject;
 
 import com.titanic.ventapasajes.modelo.Bus;
+import com.titanic.ventapasajes.modelo.Programacion;
 import com.titanic.ventapasajes.modelo.Recorrido;
 import com.titanic.ventapasajes.modelo.Venta;
 import com.titanic.ventapasajes.repositorio.VentaRepositorio;
@@ -36,7 +37,7 @@ public class RegistroVentaService implements Serializable {
 
 
 
-    public Venta obtenerVenta(Date fechaVenta, Recorrido ruta, String horaSalida, Bus bus) {
-        return ventaRepositorio.obtenerVenta(fechaVenta, ruta, horaSalida, bus);
+    public Venta obtenerVenta(Programacion programacion) {
+        return ventaRepositorio.obtenerVenta(programacion);
     }
 }
