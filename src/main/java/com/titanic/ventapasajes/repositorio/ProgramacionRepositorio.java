@@ -41,20 +41,6 @@ public class ProgramacionRepositorio implements Serializable {
     public List<Programacion> listarProgramacionesFiltradas(ProgramacionFiltros programacionFiltros) {
 
 
-//        TypedQuery<Programacion> q = entityManager.createQuery("select p from Programacion p " +
-//                "where p.fechaProgramacion = :fechaProgramacion", Programacion.class);
-//
-//        if(programacionFiltros.getFechaProgramacion()!=null) {
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(programacionFiltros.getFechaProgramacion());
-//            q.setParameter("fechaProgramacion", calendar.getTime(), TemporalType.DATE);
-//
-//        }
-//
-//        return q.getResultList();
-//
-//
-
         Session session = entityManager.unwrap(Session.class);
         Criteria criteria =  session.createCriteria(Programacion.class);
         if(programacionFiltros.getFechaProgramacion()!=null){

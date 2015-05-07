@@ -22,9 +22,10 @@ public class RegistroProgramacionService implements Serializable {
 
     @Transaccion
     public Programacion registrarProgramacion(Programacion programacion){
-
-
-
         return programacionRepositorio.adicionarProgramacion(programacion);
+    }
+
+    public Programacion obtenerProgramacion(Long id){
+        return programacionRepositorio.obtenerProgramacion(id);
     }
 }

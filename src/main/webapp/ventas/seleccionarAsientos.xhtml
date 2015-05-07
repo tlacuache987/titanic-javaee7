@@ -13,8 +13,7 @@
 
         <f:metadata>
             <o:viewParam name="programacion" value="#{seleccionarAsientosBean.programacion}" />
-            <f:event listener="#{seleccionarAsientosBean.inicializar}"
-                     type="preRenderView" />
+
         </f:metadata>
 
         <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
@@ -51,8 +50,12 @@
 
                 </f:facet>
                 <f:facet name="right">
-                    <p:button value="Seleccionar Bus" id="btnSeleccionarBus"
-                              outcome="/ventas/seleccionarBus" />
+                    <p:button  value="Nueva Programación" outcome="/ventas/seleccionarBus"/>
+
+                    <p:button  value="Vender Asientos" outcome="/ventas/informacionClientes">
+
+                        <f:param name="programacion" value="#{seleccionarAsientosBean.programacion.ideProgramacion}" />
+                    </p:button>
                 </f:facet>
             </p:toolbar>
 
@@ -77,6 +80,7 @@
 
                         >
 
+
                     <f:facet name="header">
                         Primera Planta
                     </f:facet>
@@ -87,7 +91,10 @@
 
                     <p:column headerText="C1" style="text-align: center; width:30px;" >
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[0].numeroAsiento.concat(fila.boletosInferiores[0].estadoBoleto)}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[0].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(fila.boletosInferiores[0].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
                             <f:facet name="input">
                                 <h:outputText value="#{fila.boletosInferiores[0].numeroAsiento}" />
                                 <h:selectOneMenu value="#{fila.boletosInferiores[0].estadoBoleto}" style="width:100%">
@@ -98,7 +105,10 @@
                     </p:column>
                     <p:column headerText="C2" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[1].numeroAsiento.concat(fila.boletosInferiores[1].estadoBoleto)}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[1].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(fila.boletosInferiores[1].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
                             <f:facet name="input">
                                 <p:inputText value="#{fila.boletosInferiores[1].numeroAsiento}" style="width:40px" maxlength="10"/>
                                 <h:selectOneMenu value="#{fila.boletosInferiores[1].estadoBoleto}" style="width:100%">
@@ -110,7 +120,10 @@
 
                     <p:column headerText="C3" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[2].numeroAsiento}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[2].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(fila.boletosInferiores[2].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
                             <f:facet name="input">
                                 <p:inputText  value="#{fila.boletosInferiores[2].numeroAsiento}" style="width:40px"  maxlength="10"/>
                                 <h:selectOneMenu value="#{fila.boletosInferiores[2].estadoBoleto}" style="width:100%">
@@ -122,7 +135,10 @@
 
                     <p:column headerText="C4" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[3].numeroAsiento.concat(fila.boletosInferiores[3].estadoBoleto)}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[3].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(fila.boletosInferiores[3].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
                             <f:facet name="input">
                                 <p:inputText value="#{fila.boletosInferiores[3].numeroAsiento}" style="width:40px"  maxlength="10"/>
                                 <h:selectOneMenu value="#{fila.boletosInferiores[3].estadoBoleto}" style="width:100%">
@@ -134,7 +150,10 @@
 
                     <p:column headerText="C5" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[4].numeroAsiento.concat(fila.boletosInferiores[4].estadoBoleto)}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[4].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(fila.boletosInferiores[4].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
                             <f:facet name="input">
                                 <p:inputText  value="#{fila.boletosInferiores[4].numeroAsiento}" style="width:40px" maxlength="10"/>
                                 <h:selectOneMenu value="#{fila.boletosInferiores[4].estadoBoleto}" style="width:100%">
@@ -167,7 +186,11 @@
 
                     <p:column headerText="C1" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[0].numeroAsiento}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[0].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(filaSuperior.boletosSuperiores[0].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+
                             <f:facet name="input">
                                 <h:outputText value="#{filaSuperior.boletosSuperiores[0].numeroAsiento}" />
                                 <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[0].estadoBoleto}" style="width:100%">
@@ -178,7 +201,11 @@
                     </p:column>
                     <p:column headerText="C2" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[1].numeroAsiento}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[1].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(filaSuperior.boletosSuperiores[1].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+
                             <f:facet name="input">
                                 <h:outputText value="#{filaSuperior.boletosSuperiores[1].numeroAsiento}" />
                                 <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[1].estadoBoleto}" style="width:100%">
@@ -190,7 +217,11 @@
 
                     <p:column headerText="C3" style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[2].numeroAsiento}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[2].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(filaSuperior.boletosSuperiores[2].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+
                             <f:facet name="input">
                                 <h:outputText value="#{filaSuperior.boletosSuperiores[2].numeroAsiento}" />
                                 <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[2].estadoBoleto}" style="width:100%">
@@ -202,7 +233,11 @@
 
                     <p:column headerText="C4" style="text-align: center; width:30px;" >
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[3].numeroAsiento}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[3].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(filaSuperior.boletosSuperiores[3].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+
                             <f:facet name="input">
                                 <h:outputText value="#{filaSuperior.boletosSuperiores[3].numeroAsiento}" />
                                 <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[3].estadoBoleto}" style="width:100%">
@@ -214,7 +249,11 @@
 
                     <p:column headerText="C5"  style="text-align: center; width:30px;">
                         <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[4].numeroAsiento}" /></f:facet>
+                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[4].numeroAsiento.
+                                                    concat(seleccionarAsientosBean.parentesisInicial).
+                                                    concat(filaSuperior.boletosSuperiores[4].estadoBoleto).
+                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+
                             <f:facet name="input">
                                 <h:outputText value="#{filaSuperior.boletosSuperiores[4].numeroAsiento}" />
                                 <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[4].estadoBoleto}" style="width:100%">

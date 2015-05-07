@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by Celeritech Peru on 01/04/2015.
@@ -36,7 +37,7 @@ public class BoletoSuperior implements Serializable{
     //campos para facilidad en la generacion del reporte
     private String numeroDocumento;
     private String nombresCliente;
-    private String fechaVenta;
+    private Date fechaVenta;
     private String horaSalida;
     private String origen;
     private String destino;
@@ -187,14 +188,18 @@ public class BoletoSuperior implements Serializable{
         this.nombresCliente = nombresCliente;
     }
 
-    @Column(name="fecha_venta", nullable=true, length = 12)
-    public String getFechaVenta() {
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "fecha_venta", nullable = false)
+    public Date getFechaVenta() {
         return fechaVenta;
     }
 
-    public void setFechaVenta(String fechaVenta) {
+    public void setFechaVenta(Date fechaVenta) {
         this.fechaVenta = fechaVenta;
     }
+
+
 
     @Column(name="hora_salida", nullable=true, length = 10)
     public String getHoraSalida() {

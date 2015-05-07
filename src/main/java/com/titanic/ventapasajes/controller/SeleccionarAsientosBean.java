@@ -3,9 +3,7 @@ package com.titanic.ventapasajes.controller;
 import com.titanic.ventapasajes.modelo.*;
 import com.titanic.ventapasajes.repositorio.ProgramacionRepositorio;
 import com.titanic.ventapasajes.service.RegistroVentaService;
-import com.titanic.ventapasajes.util.FacesUtil;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
@@ -13,8 +11,6 @@ import org.primefaces.push.EventBusFactory;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -46,20 +42,31 @@ public class SeleccionarAsientosBean implements Serializable {
 
     private Venta venta;
 
+    private String parentesisInicial = "(";
+    private String parentesisFinal = ")";
 
+    @PostConstruct
+    public void init(){
 
-    public void inicializar(){
+        String programacionReq = request.getParameter("programacion");
 
+        String programacionId = null;
 
-        if(!FacesUtil.isPostback()) {
-            venta = ventaService.obtenerVenta(programacion);
-            if (venta == null) {
-                nuevaVenta();
-            }
+        if(programacionReq!=null) {
+            request.getSession().setAttribute("programacionId", programacionReq);
+            programacionId = programacionReq;
+        }else{
+            programacionId = (String) request.getSession().getAttribute("programacionId");
         }
 
-    }
+        programacion = programacionRepositorio.obtenerProgramacion(Long.valueOf(programacionId));
 
+
+        venta = ventaService.obtenerVenta(programacion);
+        if(venta==null){
+            nuevaVenta();
+        }
+    }
 
 
 
@@ -168,6 +175,8 @@ public class SeleccionarAsientosBean implements Serializable {
         }
     }
 
+
+
     public EstadoBoleto[] getEstadoBoleto() {
         return EstadoBoleto.values();
     }
@@ -178,5 +187,13 @@ public class SeleccionarAsientosBean implements Serializable {
 
     public void setVenta(Venta venta) {
         this.venta = venta;
+    }
+
+    public String getParentesisInicial() {
+        return parentesisInicial;
+    }
+
+    public String getParentesisFinal() {
+        return parentesisFinal;
     }
 }

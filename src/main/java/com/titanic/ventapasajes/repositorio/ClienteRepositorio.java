@@ -95,6 +95,7 @@ public class ClienteRepositorio implements Serializable{
 		}
 	}
 
+	@Transaccion
 	public Cliente adicionarCliente(Cliente cliente) {
 		return entityManager.merge(cliente);
 	}
