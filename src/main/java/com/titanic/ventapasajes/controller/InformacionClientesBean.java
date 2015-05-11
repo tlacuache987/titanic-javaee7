@@ -177,7 +177,7 @@ public class InformacionClientesBean implements Serializable {
 
                 }
 
-                this.venta.setTotalVenta(totalVenta);
+                this.venta.getTotalVenta().add(totalVenta);
 
                 this.venta = ventaService.registrarVenta(venta);
 
