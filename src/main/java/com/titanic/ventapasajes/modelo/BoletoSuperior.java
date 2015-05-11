@@ -190,7 +190,7 @@ public class BoletoSuperior implements Serializable{
 
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_venta", nullable = false)
+    @Column(name = "fecha_venta", nullable = true)
     public Date getFechaVenta() {
         return fechaVenta;
     }

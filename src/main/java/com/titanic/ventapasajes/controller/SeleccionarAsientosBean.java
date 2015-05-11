@@ -11,6 +11,7 @@ import org.primefaces.push.EventBusFactory;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -81,17 +82,33 @@ public class SeleccionarAsientosBean implements Serializable {
 
 
     private void nuevaVenta() {
-        venta = new Venta();
-        venta.setProgramacion(programacion);
-        venta.setTotalVenta(BigDecimal.ZERO);
 
-        List<FilaBoletoSuperior> filasBoletosSuperiores = new ArrayList<>();
-        List<FilaBoletoInferior> filasBoletosInferiores = new ArrayList<>();
+        try{
 
-        venta.setFilasBoletoSuperiores(clonarFilasSuperiores(filasBoletosSuperiores));
-        venta.setFilasBoletosInferiores(clonarFilasInferiores(filasBoletosInferiores));
+            venta = new Venta();
+            venta.setProgramacion(programacion);
+            venta.setTotalVenta(BigDecimal.ZERO);
 
-        ventaService.registrarVenta(venta);
+            List<FilaBoletoSuperior> filasBoletosSuperiores = new ArrayList<>();
+            List<FilaBoletoInferior> filasBoletosInferiores = new ArrayList<>();
+
+            venta.setFilasBoletoSuperiores(clonarFilasSuperiores(filasBoletosSuperiores));
+            venta.setFilasBoletosInferiores(clonarFilasInferiores(filasBoletosInferiores));
+
+            ventaService.registrarVenta(venta);
+        }catch(Exception ex){
+
+            venta.setFilasBoletosInferiores(new ArrayList<FilaBoletoInferior>());
+            venta.setFilasBoletoSuperiores(new ArrayList<FilaBoletoSuperior>());
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Nueva Venta", "No se pudo crear la venta. Contactar a Sistemas.");
+
+            FacesContext.getCurrentInstance().addMessage(null, message);
+
+        }
+
+
     }
 
     private List<FilaBoletoInferior> clonarFilasInferiores(List<FilaBoletoInferior> filasBoletosInferiores) {
@@ -112,15 +129,35 @@ public class SeleccionarAsientosBean implements Serializable {
                 boletoInferior.setNumeroAsiento(celdaInferior.getNumeroAsiento());
                 boletoInferior.setNumeroBoleto(celdaInferior.getNumeroCelda());
                 boletoInferior.setTipoBoleto(celdaInferior.getTipoCelda());
-                boletoInferior.setPrecio(new BigDecimal(0));
+                boletoInferior.setPrecio(BigDecimal.ZERO);
+                setPrecioBoleto(boletoInferior);
                 filaBoletoInferior.getBoletosInferiores().add(boletoInferior);
-
             }
 
             filasBoletosInferiores.add(filaBoletoInferior);
         }
 
         return filasBoletosInferiores;
+    }
+
+    private void setPrecioBoleto(BoletoInferior boletoInferior) {
+        Recorrido ruta = programacion.getRuta();
+        for(TarifaGeneral tarifaGeneral: ruta.getPrecios()){
+            if(tarifaGeneral.getTipoBus().equals(boletoInferior.getCalidad())){
+                boletoInferior.setPrecio(tarifaGeneral.getPrecio());
+                break;
+            }
+        }
+    }
+
+    private void setPrecioBoleto(BoletoSuperior boletoSuperior) {
+        Recorrido ruta = programacion.getRuta();
+        for(TarifaGeneral tarifaGeneral: ruta.getPrecios()){
+            if(tarifaGeneral.getTipoBus().equals(boletoSuperior.getCalidad())){
+                boletoSuperior.setPrecio(tarifaGeneral.getPrecio());
+                break;
+            }
+        }
     }
 
     private List<FilaBoletoSuperior> clonarFilasSuperiores(List<FilaBoletoSuperior> filasBoletosSuperiores) {
@@ -141,7 +178,8 @@ public class SeleccionarAsientosBean implements Serializable {
                 boletoSuperior.setNumeroAsiento(celdaSuperior.getNumeroAsiento());
                 boletoSuperior.setNumeroBoleto(celdaSuperior.getNumeroCelda());
                 boletoSuperior.setTipoBoleto(celdaSuperior.getTipoCelda());
-                boletoSuperior.setPrecio(new BigDecimal(0));
+                boletoSuperior.setPrecio(BigDecimal.ZERO);
+                setPrecioBoleto(boletoSuperior);
                 filaBoletoSuperior.getBoletosSuperiores().add(boletoSuperior);
 
             }
