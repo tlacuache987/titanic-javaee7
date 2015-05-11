@@ -2,9 +2,11 @@ package com.titanic.ventapasajes.controller;
 
 
 import com.titanic.ventapasajes.modelo.*;
+import com.titanic.ventapasajes.security.Seguridad;
 import com.titanic.ventapasajes.service.RegistroClienteService;
 import com.titanic.ventapasajes.service.RegistroProgramacionService;
 import com.titanic.ventapasajes.service.RegistroVentaService;
+import com.titanic.ventapasajes.util.jpa.Transaccion;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -41,6 +43,11 @@ public class InformacionClientesBean implements Serializable {
     @Inject
     private HttpServletRequest request;
 
+
+    @Inject
+    private Seguridad seguridad;
+
+
     private Programacion programacion;
 
     private Venta venta;
@@ -69,14 +76,19 @@ public class InformacionClientesBean implements Serializable {
             for (BoletoSuperior boletoSuperior : filaBoletoSuperior.getBoletosSuperiores()) {
 
                 if (boletoSuperior.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    Cliente cliente = new Cliente();
-                    cliente.setEdad(0);
-                    cliente.setSexo(Sexo.FEMENINO);
-                    cliente.setTipoDocumento(TipoDocumento.DNI);
-                    cliente.setTipoPersona(TipoPersona.NATURAL);
-                    cliente.setDebePresentarCartaNotarial(false);
-                    boletoSuperior.setCliente(cliente);
-                    boletosReservadosSuperiores.add(boletoSuperior);
+
+                    if (boletoSuperior.getUsuario().getIdeUsuario() == seguridad.getUsuarioLogeado().getUsuario().getIdeUsuario()) {
+                        Cliente cliente = new Cliente();
+                        cliente.setEdad(0);
+                        cliente.setSexo(Sexo.FEMENINO);
+                        cliente.setTipoDocumento(TipoDocumento.DNI);
+                        cliente.setTipoPersona(TipoPersona.NATURAL);
+                        cliente.setDebePresentarCartaNotarial(false);
+                        boletoSuperior.setCliente(cliente);
+                        boletosReservadosSuperiores.add(boletoSuperior);
+                    }
+
+
                 }
             }
         }
@@ -88,14 +100,17 @@ public class InformacionClientesBean implements Serializable {
             for (BoletoInferior boletoInferior : filaBoletoInferior.getBoletosInferiores()) {
 
                 if (boletoInferior.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    Cliente cliente = new Cliente();
-                    cliente.setEdad(0);
-                    cliente.setSexo(Sexo.FEMENINO);
-                    cliente.setTipoDocumento(TipoDocumento.DNI);
-                    cliente.setTipoPersona(TipoPersona.NATURAL);
-                    cliente.setDebePresentarCartaNotarial(false);
-                    boletoInferior.setCliente(cliente);
-                    boletosReservadosInferiores.add(boletoInferior);
+
+                    if (boletoInferior.getUsuario().getIdeUsuario() == seguridad.getUsuarioLogeado().getUsuario().getIdeUsuario()) {
+                        Cliente cliente = new Cliente();
+                        cliente.setEdad(0);
+                        cliente.setSexo(Sexo.FEMENINO);
+                        cliente.setTipoDocumento(TipoDocumento.DNI);
+                        cliente.setTipoPersona(TipoPersona.NATURAL);
+                        cliente.setDebePresentarCartaNotarial(false);
+                        boletoInferior.setCliente(cliente);
+                        boletosReservadosInferiores.add(boletoInferior);
+                    }
                 }
             }
         }
@@ -128,44 +143,66 @@ public class InformacionClientesBean implements Serializable {
 
     }
 
-
+    @Transaccion
     public void registrarVentaConCliente() {
 
-        if (boletosReservadosInferiores.size() > 0) {
+        try{
+            if (boletosReservadosSuperiores.size()>0 || boletosReservadosInferiores.size() > 0) {
 
-            BigDecimal totalVenta = BigDecimal.ZERO;
+                BigDecimal totalVenta = BigDecimal.ZERO;
 
-            for (int i = 0; i < boletosReservadosInferiores.size(); i++) {
+                for (int i = 0; i < boletosReservadosSuperiores.size(); i++) {
 
-                Cliente cliente = boletosReservadosInferiores.get(i).getCliente();
-                cliente = clienteService.adicionarCliente(cliente);
-                boletosReservadosInferiores.get(i).setCliente(cliente);
-                boletosReservadosInferiores.get(i).setEstadoBoleto(EstadoBoleto.PAGADO);
-                Calendar fechaVenta = Calendar.getInstance();
-                boletosReservadosInferiores.get(i).setFechaVenta(fechaVenta.getTime());
-                boletosReservadosInferiores.get(i).setHoraSalida(programacion.getHoraSalida());
-                boletosReservadosInferiores.get(i).setOrigen(programacion.getRuta().getOrigen().getNombreTerminal());
-                boletosReservadosInferiores.get(i).setDestino(programacion.getRuta().getDestino().getNombreTerminal());
-                totalVenta = totalVenta.add(boletosReservadosInferiores.get(i).getPrecio());
+                    Cliente cliente = boletosReservadosSuperiores.get(i).getCliente();
+                    cliente = clienteService.adicionarCliente(cliente);
+                    boletosReservadosSuperiores.get(i).setCliente(cliente);
+                    boletosReservadosSuperiores.get(i).setEstadoBoleto(EstadoBoleto.PAGADO);
+                    Calendar fechaVenta = Calendar.getInstance();
+                    boletosReservadosSuperiores.get(i).setFechaVenta(fechaVenta.getTime());
+                    boletosReservadosSuperiores.get(i).setHoraSalida(programacion.getHoraSalida());
+                    totalVenta = totalVenta.add(boletosReservadosSuperiores.get(i).getPrecio());
+
+                }
+
+                for (int i = 0; i < boletosReservadosInferiores.size(); i++) {
+
+                    Cliente cliente = boletosReservadosInferiores.get(i).getCliente();
+                    cliente = clienteService.adicionarCliente(cliente);
+                    boletosReservadosInferiores.get(i).setCliente(cliente);
+                    boletosReservadosInferiores.get(i).setEstadoBoleto(EstadoBoleto.PAGADO);
+                    Calendar fechaVenta = Calendar.getInstance();
+                    boletosReservadosInferiores.get(i).setFechaVenta(fechaVenta.getTime());
+                    boletosReservadosInferiores.get(i).setHoraSalida(programacion.getHoraSalida());
+                    totalVenta = totalVenta.add(boletosReservadosInferiores.get(i).getPrecio());
+
+                }
+
+                this.venta.setTotalVenta(totalVenta);
+
+                this.venta = ventaService.registrarVenta(venta);
+
+                this.boletosReservadosInferiores = new ArrayList<BoletoInferior>();
+                this.boletosReservadosSuperiores = new ArrayList<BoletoSuperior>();
+
+                //printSilentPDF();
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta Satisfactoria", "Venta Satisfactoria");
+
+                FacesContext.getCurrentInstance().addMessage(null, message);
+
 
             }
 
-            this.venta.setTotalVenta(totalVenta);
 
-            this.venta = ventaService.registrarVenta(venta);
+        }catch(Exception ex){
+            ex.printStackTrace();
 
-            this.boletosReservadosInferiores = new ArrayList<BoletoInferior>();
-            this.boletosReservadosSuperiores = new ArrayList<BoletoSuperior>();
-
-            //printSilentPDF();
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta Satisfactoria", "Venta Satisfactoria");
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Venta de Boletos", "No se pudo vender los Boletos. Contactar a Sistemas.");
 
             FacesContext.getCurrentInstance().addMessage(null, message);
-
-
         }
-    }
 
+    }
 
 
     public Sexo[] getSexo() {

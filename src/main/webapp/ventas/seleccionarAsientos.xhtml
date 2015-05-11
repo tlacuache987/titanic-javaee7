@@ -89,7 +89,11 @@
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[4].estadoBoleto == 'PAGADO'}">}
 
-                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}" styleClass="botonPagado"/>
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}" styleClass="botonPagado">
+                                                <p:confirm header="Liberar Asiento"
+                                                           message="Esta seguro de liberar el asiento"
+                                                           icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
 
                                 </c:when>
@@ -126,7 +130,11 @@
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[4].estadoBoleto == 'PAGADO'}">}
 
-                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}" styleClass="botonPagado"/>
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
 
                                 </c:when>
@@ -169,7 +177,11 @@
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[3].estadoBoleto == 'PAGADO'}">}
 
-                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}" styleClass="botonPagado"/>
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}" styleClass="botonPagado">
+                                                <p:confirm header="Liberar Asiento"
+                                                           message="Esta seguro de liberar el asiento"
+                                                           icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
 
                                 </c:when>
@@ -191,19 +203,20 @@
 
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[3].estadoBoleto == 'LIBRE'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}"
                                                          action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[3])}"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[3].estadoBoleto == 'RESERVADO'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}" styleClass="botonReservado"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[3].estadoBoleto == 'PAGADO'}">}
-
-                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}" styleClass="botonPagado"/>
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
                                 </c:when>
 
@@ -232,19 +245,20 @@
 
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[2].estadoBoleto == 'LIBRE'}">
-
                                         <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}"
                                                          action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[2])}"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[2].estadoBoleto == 'RESERVADO'}">
-
                                         <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}" styleClass="botonReservado"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[2].estadoBoleto == 'PAGADO'}">}
-
-                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}" styleClass="botonPagado"/>
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
 
                                 </c:when>
@@ -265,19 +279,20 @@
                                 <c:when test="#{filaBoletoInferior.boletosInferiores[2].tipoBoleto=='ASIENTO'}">
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto == 'LIBRE'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}"
                                                          action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[2])}"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto == 'RESERVADO'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}" styleClass="botonReservado"/>
                                     </c:if>
 
-                                    <c:if test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto == 'PAGADO'}">}
-
-                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}" styleClass="botonPagado"/>
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto == 'PAGADO'}">
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
                                 </c:when>
 
@@ -306,19 +321,20 @@
                                 <c:when test="#{filaBoletoSuperior.boletosSuperiores[1].tipoBoleto=='ASIENTO'}">
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto == 'LIBRE'}">
-
                                         <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}"
                                                          action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[1])}"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto == 'RESERVADO'}">
-
                                         <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}" styleClass="botonReservado"/>
                                     </c:if>
 
-                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto == 'PAGADO'}">}
-
-                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}" styleClass="botonPagado"/>
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto == 'PAGADO'}">
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
 
 
@@ -341,19 +357,20 @@
                                 <c:when test="#{filaBoletoInferior.boletosInferiores[1].tipoBoleto=='ASIENTO'}">
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto == 'LIBRE'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}"
                                                          action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[1])}"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto == 'RESERVADO'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}" styleClass="botonReservado"/>
                                     </c:if>
 
-                                    <c:if test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto == 'PAGADO'}">}
-
-                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}" styleClass="botonPagado"/>
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto == 'PAGADO'}">
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
 
 
@@ -382,19 +399,20 @@
                                 <c:when test="#{filaBoletoSuperior.boletosSuperiores[0].tipoBoleto=='ASIENTO'}">
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto == 'LIBRE'}">
-
                                         <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}"
                                                          action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[0])}"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto == 'RESERVADO'}">
-
                                         <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}" styleClass="botonReservado"/>
                                     </c:if>
 
-                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto == 'PAGADO'}">}
-
-                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}" styleClass="botonPagado"/>
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto == 'PAGADO'}">
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
+                                        </p:commandButton>
                                     </c:if>
 
 
@@ -416,19 +434,21 @@
 
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[0].estadoBoleto == 'LIBRE'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}"
                                                          action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[0])}"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[0].estadoBoleto == 'RESERVADO'}">
-
                                         <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}" styleClass="botonReservado"/>
                                     </c:if>
 
                                     <c:if test="#{filaBoletoInferior.boletosInferiores[0].estadoBoleto == 'PAGADO'}">}
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}" styleClass="botonPagado">
+                                            <p:confirm header="Liberar Asiento"
+                                                       message="Esta seguro de liberar el asiento"
+                                                       icon="ui-icon-alert"/>
 
-                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}" styleClass="botonPagado"/>
+                                        </p:commandButton>
                                     </c:if>
 
 
@@ -447,6 +467,11 @@
 
 
             </p:panelGrid>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
 
 
         </h:form>

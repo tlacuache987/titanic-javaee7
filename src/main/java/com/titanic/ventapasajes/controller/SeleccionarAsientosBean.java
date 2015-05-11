@@ -134,6 +134,8 @@ public class SeleccionarAsientosBean implements Serializable {
                 boletoInferior.setTipoBoleto(celdaInferior.getTipoCelda());
                 boletoInferior.setPrecio(BigDecimal.ZERO);
                 setPrecioBoleto(boletoInferior);
+                boletoInferior.setOrigen(programacion.getRuta().getOrigen().getNombreTerminal());
+                boletoInferior.setDestino(programacion.getRuta().getDestino().getNombreTerminal());
                 filaBoletoInferior.getBoletosInferiores().add(boletoInferior);
             }
 
@@ -204,11 +206,43 @@ public class SeleccionarAsientosBean implements Serializable {
                 new FacesMessage(StringEscapeUtils.escapeHtml(summary), StringEscapeUtils.escapeHtml(detail)));
     }
 
+    public void reservar(BoletoInferior boletoInferior){
+
+        try{
+
+
+
+            boletoInferior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+            boletoInferior.setUsuario(seguridad.getUsuarioLogeado().getUsuario());
+
+            this.venta = ventaService.registrarVenta(this.venta);
+            notificarPUSH();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Reservar Boleto", "No se pudo reservar el Boleto. Contactar a Sistemas.");
+
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
+    }
+
     public void reservar(BoletoSuperior boletoSuperior){
 
         try{
 
-            boletoSuperior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+            if(boletoSuperior.getEstadoBoleto() == EstadoBoleto.LIBRE){
+                boletoSuperior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+            }else if(boletoSuperior.getEstadoBoleto()==EstadoBoleto.RESERVADO){
+                boletoSuperior.setEstadoBoleto(EstadoBoleto.LIBRE);
+            }else if(boletoSuperior.getEstadoBoleto()==EstadoBoleto.PAGADO){
+                boletoSuperior.setEstadoBoleto(EstadoBoleto.LIBRE);
+                actualizarTotalVenta();
+            }
+
+
             boletoSuperior.setUsuario(seguridad.getUsuarioLogeado().getUsuario());
 
             this.venta = ventaService.registrarVenta(this.venta);
@@ -225,6 +259,34 @@ public class SeleccionarAsientosBean implements Serializable {
 
     }
 
+    private void actualizarTotalVenta() {
+
+        BigDecimal totalVentaPagados = BigDecimal.ZERO;
+
+        for (FilaBoletoSuperior filaBoletoSuperior : venta.getFilasBoletoSuperiores()) {
+
+            for (BoletoSuperior boletoSuperior : filaBoletoSuperior.getBoletosSuperiores()) {
+
+                if (boletoSuperior.getEstadoBoleto() == EstadoBoleto.PAGADO) {
+                    totalVentaPagados.add(boletoSuperior.getPrecio());
+                }
+
+            }
+        }
+
+        for (FilaBoletoInferior filaBoletoInferior : venta.getFilasBoletosInferiores()) {
+
+            for (BoletoInferior boletoInferior : filaBoletoInferior.getBoletosInferiores()) {
+
+                if (boletoInferior.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
+                    totalVentaPagados.add(boletoInferior.getPrecio());
+                }
+            }
+        }
+
+        venta.setTotalVenta(totalVentaPagados);
+
+    }
 
 
     public Venta getVenta() {
