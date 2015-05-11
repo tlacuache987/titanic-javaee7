@@ -2,6 +2,7 @@ package com.titanic.ventapasajes.controller;
 
 import com.titanic.ventapasajes.modelo.*;
 import com.titanic.ventapasajes.repositorio.ProgramacionRepositorio;
+import com.titanic.ventapasajes.security.Seguridad;
 import com.titanic.ventapasajes.service.RegistroVentaService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.primefaces.event.CellEditEvent;
@@ -39,12 +40,14 @@ public class SeleccionarAsientosBean implements Serializable {
     @Inject
     private HttpServletRequest request;
 
+    @Inject
+    private Seguridad seguridad;
+
+
     private Programacion programacion;
 
     private Venta venta;
 
-    private String parentesisInicial = "(";
-    private String parentesisFinal = ")";
 
     @PostConstruct
     public void init(){
@@ -201,23 +204,28 @@ public class SeleccionarAsientosBean implements Serializable {
                 new FacesMessage(StringEscapeUtils.escapeHtml(summary), StringEscapeUtils.escapeHtml(detail)));
     }
 
+    public void reservar(BoletoSuperior boletoSuperior){
 
-    public void onCellEdit(CellEditEvent event) {
-        Object oldValue = event.getOldValue();
-        Object newValue = event.getNewValue();
+        try{
 
-        if(newValue != null && !newValue.equals(oldValue)) {
+            boletoSuperior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+            boletoSuperior.setUsuario(seguridad.getUsuarioLogeado().getUsuario());
 
             this.venta = ventaService.registrarVenta(this.venta);
             notificarPUSH();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Reservar Boleto", "No se pudo reservar el Boleto. Contactar a Sistemas.");
+
+            FacesContext.getCurrentInstance().addMessage(null, message);
         }
+
     }
 
 
-
-    public EstadoBoleto[] getEstadoBoleto() {
-        return EstadoBoleto.values();
-    }
 
     public Venta getVenta() {
         return venta;
@@ -227,11 +235,5 @@ public class SeleccionarAsientosBean implements Serializable {
         this.venta = venta;
     }
 
-    public String getParentesisInicial() {
-        return parentesisInicial;
-    }
 
-    public String getParentesisFinal() {
-        return parentesisFinal;
-    }
 }

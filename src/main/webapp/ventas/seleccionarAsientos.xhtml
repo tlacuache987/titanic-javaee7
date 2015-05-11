@@ -4,7 +4,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:o="http://omnifaces.org/ui">
+                xmlns:o="http://omnifaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 
     <ui:define name="titulo">Seleccionar Asientos</ui:define>
@@ -12,7 +13,7 @@
     <ui:define name="cuerpo">
 
         <f:metadata>
-            <o:viewParam name="programacion" value="#{seleccionarAsientosBean.programacion}" />
+            <o:viewParam name="programacion" value="#{seleccionarAsientosBean.programacion}"/>
 
         </f:metadata>
 
@@ -20,252 +21,429 @@
 
 
         <script language="JavaScript">
-                function handleMessage(facesMessage) {
-                    facesMessage.severity = "info";
-                    PF('wmsg').show([facesMessage]);
-                }
+            function handleMessage(facesMessage) {
+                facesMessage.severity = "info";
+                PF('wmsg').show([facesMessage]);
+            }
 
         </script>
-
-
 
 
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
 
 
-            <p:messages autoUpdate="true" />
+            <p:messages autoUpdate="true"/>
             <p:toolbar style="margin-top:20px">
                 <f:facet name="left">
-                    <p:outputLabel  value="Fecha:  "  style="font-weight:normal"/>
-                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.fechaProgramacion}"/>
-                    <p:outputLabel  value="  Ruta:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.ruta.ruta}"/>
-                    <p:outputLabel  value="  Bus:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.bus.descripcionBus}"/>
-                    <p:outputLabel  value="  Hora Salida:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.horaSalida}"/>
-                    <p:outputLabel  value="  Hora Llegada:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{seleccionarAsientosBean.programacion.horaLlegada}"/>
+                    <p:outputLabel value="Fecha:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{seleccionarAsientosBean.programacion.fechaProgramacion}"/>
+                    <p:outputLabel value="  Ruta:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{seleccionarAsientosBean.programacion.ruta.ruta}"/>
+                    <p:outputLabel value="  Bus:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{seleccionarAsientosBean.programacion.bus.descripcionBus}"/>
+                    <p:outputLabel value="  Hora Salida:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{seleccionarAsientosBean.programacion.horaSalida}"/>
+                    <p:outputLabel value="  Hora Llegada:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{seleccionarAsientosBean.programacion.horaLlegada}"/>
 
                 </f:facet>
                 <f:facet name="right">
-                    <p:button  value="Nueva Programación" outcome="/ventas/seleccionarBus"/>
+                    <p:button value="Nueva Programación" outcome="/ventas/seleccionarBus"/>
 
-                    <p:button  value="Vender Asientos" outcome="/ventas/informacionClientes">
+                    <p:button value="Vender Asientos" outcome="/ventas/informacionClientes">
 
-                        <f:param name="programacion" value="#{seleccionarAsientosBean.programacion.ideProgramacion}" />
+                        <f:param name="programacion" value="#{seleccionarAsientosBean.programacion.ideProgramacion}"/>
                     </p:button>
                 </f:facet>
             </p:toolbar>
 
 
-
             <!-- Asientos para escoger -->
 
-            <p:messages autoUpdate="true" />
+            <p:panelGrid id="segundaPlanta" style="margin-top:15px">
 
-            <p:panelGrid columns="2" id="panelPlanos"
-                         columnClasses="alignTop,alignTop"
-                         >
-
-
-
-
-                <p:dataTable id="dtPrimeraPlanta"
-                             value="#{seleccionarAsientosBean.venta.filasBoletosInferiores}" var="fila"
-                             editable="true"
-                             editMode="cell"
-                             widgetVar="wPrimeraPlanta"
-
-                        >
-
-
-                    <f:facet name="header">
-                        Primera Planta
-                    </f:facet>
-
-
-                    <p:ajax event="cellEdit" listener="#{seleccionarAsientosBean.onCellEdit}" />
-
-
-                    <p:column headerText="C1" style="text-align: center; width:30px;" >
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[0].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(fila.boletosInferiores[0].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
-                            <f:facet name="input">
-                                <h:outputText value="#{fila.boletosInferiores[0].numeroAsiento}" />
-                                <h:selectOneMenu value="#{fila.boletosInferiores[0].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
+                <!-- 4 FILA -->
+                <p:row>
+                    <p:column rowspan="5">
+                        <p:outputLabel value="Arriba"/>
                     </p:column>
-                    <p:column headerText="C2" style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[1].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(fila.boletosInferiores[1].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
-                            <f:facet name="input">
-                                <p:inputText value="#{fila.boletosInferiores[1].numeroAsiento}" style="width:40px" maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.boletosInferiores[1].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
+                    <!-- celdas  04 -->
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior"
+                               varStatus="status">
+
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[4].tipoBoleto=='ASIENTO'}">
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[4].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[4])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[4].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[4].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[4].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+
+                    <p:column rowspan="5">
+                        <p:outputLabel value="Abajo"/>
                     </p:column>
 
-                    <p:column headerText="C3" style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[2].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(fila.boletosInferiores[2].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
-                            <f:facet name="input">
-                                <p:inputText  value="#{fila.boletosInferiores[2].numeroAsiento}" style="width:40px"  maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.boletosInferiores[2].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletosInferiores}" var="filaBoletoInferior"
+                               varStatus="status">
 
-                    <p:column headerText="C4" style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[3].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(fila.boletosInferiores[3].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
-                            <f:facet name="input">
-                                <p:inputText value="#{fila.boletosInferiores[3].numeroAsiento}" style="width:40px"  maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.boletosInferiores[3].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoInferior.boletosInferiores[4].tipoBoleto=='ASIENTO'}">
 
-                    <p:column headerText="C5" style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{fila.boletosInferiores[4].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(fila.boletosInferiores[4].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
-                            <f:facet name="input">
-                                <p:inputText  value="#{fila.boletosInferiores[4].numeroAsiento}" style="width:40px" maxlength="10"/>
-                                <h:selectOneMenu value="#{fila.boletosInferiores[4].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[4].estadoBoleto == 'LIBRE'}">
 
-                </p:dataTable>
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[4])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[4].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[4].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[4].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
 
 
+                </p:row>
+
+                <!-- Fin Fila 4-->
 
 
+                <!-- Fila 3 -->
 
-                <p:dataTable id="dtSegundaPlanta"
-                             value="#{seleccionarAsientosBean.venta.filasBoletoSuperiores}" var="filaSuperior"
-                             editable="true"
-                             editMode="cell"
-                             widgetVar="cellFilaSegunda"
-                        >
+                <p:row>
+                    <!-- celdas 03 -->
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior"
+                               varStatus="status">
 
-                    <f:facet name="header">
-                        Segunda Planta
-                    </f:facet>
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[3].tipoBoleto=='ASIENTO'}">
 
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[3].estadoBoleto == 'LIBRE'}">
 
-                    <p:ajax event="cellEdit" listener="#{seleccionarAsientosBean.onCellEdit}" />
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[3])}"/>
+                                    </c:if>
 
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[3].estadoBoleto == 'RESERVADO'}">
 
-                    <p:column headerText="C1" style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[0].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(filaSuperior.boletosSuperiores[0].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
 
-                            <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.boletosSuperiores[0].numeroAsiento}" />
-                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[0].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column headerText="C2" style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[1].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(filaSuperior.boletosSuperiores[1].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[3].estadoBoleto == 'PAGADO'}">}
 
-                            <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.boletosSuperiores[1].numeroAsiento}" />
-                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[1].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[3].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
 
-                    <p:column headerText="C3" style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[2].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(filaSuperior.boletosSuperiores[2].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+                                </c:when>
 
-                            <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.boletosSuperiores[2].numeroAsiento}" />
-                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[2].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
 
-                    <p:column headerText="C4" style="text-align: center; width:30px;" >
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[3].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(filaSuperior.boletosSuperiores[3].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
+                    </c:forEach>
 
-                            <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.boletosSuperiores[3].numeroAsiento}" />
-                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[3].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletosInferiores}" var="filaBoletoInferior"
+                               varStatus="status">
 
-                    <p:column headerText="C5"  style="text-align: center; width:30px;">
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{filaSuperior.boletosSuperiores[4].numeroAsiento.
-                                                    concat(seleccionarAsientosBean.parentesisInicial).
-                                                    concat(filaSuperior.boletosSuperiores[4].estadoBoleto).
-                                                    concat(seleccionarAsientosBean.parentesisFinal)}" /></f:facet>
-
-                            <f:facet name="input">
-                                <h:outputText value="#{filaSuperior.boletosSuperiores[4].numeroAsiento}" />
-                                <h:selectOneMenu value="#{filaSuperior.boletosSuperiores[4].estadoBoleto}" style="width:100%">
-                                    <f:selectItems value="#{seleccionarAsientosBean.estadoBoleto}" var="estadoBoleto" itemLabel="#{estadoBoleto}" itemValue="#{estadoBoleto}" />
-                                </h:selectOneMenu>
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-
-                </p:dataTable>
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoInferior.boletosInferiores[3].tipoBoleto=='ASIENTO'}">
 
 
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[3].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[3])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[3].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[3].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[3].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+
+                </p:row>
+
+                <!-- Fin Fila 3 -->
+
+                <!--Fila 2-->
+
+                <p:row>
+                    <!-- celdas 02 -->
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior"
+                               varStatus="status">
+
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[2].tipoBoleto=='ASIENTO'}">
+
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[2].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[2])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[2].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[2].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[2].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+                    <!-- celdas 02 -->
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletosInferiores}" var="filaBoletoInferior"
+                               varStatus="status">
+
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoInferior.boletosInferiores[2].tipoBoleto=='ASIENTO'}">
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[2])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[2].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[2].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+
+                </p:row>
+
+                <!--Fin Fila 2-->
+
+
+                <!-- Fila 1-->
+
+                <p:row>
+                    <!-- celdas 01 -->
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior"
+                               varStatus="status">
+
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[1].tipoBoleto=='ASIENTO'}">
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[1])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[1].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[1].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+
+
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+
+                    <!-- celdas 01 -->
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletosInferiores}" var="filaBoletoInferior"
+                               varStatus="status">
+
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoInferior.boletosInferiores[1].tipoBoleto=='ASIENTO'}">
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[1])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[1].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[1].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+
+
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+
+                </p:row>
+
+                <!--Fin Fila 1-->
+
+                <!--Fila 0-->
+
+                <p:row>
+                    <!-- celdas 00 -->
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletoSuperiores}" var="filaBoletoSuperior" varStatus="status">
+
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoSuperior.boletosSuperiores[0].tipoBoleto=='ASIENTO'}">
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoSuperior.boletosSuperiores[0])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoSuperior.boletosSuperiores[0].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoSuperior.boletosSuperiores[0].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+
+
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+
+                    <c:forEach items="#{seleccionarAsientosBean.venta.filasBoletosInferiores}" var="filaBoletoInferior" varStatus="status">
+
+                        <p:column>
+                            <c:choose>
+                                <c:when test="#{filaBoletoInferior.boletosInferiores[0].tipoBoleto=='ASIENTO'}">
+
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[0].estadoBoleto == 'LIBRE'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}"
+                                                         action="#{seleccionarAsientosBean.reservar(filaBoletoInferior.boletosInferiores[0])}"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[0].estadoBoleto == 'RESERVADO'}">
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}" styleClass="botonReservado"/>
+                                    </c:if>
+
+                                    <c:if test="#{filaBoletoInferior.boletosInferiores[0].estadoBoleto == 'PAGADO'}">}
+
+                                        <p:commandButton value="#{filaBoletoInferior.boletosInferiores[0].numeroAsiento}" styleClass="botonPagado"/>
+                                    </c:if>
+
+
+                                </c:when>
+
+                                <c:otherwise>
+                                    <p:spacer height="0"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </p:column>
+
+                    </c:forEach>
+                </p:row>
+
+                <!--Fin Fila 0-->
 
 
             </p:panelGrid>
@@ -274,15 +452,11 @@
         </h:form>
 
         <p:socket channel="/notify" onMessage="handleMessage">
-            <p:ajax event="message" update=":form:dtPrimeraPlanta"/>
+            <p:ajax event="message" update=":form"/>
         </p:socket>
 
 
-
-
     </ui:define>
-
-
 
 
 </ui:composition>
