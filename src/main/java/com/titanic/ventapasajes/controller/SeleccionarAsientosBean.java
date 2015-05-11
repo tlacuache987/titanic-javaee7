@@ -210,9 +210,16 @@ public class SeleccionarAsientosBean implements Serializable {
 
         try{
 
+            if(boletoInferior.getEstadoBoleto() == EstadoBoleto.LIBRE){
+                boletoInferior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+            }else if(boletoInferior.getEstadoBoleto()==EstadoBoleto.RESERVADO){
+                boletoInferior.setEstadoBoleto(EstadoBoleto.LIBRE);
+            }else if(boletoInferior.getEstadoBoleto()==EstadoBoleto.PAGADO){
+                boletoInferior.setEstadoBoleto(EstadoBoleto.LIBRE);
+                actualizarTotalVenta();
+            }
 
 
-            boletoInferior.setEstadoBoleto(EstadoBoleto.RESERVADO);
             boletoInferior.setUsuario(seguridad.getUsuarioLogeado().getUsuario());
 
             this.venta = ventaService.registrarVenta(this.venta);
@@ -278,7 +285,7 @@ public class SeleccionarAsientosBean implements Serializable {
 
             for (BoletoInferior boletoInferior : filaBoletoInferior.getBoletosInferiores()) {
 
-                if (boletoInferior.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
+                if (boletoInferior.getEstadoBoleto() == EstadoBoleto.PAGADO) {
                     totalVentaPagados.add(boletoInferior.getPrecio());
                 }
             }

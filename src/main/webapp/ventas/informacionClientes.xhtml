@@ -73,11 +73,11 @@
                     <p:row>
 
                         <p:column>
-                            <p:inputText id="asiento_#{status.count}" value="#{boletoReservadoSuperior.numeroAsiento}"
+                            <p:inputText id="asientosup_#{status.count}" value="#{boletoReservadoSuperior.numeroAsiento}"
                                          disabled="true" size="10"/>
                         </p:column>
                         <p:column>
-                            <p:autoComplete id="dni_#{status.count}" value="#{boletoReservadoSuperior.cliente.numeroDocumento}"
+                            <p:autoComplete id="dnisup_#{status.count}" value="#{boletoReservadoSuperior.cliente.numeroDocumento}"
                                             completeMethod="#{informacionClientesBean.completeClientes}" maxlength="8" size="10">
                                 <p:ajax event="itemSelect" listener="#{informacionClientesBean.setearCliente(boletoReservadoSuperior.cliente)}"
                                         update="form"/>
@@ -86,16 +86,16 @@
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="precio_#{status.count}" value="#{boletoReservadoSuperior.precio}" size="10"/>
+                            <p:inputText id="preciosup_#{status.count}" value="#{boletoReservadoSuperior.precio}" size="10"/>
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="nombres_#{status.count}" value="#{boletoReservadoSuperior.cliente.nombreCliente}"
+                            <p:inputText id="nombressup_#{status.count}" value="#{boletoReservadoSuperior.cliente.nombreCliente}"
                                          maxlength="255" size="30"/>
                         </p:column>
 
                         <p:column>
-                            <p:selectOneRadio id="sexo_#{status.count}" styleClass="no-border"
+                            <p:selectOneRadio id="sexosup_#{status.count}" styleClass="no-border"
                                               value="#{boletoReservadoSuperior.cliente.sexo}">
                                 <f:selectItems value="#{informacionClientesBean.sexo}" var="sexo"
                                                itemValue="#{sexo}"
@@ -105,8 +105,8 @@
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="edad_#{status.count}" value="#{boletoReservadoSuperior.cliente.edad}"/>
-                            <p:slider for="edad_#{status.count}"/>
+                            <p:inputText id="edadsup_#{status.count}" value="#{boletoReservadoSuperior.cliente.edad}"/>
+                            <p:slider for="edadsup_#{status.count}"/>
                         </p:column>
                         <p:column>
                             <p:selectBooleanCheckbox value="#{boletoReservadoSuperior.presentoCartaNotarial}"/>
@@ -126,11 +126,11 @@
                     <p:row>
 
                         <p:column>
-                            <p:inputText id="asiento_#{status.count}" value="#{boletoReservadoInferior.numeroAsiento}"
+                            <p:inputText id="asientoinf_#{status.count}" value="#{boletoReservadoInferior.numeroAsiento}"
                                             disabled="true" size="10"/>
                         </p:column>
                         <p:column>
-                            <p:autoComplete id="dni_#{status.count}" value="#{boletoReservadoInferior.cliente.numeroDocumento}"
+                            <p:autoComplete id="dniinf_#{status.count}" value="#{boletoReservadoInferior.cliente.numeroDocumento}"
                                             completeMethod="#{informacionClientesBean.completeClientes}" maxlength="8" size="10">
                                 <p:ajax event="itemSelect" listener="#{informacionClientesBean.setearCliente(boletoReservadoInferior.cliente)}"
                                         update="form"/>
@@ -139,16 +139,16 @@
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="precio_#{status.count}" value="#{boletoReservadoInferior.precio}" size="10"/>
+                            <p:inputText id="precioinf_#{status.count}" value="#{boletoReservadoInferior.precio}" size="10"/>
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="nombres_#{status.count}" value="#{boletoReservadoInferior.cliente.nombreCliente}"
+                            <p:inputText id="nombresinf_#{status.count}" value="#{boletoReservadoInferior.cliente.nombreCliente}"
                                          maxlength="255" size="30"/>
                         </p:column>
 
                         <p:column>
-                            <p:selectOneRadio id="sexo_#{status.count}" styleClass="no-border"
+                            <p:selectOneRadio id="sexoinf_#{status.count}" styleClass="no-border"
                                               value="#{boletoReservadoInferior.cliente.sexo}">
                                 <f:selectItems value="#{informacionClientesBean.sexo}" var="sexo"
                                                itemValue="#{sexo}"
@@ -158,8 +158,8 @@
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="edad_#{status.count}" value="#{boletoReservadoInferior.cliente.edad}"/>
-                            <p:slider for="edad_#{status.count}"/>
+                            <p:inputText id="edadinf_#{status.count}" value="#{boletoReservadoInferior.cliente.edad}"/>
+                            <p:slider for="edadinf_#{status.count}"/>
                         </p:column>
                         <p:column>
                             <p:selectBooleanCheckbox value="#{boletoReservadoInferior.presentoCartaNotarial}"/>
