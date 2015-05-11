@@ -1,0 +1,94 @@
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Buscar Programacion</ui:define>
+
+	<ui:define name="cuerpo">
+		<h:form id="formBusqueda">
+			<h1>Buscar Programacion</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top:20px">
+				<f:facet name="left">
+					<p:commandButton value="Buscar Programacion"
+						action="#{programacionBean.buscarProgramacionesFiltradas}" update="@form" />
+                </f:facet>
+				<f:facet name="right">
+					<p:button value="Nueva Programacion" outcome="/programacion/registrarProgramacion" />
+                </f:facet>
+			</p:toolbar>
+
+			<p:panelGrid columns="2" id="panelForm"
+				style="width:100%;margin-top:15px" columnClasses="lblIzq">
+				<p:outputLabel value="Fecha Programacion" for="fechaProgramacion" />
+                <p:calendar id="fechaProgramacion" value="#{programacionBean.filtros.fechaProgramacion}" showOn="button"
+                            />
+
+			</p:panelGrid>
+
+			<p:dataTable id="programacionesTable"
+				value="#{programacionBean.programacionesFiltradas}" var="programacion"
+				style="margin-top:20px"
+				emptyMessage="No se encontraron programaciones para su busqueda" rows="20"
+				paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Id" style="text-align:center;width:100px">
+					<h:outputLabel value="#{programacion.ideProgramacion}" />
+				</p:column>
+
+				<p:column headerText="Fecha Programacion" >
+					<h:outputLabel value="#{programacion.fechaProgramacion}" />
+				</p:column>
+
+				<p:column headerText="Ruta" style="text-align:center;width:150px">
+					<h:outputLabel value="#{programacion.ruta.ruta}" />
+				</p:column>
+
+				<p:column headerText="Bus" style="text-align:center;width:150px">
+					<h:outputLabel value="#{programacion.bus.descripcionBus}" />
+				</p:column>
+
+				<p:column headerText="Hora Salida" >
+					<h:outputLabel value="#{programacion.horaSalida}" />
+				</p:column>
+
+
+                <p:column headerText="Hora Llegada" >
+                    <h:outputLabel value="#{programacion.horaLlegada}" />
+                </p:column>
+
+                <p:column style="text-align:center;width:100px">
+					<p:button title="Editar" icon="ui-icon-pencil" outcome="/programacion/registrarProgramacion">
+						<f:param name="programacion" value="#{programacion.ideProgramacion}" />
+					</p:button>
+
+                    <p:commandButton  icon="ui-icon-trash" action="#{programacionBean.eliminarProgramacion}"
+                                      update="programacionesTable">
+                        <p:confirm header="Eliminar Programacion"
+                                   message="Esta seguro de eliminar la programación"
+                                   icon="ui-icon-alert"/>
+                        <f:setPropertyActionListener
+                                target="#{programacionBean.programacionSeleccionada}" value="#{programacion}" />
+                    </p:commandButton>
+					
+				</p:column>				
+				
+			</p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+			
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

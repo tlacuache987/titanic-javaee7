@@ -1,5 +1,4 @@
 package com.titanic.ventapasajes.controller;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +38,16 @@ public class RegistroBusBean implements Serializable {
 
     }
 
+
+    public void inicializar() {
+        if (!FacesUtil.isPostback()) {
+            if(!isEditando()) {
+                bus.setFilasInferiores(getFilasYCeldasInferiores(bus));
+                bus.setFilasSuperiores(getFilasYCeldasSuperiores(bus));
+            }
+        }
+    }
+
     private List<Fila> getFilasYCeldasInferiores(Bus bus) {
         List<Fila> planta = new ArrayList<>();
         for(int i=0; i<10; i++){
@@ -51,6 +60,7 @@ public class RegistroBusBean implements Serializable {
                 celda.setNumeroCelda("");
                 celda.setEstadoCelda(EstadoBoleto.LIBRE);
                 celda.setTipoCelda(TipoCelda.OTRO);
+                celda.setCalidad(TipoBus.COMUN);
                 celda.setFila(fila);
                 fila.getCeldasInferiores().add(celda);
             }
@@ -60,15 +70,6 @@ public class RegistroBusBean implements Serializable {
     }
 
 
-
-    public void inicializar() {
-        if (!FacesUtil.isPostback()) {
-            if(!isEditando()) {
-                bus.setFilasInferiores(getFilasYCeldasInferiores(bus));
-                bus.setFilasSuperiores(getFilasYCeldasSuperiores(bus));
-            }
-        }
-    }
 
     private List<FilaSuperior> getFilasYCeldasSuperiores(Bus bus) {
 
@@ -83,6 +84,7 @@ public class RegistroBusBean implements Serializable {
                 celda.setNumeroCelda("");
                 celda.setEstadoCelda(EstadoBoleto.LIBRE);
                 celda.setTipoCelda(TipoCelda.OTRO);
+                celda.setCalidad(TipoBus.COMUN);
                 celda.setFila(fila);
                 fila.getCeldasSuperiores().add(celda);
             }
@@ -102,8 +104,6 @@ public class RegistroBusBean implements Serializable {
     public TipoBus[] getTiposBuses() {
         return TipoBus.values();
     }
-
-
 
 
     public void registrarBus() {
@@ -157,29 +157,16 @@ public class RegistroBusBean implements Serializable {
     }
 
     private void configurarValoresCelda(Celda celda) {
-        String numeroCelda = celda.getNumeroCelda().toUpperCase();
+        String numeroCeldaStr = celda.getNumeroCelda().toUpperCase();
 
-        if(numeroCelda.startsWith("O")){
+        try{
+            Integer.parseInt(numeroCeldaStr);
             celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.COMUN);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-        } else if(numeroCelda.startsWith("S")){
-            celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.SEMI_CAMA);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-
-        } else if(numeroCelda.startsWith("C")){
-            celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.CAMA);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-
-        } else if(numeroCelda.startsWith("U")){
-            celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.SUIT);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-
-        }else{
+            celda.setNumeroAsiento(numeroCeldaStr);
+        }catch(NumberFormatException ex){
             celda.setTipoCelda(TipoCelda.OTRO);
+            celda.setCalidad(TipoBus.COMUN);
+            ex.printStackTrace();
         }
     }
 
@@ -191,31 +178,22 @@ public class RegistroBusBean implements Serializable {
     }
 
     private void configurarValoresCelda(CeldaSuperior celda) {
-        String numeroCelda = celda.getNumeroCelda().toUpperCase();
-        if(numeroCelda.startsWith("O")){
+        String numeroCeldaStr = celda.getNumeroCelda().toUpperCase();
+        try{
+            Integer.parseInt(numeroCeldaStr);
             celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.COMUN);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-        } else if(numeroCelda.startsWith("S")){
-            celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.SEMI_CAMA);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-
-        } else if(numeroCelda.startsWith("C")){
-            celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.CAMA);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-
-        } else if(numeroCelda.startsWith("U")){
-            celda.setTipoCelda(TipoCelda.ASIENTO);
-            celda.setCalidad(TipoBus.SUIT);
-            celda.setNumeroAsiento(numeroCelda.trim().substring(2));
-
-        }else{
+            celda.setNumeroAsiento(numeroCeldaStr);
+        }catch(NumberFormatException ex){
             celda.setTipoCelda(TipoCelda.OTRO);
+            celda.setCalidad(TipoBus.COMUN);
+            ex.printStackTrace();
         }
     }
 
+
+    public TipoBus[] getCalidad() {
+        return TipoBus.values();
+    }
 
 
 }

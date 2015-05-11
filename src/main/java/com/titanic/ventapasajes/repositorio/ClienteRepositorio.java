@@ -32,7 +32,7 @@ public class ClienteRepositorio implements Serializable{
 	}
 
 
-    @SuppressWarnings("unchecked")
+
 	public List<Cliente> buscarTodos(){
         return this.entityManager.createQuery("from Cliente").getResultList();
     }
@@ -95,6 +95,7 @@ public class ClienteRepositorio implements Serializable{
 		}
 	}
 
+	@Transaccion
 	public Cliente adicionarCliente(Cliente cliente) {
 		return entityManager.merge(cliente);
 	}

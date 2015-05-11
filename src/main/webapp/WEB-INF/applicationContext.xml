@@ -36,6 +36,7 @@
 		<intercept-url pattern="/inicio.xhtml" access="isAuthenticated()" />
 		<intercept-url pattern="/excepciones/accesoDenegado.xhtml" access="isAuthenticated()" />
 		<intercept-url pattern="/ventas/**" access="hasAnyRole('VENDEDORES', 'AUXILIARES', 'ADMINISTRADORES')" />
+        <intercept-url pattern="/programacion/**" access="hasAnyRole('VENDEDORES', 'AUXILIARES', 'ADMINISTRADORES')" />
 		<intercept-url pattern="/cliente/**" access="hasAnyRole('ADMINISTRADORES')" />
         <intercept-url pattern="/usuario/**" access="hasAnyRole('ADMINISTRADORES')" />
         <intercept-url pattern="/bus/**" access="hasAnyRole('ADMINISTRADORES')" />

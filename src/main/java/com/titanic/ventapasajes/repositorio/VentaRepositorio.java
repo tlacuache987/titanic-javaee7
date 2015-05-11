@@ -7,11 +7,16 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import com.titanic.ventapasajes.modelo.Programacion;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 
 import com.titanic.ventapasajes.modelo.Bus;
 import com.titanic.ventapasajes.modelo.Recorrido;
 import com.titanic.ventapasajes.modelo.Venta;
+import org.hibernate.Session;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * Created by josediaz on 7/28/14.
@@ -33,6 +38,7 @@ public class VentaRepositorio implements Serializable {
         return entityManager.merge(venta);
     }
 
+<<<<<<< HEAD
 
     public Venta obtenerVenta(Date fechaVenta, Recorrido ruta, String horaSalida, Bus bus) {
 
@@ -51,6 +57,17 @@ public class VentaRepositorio implements Serializable {
                     .getSingleResult();
 
             //Hibernate.initialize(venta.getBoletos());
+=======
+    public Venta obtenerVenta(Programacion programacion) {
+
+        try{
+
+            Venta venta = entityManager.createQuery("from Venta where " +
+                    "programacion.ideProgramacion = :ideProgramacion ",Venta.class)
+                    .setParameter("ideProgramacion", programacion.getIdeProgramacion())
+                    .getSingleResult();
+
+>>>>>>> 1.1-sin-wizard
             return venta;
         }catch(NoResultException e){
             return null;

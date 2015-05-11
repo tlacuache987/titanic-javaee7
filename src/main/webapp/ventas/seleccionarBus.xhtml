@@ -1,41 +1,122 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui">
 
-<h:head>
-    <title>Bus</title>
-    <style type="text/css">
-        .ui-widget {
-            font-size: 80%;
-        }
-    </style>
-</h:head>
 
-<h:body>
-    <h:form>
-        <p:dataTable var="bus" value="#{busBean.busesFiltrados}">
-            <p:column headerText="Id">
-                <h:outputText value="#{bus.ideBus}" />
-            </p:column>
+    <ui:define name="titulo">Buses</ui:define>
 
-            <p:column headerText="Nombre Bus">
-                <h:outputText value="#{bus.descripcionBus}" />
-            </p:column>
+    <ui:define name="cuerpo">
 
-            <p:column headerText="Placa">
-                <h:outputText value="#{bus.placa}" />
-            </p:column>
 
-            <p:column headerText="Numero Plantas">
-                <h:outputText value="#{bus.tipoPlanta.descripcion}" />
-            </p:column>
 
-            <p:column headerText="Seleccione Bus">
-                <p:commandButton icon="ui-icon-search" actionListener="#{busBean.selectBusFromDialog(bus)}" />
-            </p:column>
-        </p:dataTable>
-    </h:form>
-</h:body>
+        <f:metadata>
 
-</html>
+
+            <f:event listener="#{seleccionarBusBean.inicializar}"
+                     type="preRenderView"/>
+        </f:metadata>
+
+
+        <h1>Buses</h1>
+
+
+
+        <h:form id="form">
+
+            <p:growl id="msgs" widgetVar="wmsg" showDetail="true"/>
+
+            <p:messages autoUpdate="true"/>
+
+            <p:toolbar style="margin-top:20px">
+
+
+                <f:facet name="left">
+
+
+
+                    <p:outputLabel for="fechaPartida" value="Fecha Partida:"/>
+                    <p:calendar id="fechaPartida" value="#{seleccionarBusBean.fechaVenta}" showOn="button"
+                                update=":form" >
+
+
+                        <p:ajax event="dateSelect" listener="#{seleccionarBusBean.onFechaSeleccionada}"
+                                update="msgs,:form"/>
+                    </p:calendar>
+
+
+                </f:facet>
+
+            </p:toolbar>
+
+
+
+
+            <p:dataTable id="programacionesTable"
+                         value="#{seleccionarBusBean.programaciones}" var="programacion"
+                         style="margin-top:20px"
+                         emptyMessage="No se encontraron programaciones para esta fecha de Venta" rows="20"
+                         paginator="true" paginatorAlwaysVisible="false"
+                         paginatorPosition="bottom">
+
+                <p:column headerText="Id" style="text-align:center;width:100px">
+                    <h:outputLabel value="#{programacion.ideProgramacion}" />
+                </p:column>
+
+                <p:column headerText="Fecha Programacion" >
+                    <h:outputLabel value="#{programacion.fechaProgramacion}" />
+                </p:column>
+
+                <p:column headerText="Ruta" style="text-align:center;width:150px">
+                    <h:outputLabel value="#{programacion.ruta.ruta}" />
+                </p:column>
+
+                <p:column headerText="Bus" style="text-align:center;width:150px">
+                    <h:outputLabel value="#{programacion.bus.descripcionBus}" />
+                </p:column>
+
+                <p:column headerText="Hora Salida" >
+                    <h:outputLabel value="#{programacion.horaSalida}" />
+                </p:column>
+
+
+                <p:column headerText="Hora Llegada" >
+                    <h:outputLabel value="#{programacion.horaLlegada}" />
+                </p:column>
+
+                <p:column headerText="Estado" >
+                    <h:outputLabel value="#{programacion.tipoProgramacion}" />
+                </p:column>
+
+                <p:column style="text-align:center;width:100px">
+                    <p:button  value="Asientos" outcome="/ventas/seleccionarAsientos">
+
+                        <f:param name="programacion" value="#{programacion.ideProgramacion}" />
+                    </p:button>
+
+                </p:column>
+
+            </p:dataTable>
+
+            <p:confirmDialog global="true">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+            </p:confirmDialog>
+
+
+
+
+
+        </h:form>
+
+    </ui:define>
+
+
+
+
+</ui:composition>
+
+

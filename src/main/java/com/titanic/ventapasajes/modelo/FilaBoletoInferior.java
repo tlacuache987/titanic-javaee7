@@ -36,6 +36,7 @@ public class FilaBoletoInferior implements Serializable {
 
 
     @OneToMany(mappedBy = "filaBoletoInferior", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OrderBy("ide_boleto ASC")
     public List<BoletoInferior> getBoletosInferiores() {
         return boletosInferiores;
     }

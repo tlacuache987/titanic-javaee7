@@ -16,14 +16,11 @@ import java.util.List;
 public class Venta implements Serializable {
 
     /**
-	 * 
-	 */
-	private static final long serialVersionUID = -2197964758413800707L;
-	private Long ideVenta;
-    private Date fechaVenta;
-    private Recorrido ruta;
-    private String horaSalida;
-    private Bus bus;
+     *
+     */
+    private static final long serialVersionUID = -2197964758413800707L;
+    private Long ideVenta;
+    private Programacion programacion;
     private BigDecimal totalVenta;
 
     private List<FilaBoletoSuperior> filasBoletoSuperiores;
@@ -42,46 +39,18 @@ public class Venta implements Serializable {
     }
 
 
-    @NotNull
-    @Temporal(TemporalType.DATE)
-    @Column(name = "fecha_venta", nullable = false)
-    public Date getFechaVenta() {
-        return fechaVenta;
-    }
 
-    public void setFechaVenta(Date fechaVenta) {
-        this.fechaVenta = fechaVenta;
-    }
 
     @ManyToOne
-    @JoinColumn(name = "ide_recorrido", nullable = false)
-    public Recorrido getRuta() {
-        return ruta;
+    @JoinColumn(name = "ide_programacion", nullable = false)
+    public Programacion getProgramacion() {
+        return programacion;
     }
 
-    public void setRuta(Recorrido ruta) {
-        this.ruta = ruta;
+    public void setProgramacion(Programacion programacion) {
+        this.programacion = programacion;
     }
 
-    @Size(max = 10)
-    @Column(name="hora_salida", nullable=false, length=10)
-    public String getHoraSalida() {
-        return horaSalida;
-    }
-
-    public void setHoraSalida(String horaSalida) {
-        this.horaSalida = horaSalida;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "ide_bus", nullable = false)
-    public Bus getBus() {
-        return bus;
-    }
-
-    public void setBus(Bus bus) {
-        this.bus = bus;
-    }
 
     @NotNull
     @Column(name = "total_venta", nullable = false, precision = 10, scale = 2)
@@ -114,19 +83,8 @@ public class Venta implements Serializable {
         this.filasBoletoSuperiores = filasBoletoSuperiores;
     }
 
-    @Override
-    public String toString() {
-        return "Venta{" +
-                "ideVenta=" + ideVenta +
-                ", fechaVenta=" + fechaVenta +
-                ", ruta=" + ruta +
-                ", horaSalida='" + horaSalida + '\'' +
-                ", bus=" + bus +
-                ", totalVenta=" + totalVenta +
-                ", filasBoletoSuperiores=" + filasBoletoSuperiores +
-                ", filasBoletosInferiores=" + filasBoletosInferiores +
-                '}';
-    }
+
+
 
     @Override
     public boolean equals(Object o) {

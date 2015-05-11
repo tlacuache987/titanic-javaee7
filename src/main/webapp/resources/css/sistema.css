@@ -58,3 +58,13 @@ h1{font-size: 24px;font-weight: 500;padding:0px; margin:0px;color:#2779AA}
     color: #ffffff;;
 }
 
+.viewSeatsBtn {
+    font-weight: 700;
+    line-height: 1.2;
+    background-color: #e24648;
+    margin-top: 20px;
+}
+
+.alignTop {
+    vertical-align: top;
+}

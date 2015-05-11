@@ -4,7 +4,8 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
 
 <persistence-unit name="PedidoPU">
 	<provider>org.hibernate.ejb.HibernatePersistence</provider>
-	
+
+    <!--non-jta-data-source>java:comp/env/jdbc/titanic</non-jta-data-source-->
 	<properties>
 
 
@@ -18,8 +19,13 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
 		<property name="javax.persistence.jdbc.password" value="password" />
 		<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
 
+        <!--property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/titanic_diplomado" />
+        <property name="javax.persistence.jdbc.user" value="titanic" />
+        <property name="javax.persistence.jdbc.password" value="P4ssw0rd_01" />
+        <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" /-->
+
 		<property name="hibernate.hbm2ddl.auto" value="update" />
-		<property name="hibernate.show_sql" value="false" />
+		<property name="hibernate.show_sql" value="true" />
 		<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
 	</properties>
 	

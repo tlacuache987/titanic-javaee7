@@ -1,23 +1,19 @@
 package com.titanic.ventapasajes.modelo;
 
 /**
- * Created by josediaz on 7/28/14.
+ * Created by Celeritech Peru on 02/03/2015.
  */
-public enum EstadoBoleto {
+public enum TipoProgramacion {
 
-    LIBRE("LIBRE"), RESERVADO("RESERVADO"), PAGADO("PAGADO"), NO_DISPONIBLE("NO DISPONIBLE");
-
-
+    VENDIDO("Vendido"), ABIERTO("Abierto"), CANCELADO("Cancelado");
 
     private String descripcion;
 
-    EstadoBoleto(String descripcion){
+    TipoProgramacion(String descripcion){
         this.descripcion = descripcion;
     }
 
     public String getDescripcion(){
         return descripcion;
     }
-
 }
-
