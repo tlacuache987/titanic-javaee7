@@ -1,207 +1,257 @@
 <ui:composition template="/WEB-INF/template/layoutPadre.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+                                 xmlns="http://www.w3.org/1999/xhtml"
+                                 xmlns:h="http://java.sun.com/jsf/html"
+                                 xmlns:f="http://java.sun.com/jsf/core"
+                                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                                 xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
 
-    <ui:define name="titulo">#{registroBusBean.editando ? 'Editando Bus' : 'Registrar Nuevo Bus'}</ui:define>
+<ui:define name="titulo">#{registroBusBean.editando ? 'Editando Bus' : 'Registrar Nuevo Bus'}</ui:define>
 
-    <ui:define name="cuerpo">
-        <h1>#{registroBusBean.editando ? 'Editando Bus' :
-                'Registrar Nuevo Bus'}</h1>
-
-
-        <f:metadata>
-            <o:viewParam name="bus" value="#{registroBusBean.bus}" /> 
-            <f:event listener="#{registroBusBean.inicializar}"
-                     type="preRenderView" />
-        </f:metadata>
+<ui:define name="cuerpo">
+    <h1>#{registroBusBean.editando ? 'Editando Bus' :
+            'Registrar Nuevo Bus'}</h1>
 
 
-        <h:form id="form">
-            <p:growl id="msgs" showDetail="true"/>
+    <f:metadata>
+        <o:viewParam name="bus" value="#{registroBusBean.bus}" />
+        <f:event listener="#{registroBusBean.inicializar}"
+                 type="preRenderView" />
+    </f:metadata>
 
-            <p:messages autoUpdate="true" />
-            <p:toolbar style="margin-top:20px">
-                <f:facet name="left">
-                    <p:button value="Nuevo Bus" outcome="/bus/registrarBus" />
-                    <p:commandButton value="Grabar Bus" id="btnGrabar"
-                                     action="#{registroBusBean.registrarBus}" update=":form" />
+
+    <h:form id="form">
+        <p:growl id="msgs" showDetail="true"/>
+
+        <p:messages autoUpdate="true" />
+        <p:toolbar style="margin-top:20px">
+            <f:facet name="left">
+                <p:button value="Nuevo Bus" outcome="/bus/registrarBus" />
+                <p:commandButton value="Grabar Bus" id="btnGrabar"
+                                 action="#{registroBusBean.registrarBus}" update=":form" />
+            </f:facet>
+            <f:facet name="right">
+                <p:button value="Buscar Bus" id="btnBuscar"
+                          outcome="/bus/buscarBus" />
+            </f:facet>
+        </p:toolbar>
+
+        <p:panelGrid columns="2" id="panelFormBus"
+                     style="width:100%;margin-top:15px" columnClasses="lblIzq">
+
+            <p:outputLabel value="Nombre" for="nombre" />
+            <p:inputText id="nombre" size="60" maxlength="255"
+                         value="#{registroBusBean.bus.descripcionBus}" />
+
+
+            <p:outputLabel value="Plantas" for="plantas" />
+            <p:selectOneListbox id="plantas" styleClass="no-border"
+                                value="#{registroBusBean.bus.tipoPlanta}">
+                <f:selectItems value="#{registroBusBean.tiposPlantas}" var="tipoPlanta"
+                               itemValue="#{tipoPlanta}"
+                               itemLabel="#{tipoPlanta.descripcion}"/>
+
+
+
+            </p:selectOneListbox>
+
+
+            <p:outputLabel value="Calidad" for="calidad" />
+            <p:selectOneListbox id="calidad" styleClass="no-border"
+                                value="#{registroBusBean.bus.tipoBus}">
+                <f:selectItems value="#{registroBusBean.tiposBuses}" var="tipoBus"
+                               itemValue="#{tipoBus}"
+                               itemLabel="#{tipoBus.descripcion}"/>
+
+            </p:selectOneListbox>
+
+
+            <p:outputLabel value="Aire Acondicionado?: " />
+            <p:selectBooleanCheckbox value="#{registroBusBean.bus.conAireAcondicionado}" />
+
+
+            <p:outputLabel value="Placa: " />
+            <p:inputText id="placa" size="30" maxlength="10"
+                         value="#{registroBusBean.bus.placa}" />
+
+            <p:outputLabel value="Numero Motor: " />
+            <p:inputText id="numeroMotor" size="60" maxlength="50"
+                         value="#{registroBusBean.bus.numeroMotor}" />
+
+
+        </p:panelGrid>
+
+
+        <p:panelGrid columns="2" id="panelPlanos"
+                     columnClasses="alignTop,alignTop">
+
+
+
+            <p:dataTable id="planoPrimeraPlanta"
+                         value="#{registroBusBean.bus.filasInferiores}" var="fila"
+                         editable="true"
+                         editMode="cell"
+                         widgetVar="cellFilaPrimera"
+
+                    >
+
+                <f:facet name="header">
+                    Primera Planta
                 </f:facet>
-                <f:facet name="right">
-                    <p:button value="Buscar Bus" id="btnBuscar"
-                              outcome="/bus/buscarBus" />
+
+
+                <p:ajax event="cellEdit" listener="#{registroBusBean.onCellEdit}" update=":form:msgs" />
+
+
+                <p:column headerText="C1" style="text-align: center; width:30px;" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[0].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText  value="#{fila.celdasInferiores[0].numeroCelda}" style="width:40px" maxlength="10"  />
+                            <h:selectOneMenu value="#{fila.celdasInferiores[0].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="C2" style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[1].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{fila.celdasInferiores[1].numeroCelda}" style="width:40px" maxlength="10"/>
+                            <h:selectOneMenu value="#{fila.celdasInferiores[1].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="C3" style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[2].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText  value="#{fila.celdasInferiores[2].numeroCelda}" style="width:40px"  maxlength="10"/>
+                            <h:selectOneMenu value="#{fila.celdasInferiores[2].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="C4" style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[3].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{fila.celdasInferiores[3].numeroCelda}" style="width:40px"  maxlength="10"/>
+                            <h:selectOneMenu value="#{fila.celdasInferiores[3].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="C5" style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[4].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText  value="#{fila.celdasInferiores[4].numeroCelda}" style="width:40px" maxlength="10"/>
+                            <h:selectOneMenu value="#{fila.celdasInferiores[4].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+            </p:dataTable>
+
+
+            <p:dataTable id="planoSegundaPlanta"
+                         value="#{registroBusBean.bus.filasSuperiores}" var="filaSuperior"
+                         editable="true"
+                         editMode="cell"
+                         widgetVar="cellFilaSegunda"
+                    >
+
+                <f:facet name="header">
+                    Segunda Planta
                 </f:facet>
-            </p:toolbar>
-
-            <p:panelGrid columns="2" id="panelFormBus"
-                         style="width:100%;margin-top:15px" columnClasses="lblIzq">
-
-                <p:outputLabel value="Nombre" for="nombre" />
-                <p:inputText id="nombre" size="60" maxlength="255"
-                             value="#{registroBusBean.bus.descripcionBus}" />
 
 
-                <p:outputLabel value="Plantas" for="plantas" />
-                <p:selectOneListbox id="plantas" styleClass="no-border"
-                                    value="#{registroBusBean.bus.tipoPlanta}">
-                    <f:selectItems value="#{registroBusBean.tiposPlantas}" var="tipoPlanta"
-                                   itemValue="#{tipoPlanta}"
-                                   itemLabel="#{tipoPlanta.descripcion}"/>
+                <p:ajax event="cellEdit" listener="#{registroBusBean.onCellEdit}" update=":form:msgs" />
 
 
-
-                </p:selectOneListbox>
-
-
-                <p:outputLabel value="Calidad" for="calidad" />
-                <p:selectOneListbox id="calidad" styleClass="no-border"
-                                    value="#{registroBusBean.bus.tipoBus}">
-                    <f:selectItems value="#{registroBusBean.tiposBuses}" var="tipoBus"
-                                   itemValue="#{tipoBus}"
-                                   itemLabel="#{tipoBus.descripcion}"/>
-
-                </p:selectOneListbox>
-
-
-                <p:outputLabel value="Aire Acondicionado?: " />
-                <p:selectBooleanCheckbox value="#{registroBusBean.bus.conAireAcondicionado}" />
-
-
-                <p:outputLabel value="Placa: " />
-                <p:inputText id="placa" size="30" maxlength="10"
-                             value="#{registroBusBean.bus.placa}" />
-
-                <p:outputLabel value="Numero Motor: " />
-                <p:inputText id="numeroMotor" size="60" maxlength="50"
-                             value="#{registroBusBean.bus.numeroMotor}" />
-
-
-            </p:panelGrid>
-
-
-            <p:panelGrid columns="2" id="panelPlanos"
-                         style="width:100%;margin-top:15px;align-content: center" >
-
-
-
-                    <p:dataTable id="planoPrimeraPlanta"
-                                 value="#{registroBusBean.bus.filasInferiores}" var="fila"
-                                 editable="true"
-                                 editMode="cell"
-                                 widgetVar="cellFilaPrimera"
-
-                            >
-
-                        <f:facet name="header">
-                            Primera Planta
+                <p:column headerText="C1" style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[0].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText  value="#{filaSuperior.celdasSuperiores[0].numeroCelda}" style="width:40px"  maxlength="10" />
+                            <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[0].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
                         </f:facet>
-
-
-                        <p:ajax event="cellEdit" listener="#{registroBusBean.onCellEdit}" update=":form:msgs" />
-
-
-                        <p:column headerText="C1" style="text-align: center; width:30px;" >
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[0].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText  value="#{fila.celdasInferiores[0].numeroCelda}" style="width:40px" maxlength="10"  /></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column headerText="C2" style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[1].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{fila.celdasInferiores[1].numeroCelda}" style="width:40px" maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column headerText="C3" style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[2].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText  value="#{fila.celdasInferiores[2].numeroCelda}" style="width:40px"  maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column headerText="C4" style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[3].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{fila.celdasInferiores[3].numeroCelda}" style="width:40px"  maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column headerText="C5" style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{fila.celdasInferiores[4].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText  value="#{fila.celdasInferiores[4].numeroCelda}" style="width:40px" maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                    </p:dataTable>
-
-
-                    <p:dataTable id="planoSegundaPlanta"
-                                 value="#{registroBusBean.bus.filasSuperiores}" var="filaSuperior"
-                                 editable="true"
-                                 editMode="cell"
-                                 widgetVar="cellFilaSegunda"
-                            >
-
-                        <f:facet name="header">
-                            Segunda Planta
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="C2" style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[1].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{filaSuperior.celdasSuperiores[1].numeroCelda}" style="width:40px" maxlength="10"/>
+                            <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[1].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
                         </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
+                <p:column headerText="C3" style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[2].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText  value="#{filaSuperior.celdasSuperiores[2].numeroCelda}" style="width:40px"  maxlength="10"/>
+                            <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[2].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
-                        <p:ajax event="cellEdit" listener="#{registroBusBean.onCellEdit}" update=":form:msgs" />
+                <p:column headerText="C4" style="text-align: center; width:30px;" >
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[3].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText value="#{filaSuperior.celdasSuperiores[3].numeroCelda}" style="width:40px" maxlength="10"/>
+                            <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[3].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
+                <p:column headerText="C5"  style="text-align: center; width:30px;">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[4].numeroCelda}" /></f:facet>
+                        <f:facet name="input">
+                            <p:inputText  value="#{filaSuperior.celdasSuperiores[4].numeroCelda}" style="width:40px" maxlength="10"/>
+                            <h:selectOneMenu value="#{filaSuperior.celdasSuperiores[4].calidad}" style="width:100%">
+                                <f:selectItems value="#{registroBusBean.calidad}" var="calidad" itemLabel="#{calidad}" itemValue="#{calidad}" />
+                            </h:selectOneMenu>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
-                        <p:column headerText="C1" style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[0].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText  value="#{filaSuperior.celdasSuperiores[0].numeroCelda}" style="width:40px"  maxlength="10" /></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-                        <p:column headerText="C2" style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[1].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{filaSuperior.celdasSuperiores[1].numeroCelda}" style="width:40px" maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column headerText="C3" style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[2].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText  value="#{filaSuperior.celdasSuperiores[2].numeroCelda}" style="width:40px"  maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column headerText="C4" style="text-align: center; width:30px;" >
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[3].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{filaSuperior.celdasSuperiores[3].numeroCelda}" style="width:40px" maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                        <p:column headerText="C5"  style="text-align: center; width:30px;">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{filaSuperior.celdasSuperiores[4].numeroCelda}" /></f:facet>
-                                <f:facet name="input"><p:inputText  value="#{filaSuperior.celdasSuperiores[4].numeroCelda}" style="width:40px" maxlength="10"/></f:facet>
-                            </p:cellEditor>
-                        </p:column>
-
-                    </p:dataTable>
-
-
-
-            </p:panelGrid>
+            </p:dataTable>
 
 
 
+        </p:panelGrid>
 
 
-        </h:form>
 
 
 
-    </ui:define>
+    </h:form>
+
+
+
+</ui:define>
 
 </ui:composition>
