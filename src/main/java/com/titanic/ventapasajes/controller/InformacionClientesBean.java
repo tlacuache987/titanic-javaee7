@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -52,9 +51,11 @@ public class InformacionClientesBean implements Serializable {
 
     private Venta venta;
 
-    private List<BoletoInferior> boletosReservadosInferiores = new ArrayList<BoletoInferior>();
-    private List<BoletoSuperior> boletosReservadosSuperiores = new ArrayList<BoletoSuperior>();
+    private List<BoletoInferior> boletosReservadosInferiores = new ArrayList<>();
+    private List<BoletoSuperior> boletosReservadosSuperiores = new ArrayList<>();
 
+    private List<BoletoInferior> boletosPagadosInferiores = new ArrayList<>();
+    private List<BoletoSuperior> boletosPagadosSuperiores = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -65,12 +66,12 @@ public class InformacionClientesBean implements Serializable {
 
         venta = ventaService.obtenerVenta(programacion);
 
-        obtenerBoletosInferioresReservados();
-        obtenerBoletosSuperioresReservados();
+        obtenerBoletosInferioresReservadosYPagados();
+        obtenerBoletosSuperioresReservadosYPagados();
 
     }
 
-    private void obtenerBoletosSuperioresReservados() {
+    private void obtenerBoletosSuperioresReservadosYPagados() {
         for (FilaBoletoSuperior filaBoletoSuperior : venta.getFilasBoletoSuperiores()) {
 
             for (BoletoSuperior boletoSuperior : filaBoletoSuperior.getBoletosSuperiores()) {
@@ -87,14 +88,16 @@ public class InformacionClientesBean implements Serializable {
                         boletoSuperior.setCliente(cliente);
                         boletosReservadosSuperiores.add(boletoSuperior);
                     }
+                }
 
-
+                if(boletoSuperior.getEstadoBoleto() == EstadoBoleto.PAGADO){
+                    boletosPagadosSuperiores.add(boletoSuperior);
                 }
             }
         }
     }
 
-    private void obtenerBoletosInferioresReservados() {
+    private void obtenerBoletosInferioresReservadosYPagados() {
         for (FilaBoletoInferior filaBoletoInferior : venta.getFilasBoletosInferiores()) {
 
             for (BoletoInferior boletoInferior : filaBoletoInferior.getBoletosInferiores()) {
@@ -111,6 +114,9 @@ public class InformacionClientesBean implements Serializable {
                         boletoInferior.setCliente(cliente);
                         boletosReservadosInferiores.add(boletoInferior);
                     }
+                }
+                if(boletoInferior.getEstadoBoleto() == EstadoBoleto.PAGADO){
+                    boletosPagadosInferiores.add(boletoInferior);
                 }
             }
         }
@@ -138,6 +144,7 @@ public class InformacionClientesBean implements Serializable {
             cliente.setSexo(clienteBD.getSexo());
             cliente.setNombreCliente(clienteBD.getNombreCliente());
             cliente.setIdeCliente(clienteBD.getIdeCliente());
+            cliente.setNumeroTelefono(clienteBD.getNumeroTelefono());
         }
 
 
@@ -149,8 +156,6 @@ public class InformacionClientesBean implements Serializable {
         try{
             if (boletosReservadosSuperiores.size()>0 || boletosReservadosInferiores.size() > 0) {
 
-                BigDecimal totalVenta = BigDecimal.ZERO;
-
                 for (int i = 0; i < boletosReservadosSuperiores.size(); i++) {
 
                     Cliente cliente = boletosReservadosSuperiores.get(i).getCliente();
@@ -160,7 +165,7 @@ public class InformacionClientesBean implements Serializable {
                     Calendar fechaVenta = Calendar.getInstance();
                     boletosReservadosSuperiores.get(i).setFechaVenta(fechaVenta.getTime());
                     boletosReservadosSuperiores.get(i).setHoraSalida(programacion.getHoraSalida());
-                    totalVenta = totalVenta.add(boletosReservadosSuperiores.get(i).getPrecio());
+
 
                 }
 
@@ -173,21 +178,26 @@ public class InformacionClientesBean implements Serializable {
                     Calendar fechaVenta = Calendar.getInstance();
                     boletosReservadosInferiores.get(i).setFechaVenta(fechaVenta.getTime());
                     boletosReservadosInferiores.get(i).setHoraSalida(programacion.getHoraSalida());
-                    totalVenta = totalVenta.add(boletosReservadosInferiores.get(i).getPrecio());
+
 
                 }
 
-                this.venta.getTotalVenta().add(totalVenta);
 
                 this.venta = ventaService.registrarVenta(venta);
 
-                this.boletosReservadosInferiores = new ArrayList<BoletoInferior>();
-                this.boletosReservadosSuperiores = new ArrayList<BoletoSuperior>();
+                this.boletosReservadosInferiores = new ArrayList<>();
+                this.boletosReservadosSuperiores = new ArrayList<>();
+                this.boletosPagadosInferiores = new ArrayList<>();
+                this.boletosPagadosSuperiores = new ArrayList<>();
+
+                obtenerBoletosInferioresReservadosYPagados();
+                obtenerBoletosSuperioresReservadosYPagados();
 
                 //printSilentPDF();
                 FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Venta Satisfactoria", "Venta Satisfactoria");
 
                 FacesContext.getCurrentInstance().addMessage(null, message);
+
 
 
             }
@@ -240,5 +250,21 @@ public class InformacionClientesBean implements Serializable {
 
     public void setBoletosReservadosSuperiores(List<BoletoSuperior> boletosReservadosSuperiores) {
         this.boletosReservadosSuperiores = boletosReservadosSuperiores;
+    }
+
+    public List<BoletoInferior> getBoletosPagadosInferiores() {
+        return boletosPagadosInferiores;
+    }
+
+    public void setBoletosPagadosInferiores(List<BoletoInferior> boletosPagadosInferiores) {
+        this.boletosPagadosInferiores = boletosPagadosInferiores;
+    }
+
+    public List<BoletoSuperior> getBoletosPagadosSuperiores() {
+        return boletosPagadosSuperiores;
+    }
+
+    public void setBoletosPagadosSuperiores(List<BoletoSuperior> boletosPagadosSuperiores) {
+        this.boletosPagadosSuperiores = boletosPagadosSuperiores;
     }
 }

@@ -233,7 +233,7 @@ public class BoletoInferior implements Serializable {
 
     @Override
     public String toString() {
-        return "BoletoSuperior{" +
+        return "BoletInferior{" +
                 "ideBoleto=" + ideBoleto +
                 ", numeroBoleto='" + numeroBoleto + '\'' +
                 ", tipoBoleto=" + tipoBoleto +

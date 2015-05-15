@@ -22,6 +22,7 @@ public class Cliente implements Serializable{
 	private TipoDocumento tipoDocumento;
 	private Sexo sexo;
     private int edad;
+	private String numeroTelefono;
     private boolean debePresentarCartaNotarial = false;
 	
 	@Id
@@ -92,8 +93,16 @@ public class Cliente implements Serializable{
 		this.numeroDocumento = numeroDocumento;
 	}
 
+	@Column(name="numero_telefono",  nullable=true, length = 100)
+	public String getNumeroTelefono() {
+		return numeroTelefono;
+	}
 
-    @Column(name="edad", nullable = false, length = 3)
+	public void setNumeroTelefono(String numeroTelefono) {
+		this.numeroTelefono = numeroTelefono;
+	}
+
+	@Column(name="edad", nullable = false, length = 3)
     public int getEdad() {
         return edad;
     }
