@@ -17,7 +17,7 @@
 
 
             <f:metadata>
-                <o:viewParam name="programacion" value="#{informacionClientesBean.programacion}" />
+                <o:viewParam name="programacion" value="#{informacionClientesBean.programacion}"/>
 
             </f:metadata>
 
@@ -28,25 +28,25 @@
             <p:toolbar style="margin-top:20px">
 
                 <f:facet name="left">
-                    <p:outputLabel  value="Fecha:  "  style="font-weight:normal"/>
-                    <p:outputLabel  value="#{informacionClientesBean.programacion.fechaProgramacion}"/>
-                    <p:outputLabel  value="  Ruta:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{informacionClientesBean.programacion.ruta.ruta}"/>
-                    <p:outputLabel  value="  Bus:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{informacionClientesBean.programacion.bus.descripcionBus}"/>
-                    <p:outputLabel  value="  Hora Salida:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{informacionClientesBean.programacion.horaSalida}"/>
-                    <p:outputLabel  value="  Hora Llegada:  " style="font-weight:normal"/>
-                    <p:outputLabel  value="#{informacionClientesBean.programacion.horaLlegada}"/>
+                    <p:outputLabel value="Fecha:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{informacionClientesBean.programacion.fechaProgramacion}"/>
+                    <p:outputLabel value="  Ruta:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{informacionClientesBean.programacion.ruta.ruta}"/>
+                    <p:outputLabel value="  Bus:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{informacionClientesBean.programacion.bus.descripcionBus}"/>
+                    <p:outputLabel value="  Hora Salida:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{informacionClientesBean.programacion.horaSalida}"/>
+                    <p:outputLabel value="  Hora Llegada:  " style="font-weight:normal"/>
+                    <p:outputLabel value="#{informacionClientesBean.programacion.horaLlegada}"/>
 
                 </f:facet>
 
                 <f:facet name="right">
-                    <p:button  value="Nueva Programación" outcome="/ventas/seleccionarBus"/>
+                    <p:button value="Nueva Programación" outcome="/ventas/seleccionarBus"/>
 
-                    <p:button  value="Reservar Asientos" outcome="/ventas/seleccionarAsientos">
+                    <p:button value="Reservar Asientos" outcome="/ventas/seleccionarAsientos">
 
-                        <f:param name="programacion" value="#{informacionClientesBean.programacion.ideProgramacion}" />
+                        <f:param name="programacion" value="#{informacionClientesBean.programacion.ideProgramacion}"/>
                     </p:button>
 
                 </f:facet>
@@ -61,10 +61,9 @@
                     <p:column>Precio(*)</p:column>
                     <p:column>Nombre(*)</p:column>
                     <p:column>Sexo(*)</p:column>
-                    <p:column>Edad(*)</p:column>
+                    <p:column>Teléfono</p:column>
                     <p:column>Carta Notarial(*)</p:column>
                 </p:row>
-
 
 
                 <c:forEach items="#{informacionClientesBean.boletosReservadosSuperiores}" var="boletoReservadoSuperior"
@@ -73,29 +72,35 @@
                     <p:row>
 
                         <p:column>
-                            <p:inputText id="asiento_#{status.count}" value="#{boletoReservadoSuperior.numeroAsiento}"
+                            <p:inputText id="asientosup_#{status.count}"
+                                         value="#{boletoReservadoSuperior.numeroAsiento}"
                                          disabled="true" size="10"/>
                         </p:column>
                         <p:column>
-                            <p:autoComplete id="dni_#{status.count}" value="#{boletoReservadoSuperior.cliente.numeroDocumento}"
-                                            completeMethod="#{informacionClientesBean.completeClientes}" maxlength="8" size="10">
-                                <p:ajax event="itemSelect" listener="#{informacionClientesBean.setearCliente(boletoReservadoSuperior.cliente)}"
+                            <p:autoComplete id="dnisup_#{status.count}"
+                                            value="#{boletoReservadoSuperior.cliente.numeroDocumento}"
+                                            completeMethod="#{informacionClientesBean.completeClientes}" maxlength="8"
+                                            size="10">
+                                <p:ajax event="itemSelect"
+                                        listener="#{informacionClientesBean.setearCliente(boletoReservadoSuperior.cliente)}"
                                         update="form"/>
                             </p:autoComplete>
 
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="precio_#{status.count}" value="#{boletoReservadoSuperior.precio}" size="10"/>
+                            <p:inputText id="preciosup_#{status.count}" value="#{boletoReservadoSuperior.precio}"
+                                         size="10"/>
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="nombres_#{status.count}" value="#{boletoReservadoSuperior.cliente.nombreCliente}"
+                            <p:inputText id="nombressup_#{status.count}"
+                                         value="#{boletoReservadoSuperior.cliente.nombreCliente}"
                                          maxlength="255" size="30"/>
                         </p:column>
 
                         <p:column>
-                            <p:selectOneRadio id="sexo_#{status.count}" styleClass="no-border"
+                            <p:selectOneRadio id="sexosup_#{status.count}" styleClass="no-border"
                                               value="#{boletoReservadoSuperior.cliente.sexo}">
                                 <f:selectItems value="#{informacionClientesBean.sexo}" var="sexo"
                                                itemValue="#{sexo}"
@@ -105,17 +110,17 @@
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="edad_#{status.count}" value="#{boletoReservadoSuperior.cliente.edad}"/>
-                            <p:slider for="edad_#{status.count}"/>
+                            <p:inputText id="telefonosup_#{status.count}" value="#{boletoReservadoSuperior.cliente.numeroTelefono}"
+                                         size="10"/>
                         </p:column>
-                        <p:column>
+
+                        <!--p:column>
                             <p:selectBooleanCheckbox value="#{boletoReservadoSuperior.presentoCartaNotarial}"/>
                             <h:outputText value="Presento Carta Notarial"/>
-                        </p:column>
+                        </p:column-->
 
 
                     </p:row>
-
 
 
                 </c:forEach>
@@ -126,29 +131,35 @@
                     <p:row>
 
                         <p:column>
-                            <p:inputText id="asiento_#{status.count}" value="#{boletoReservadoInferior.numeroAsiento}"
-                                            disabled="true" size="10"/>
+                            <p:inputText id="asientoinf_#{status.count}"
+                                         value="#{boletoReservadoInferior.numeroAsiento}"
+                                         disabled="true" size="10"/>
                         </p:column>
                         <p:column>
-                            <p:autoComplete id="dni_#{status.count}" value="#{boletoReservadoInferior.cliente.numeroDocumento}"
-                                            completeMethod="#{informacionClientesBean.completeClientes}" maxlength="8" size="10">
-                                <p:ajax event="itemSelect" listener="#{informacionClientesBean.setearCliente(boletoReservadoInferior.cliente)}"
+                            <p:autoComplete id="dniinf_#{status.count}"
+                                            value="#{boletoReservadoInferior.cliente.numeroDocumento}"
+                                            completeMethod="#{informacionClientesBean.completeClientes}" maxlength="8"
+                                            size="10">
+                                <p:ajax event="itemSelect"
+                                        listener="#{informacionClientesBean.setearCliente(boletoReservadoInferior.cliente)}"
                                         update="form"/>
                             </p:autoComplete>
 
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="precio_#{status.count}" value="#{boletoReservadoInferior.precio}" size="10"/>
+                            <p:inputText id="precioinf_#{status.count}" value="#{boletoReservadoInferior.precio}"
+                                         size="10"/>
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="nombres_#{status.count}" value="#{boletoReservadoInferior.cliente.nombreCliente}"
+                            <p:inputText id="nombresinf_#{status.count}"
+                                         value="#{boletoReservadoInferior.cliente.nombreCliente}"
                                          maxlength="255" size="30"/>
                         </p:column>
 
                         <p:column>
-                            <p:selectOneRadio id="sexo_#{status.count}" styleClass="no-border"
+                            <p:selectOneRadio id="sexoinf_#{status.count}" styleClass="no-border"
                                               value="#{boletoReservadoInferior.cliente.sexo}">
                                 <f:selectItems value="#{informacionClientesBean.sexo}" var="sexo"
                                                itemValue="#{sexo}"
@@ -158,9 +169,10 @@
                         </p:column>
 
                         <p:column>
-                            <p:inputText id="edad_#{status.count}" value="#{boletoReservadoInferior.cliente.edad}"/>
-                            <p:slider for="edad_#{status.count}"/>
+                            <p:inputText id="telefonoinf_#{status.count}" value="#{boletoReservadoInferior.cliente.numeroTelefono}"
+                                         size="10"/>
                         </p:column>
+
                         <p:column>
                             <p:selectBooleanCheckbox value="#{boletoReservadoInferior.presentoCartaNotarial}"/>
                             <h:outputText value="Presento Carta Notarial"/>
@@ -177,9 +189,116 @@
 
 
             <br/>
-            <p:commandButton value="Confirmar Venta" action="#{informacionClientesBean.registrarVentaConCliente}" update="@form"/>
+            <p:commandButton value="Confirmar Venta" action="#{informacionClientesBean.registrarVentaConCliente}"
+                             update="@form"/>
+
+            <br/>
 
 
+            <h2>Asientos Vendidos</h2>
+
+            <p:dataTable id="boletosVendidosInferioresTable"
+                         value="#{informacionClientesBean.boletosPagadosInferiores}" var="boletoVendido"
+                         style="margin-top:20px"
+                         emptyMessage="No hay boletos vendidos en el primer piso" rows="20"
+                    >
+
+                <p:column headerText="Id" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.ideBoleto}"/>
+                </p:column>
+
+                <p:column headerText="Numero Asiento" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.numeroAsiento}"/>
+                </p:column>
+
+                <p:column headerText="Origen" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.origen}"/>
+                </p:column>
+
+                <p:column headerText="Destino" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.destino}"/>
+                </p:column>
+
+                <p:column headerText="Hora Salida" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.horaSalida}"/>
+                </p:column>
+
+
+                <p:column headerText="Cliente">
+                    <h:outputLabel value="#{boletoVendido.cliente.nombreCliente}"/>
+                </p:column>
+
+                <p:column headerText="Nro. Documento" style="text-align:center;width:100px">
+                    <h:outputLabel value="#{boletoVendido.cliente.numeroDocumento}"/>
+                </p:column>
+
+                <p:column headerText="Sexo" style="text-align:center;width:100px">
+                    <h:outputLabel value="#{boletoVendido.cliente.sexo}"/>
+                </p:column>
+
+
+                <p:column headerText="Telefono"  style="text-align:center;width:100px">
+                    <h:outputLabel value="#{boletoVendido.cliente.numeroTelefono}"/>
+                </p:column>
+
+                <p:column headerText="Vendedor">
+                    <h:outputLabel value="#{boletoVendido.usuario.nombreUsuario}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+
+            <p:dataTable id="boletosVendidosSuperioresTable"
+                         value="#{informacionClientesBean.boletosPagadosSuperiores}" var="boletoVendido"
+                         style="margin-top:20px"
+                         emptyMessage="No hay boletos vendidos en el segundo piso" rows="20"
+                    >
+
+
+                <p:column headerText="Id" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.ideBoleto}"/>
+                </p:column>
+
+                <p:column headerText="Numero Asiento" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.numeroAsiento}"/>
+                </p:column>
+
+                <p:column headerText="Origen" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.origen}"/>
+                </p:column>
+
+                <p:column headerText="Destino" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.destino}"/>
+                </p:column>
+
+                <p:column headerText="Hora Salida" style="text-align:center;width:50px">
+                    <h:outputLabel value="#{boletoVendido.horaSalida}"/>
+                </p:column>
+
+
+                <p:column headerText="Cliente">
+                    <h:outputLabel value="#{boletoVendido.cliente.nombreCliente}"/>
+                </p:column>
+
+                <p:column headerText="Nro. Documento" style="text-align:center;width:100px">
+                    <h:outputLabel value="#{boletoVendido.cliente.numeroDocumento}"/>
+                </p:column>
+
+                <p:column headerText="Sexo" style="text-align:center;width:100px">
+                    <h:outputLabel value="#{boletoVendido.cliente.sexo}"/>
+                </p:column>
+
+
+                <p:column headerText="Telefono"  style="text-align:center;width:100px">
+                    <h:outputLabel value="#{boletoVendido.cliente.numeroTelefono}"/>
+                </p:column>
+
+                <p:column headerText="Vendedor">
+                    <h:outputLabel value="#{boletoVendido.usuario.nombreUsuario}"/>
+                </p:column>
+
+            </p:dataTable>
 
 
         </h:form>

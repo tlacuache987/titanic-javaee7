@@ -16,4 +16,19 @@
             type="javax.sql.DataSource"
             url="jdbc:mysql://localhost/titanic_diplomado"
             />
+
+    <!--Resource
+            auth="Container"
+            driverClassName="com.mysql.jdbc.Driver"
+            maxActive="5"
+            maxIdle="2"
+            maxWait="5000"
+            name="jdbc/titanic"
+            username="titanic"
+            password="P4ssw0rd_01"
+            testOnBorrow="true"
+            type="javax.sql.DataSource"
+            url="jdbc:mysql://localhost/titanic_diplomado"
+            /-->
+
 </Context>

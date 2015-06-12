@@ -50,7 +50,7 @@ public class RegistroBusBean implements Serializable {
 
     private List<Fila> getFilasYCeldasInferiores(Bus bus) {
         List<Fila> planta = new ArrayList<>();
-        for(int i=0; i<10; i++){
+        for(int i=0; i<15; i++){
             Fila fila = new Fila();
             fila.setBus(bus);
             fila.setUbicacionPlanta(UbicacionPlanta.INFERIOR);
@@ -74,7 +74,7 @@ public class RegistroBusBean implements Serializable {
     private List<FilaSuperior> getFilasYCeldasSuperiores(Bus bus) {
 
         List<FilaSuperior> planta = new ArrayList<>();
-        for(int i=0; i<15; i++){
+        for(int i=0; i<20; i++){
             FilaSuperior fila = new FilaSuperior();
             fila.setBus(bus);
             fila.setUbicacionPlanta(UbicacionPlanta.SUPERIOR);

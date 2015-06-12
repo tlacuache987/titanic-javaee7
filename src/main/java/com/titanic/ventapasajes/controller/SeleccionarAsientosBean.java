@@ -210,9 +210,16 @@ public class SeleccionarAsientosBean implements Serializable {
 
         try{
 
+            if(boletoInferior.getEstadoBoleto() == EstadoBoleto.LIBRE){
+                boletoInferior.setEstadoBoleto(EstadoBoleto.RESERVADO);
+            }else if(boletoInferior.getEstadoBoleto()==EstadoBoleto.RESERVADO){
+                boletoInferior.setEstadoBoleto(EstadoBoleto.LIBRE);
+            }else if(boletoInferior.getEstadoBoleto()==EstadoBoleto.PAGADO){
+                boletoInferior.setEstadoBoleto(EstadoBoleto.LIBRE);
+
+            }
 
 
-            boletoInferior.setEstadoBoleto(EstadoBoleto.RESERVADO);
             boletoInferior.setUsuario(seguridad.getUsuarioLogeado().getUsuario());
 
             this.venta = ventaService.registrarVenta(this.venta);
@@ -239,7 +246,7 @@ public class SeleccionarAsientosBean implements Serializable {
                 boletoSuperior.setEstadoBoleto(EstadoBoleto.LIBRE);
             }else if(boletoSuperior.getEstadoBoleto()==EstadoBoleto.PAGADO){
                 boletoSuperior.setEstadoBoleto(EstadoBoleto.LIBRE);
-                actualizarTotalVenta();
+
             }
 
 
@@ -259,34 +266,6 @@ public class SeleccionarAsientosBean implements Serializable {
 
     }
 
-    private void actualizarTotalVenta() {
-
-        BigDecimal totalVentaPagados = BigDecimal.ZERO;
-
-        for (FilaBoletoSuperior filaBoletoSuperior : venta.getFilasBoletoSuperiores()) {
-
-            for (BoletoSuperior boletoSuperior : filaBoletoSuperior.getBoletosSuperiores()) {
-
-                if (boletoSuperior.getEstadoBoleto() == EstadoBoleto.PAGADO) {
-                    totalVentaPagados.add(boletoSuperior.getPrecio());
-                }
-
-            }
-        }
-
-        for (FilaBoletoInferior filaBoletoInferior : venta.getFilasBoletosInferiores()) {
-
-            for (BoletoInferior boletoInferior : filaBoletoInferior.getBoletosInferiores()) {
-
-                if (boletoInferior.getEstadoBoleto() == EstadoBoleto.RESERVADO) {
-                    totalVentaPagados.add(boletoInferior.getPrecio());
-                }
-            }
-        }
-
-        venta.setTotalVenta(totalVentaPagados);
-
-    }
 
 
     public Venta getVenta() {
